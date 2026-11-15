@@ -72,6 +72,7 @@ Kör Lighthouse i Chrome DevTools i **Mobile-läge** (efter `npm run build && np
 
 ## Checklista inför Git-inlämning (manuell kontroll)
 
+- **Repository (`origin`)**: `https://github.com/Medieinstitutet/bcu26d-inl-2-konferens-fannyskillmarck.git`
 - Kontrollera att `.gitignore` är inkluderad och att inga `node_modules/` eller `.env`-filer checkas in.
 - Dela upp arbetet i **minst 12 beskrivande commits** (t.ex. Conventional Commits som `feat: add semantic schedule section`, `style: refactor BEM classes into @layer components`) fördelade över **minst 4 olika dagar** så att ingen enskild commit överstiger 40 % av slutkodens rader.
 - Validera HTML-utdata i W3C Nu Html Checker samt testa zoom 200 % och 300 % vid 1440 px och bredderna 320, 768, 1024 och 1440 px i webbläsaren.
