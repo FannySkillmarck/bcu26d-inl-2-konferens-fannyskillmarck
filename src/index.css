@@ -1,0 +1,335 @@
+@import 'tailwindcss';
+
+/* ==========================================================================
+   Stjärnfall 2027 — Base Tokens, Light/Dark Theme & Custom Focus Styles
+   ========================================================================== */
+@layer base {
+  :root {
+    --bg-canvas: #f7f6f2;
+    --bg-surface: #ffffff;
+    --bg-subtle: #efece6;
+    --text-primary: #141619;
+    --text-muted: #4a4f57;
+    --border-hairline: rgba(20, 22, 25, 0.13);
+    --accent-brass: #854d0e;
+    --accent-brass-hover: #6c3e0a;
+    --btn-primary-bg: #854d0e;
+    --btn-primary-bg-hover: #6c3e0a;
+    --btn-primary-text: #ffffff;
+    --focus-ring-halo: rgba(133, 77, 14, 0.22);
+    --error-ink: #b91c1c;
+    --font-display: 'Fraunces', Georgia, serif;
+    --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg-canvas: #0b0d11;
+      --bg-surface: #14171e;
+      --bg-subtle: #1a1e27;
+      --text-primary: #f3f1ec;
+      --text-muted: #b2b8c2;
+      --border-hairline: rgba(243, 241, 236, 0.14);
+      --accent-brass: #e5a94c;
+      --accent-brass-hover: #efc074;
+      --btn-primary-bg: #e5a94c;
+      --btn-primary-bg-hover: #efc074;
+      --btn-primary-text: #0b0d11;
+      --focus-ring-halo: rgba(229, 169, 76, 0.28);
+      --error-ink: #fca5a5;
+    }
+  }
+
+  html {
+    scroll-behavior: smooth;
+    font-family: var(--font-sans);
+    background-color: var(--bg-canvas);
+    color: var(--text-primary);
+  }
+
+  body {
+    margin: 0;
+    background-color: var(--bg-canvas);
+    color: var(--text-primary);
+    overflow-x: clip;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  section[id] {
+    scroll-margin-top: 5.5rem;
+  }
+
+  /* Attribute selector on internal section anchor links */
+  a[href^='#'] {
+    text-decoration: none;
+  }
+
+  /* Custom designed :focus-visible ring for all interactive controls */
+  a:focus-visible,
+  button:focus-visible,
+  input:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible,
+  [tabindex]:focus-visible {
+    outline: 2px solid var(--accent-brass);
+    outline-offset: 3px;
+    box-shadow: 0 0 0 5px var(--focus-ring-halo);
+    border-radius: 4px;
+  }
+}
+
+/* ==========================================================================
+   BEM Components Layer (All custom class names scoped inside @layer components)
+   ========================================================================== */
+@layer components {
+  .typo-display {
+    font-family: var(--font-display);
+  }
+
+  .typo-mono {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 44px;
+    border-radius: 0.375rem;
+    background-color: var(--btn-primary-bg);
+    color: var(--btn-primary-text);
+    font-weight: 600;
+    white-space: nowrap;
+    flex-shrink: 0;
+    transition: background-color 180ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .btn-primary:hover {
+    background-color: var(--btn-primary-bg-hover);
+  }
+
+  /* Child combinator + ::after pseudo-element on top navigation links */
+  .site-nav__list > .site-nav__item > .site-nav__link {
+    position: relative;
+    display: inline-block;
+    padding-block: 0.35rem;
+    color: var(--text-muted);
+    transition: color 180ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .site-nav__list > .site-nav__item > .site-nav__link:hover,
+  .site-nav__list > .site-nav__item > .site-nav__link:focus-visible {
+    color: var(--text-primary);
+  }
+
+  .site-nav__list > .site-nav__item > .site-nav__link::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 1.5px;
+    background-color: var(--accent-brass);
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform 180ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .site-nav__list > .site-nav__item > .site-nav__link:hover::after,
+  .site-nav__list > .site-nav__item > .site-nav__link:focus-visible::after {
+    transform: scaleX(1);
+  }
+
+  /* ::before pseudo-element editorial kicker */
+  .section-header__kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: var(--accent-brass);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+  }
+
+  .section-header__kicker::before {
+    content: '';
+    width: 1.75rem;
+    height: 1px;
+    background-color: var(--accent-brass);
+  }
+
+  /* Child + adjacent sibling combinators & structural pseudo-classes in schedule */
+  .schedule__list > .schedule__row + .schedule__row {
+    border-top: 1px solid var(--border-hairline);
+  }
+
+  .schedule__list > .schedule__row:nth-child(even) {
+    background-color: var(--bg-subtle);
+  }
+
+  .schedule__item {
+    position: relative;
+    padding-left: 2rem;
+    transition: background-color 180ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .schedule__item::before {
+    content: '';
+    position: absolute;
+    left: 0.65rem;
+    top: 1.85rem;
+    width: 7px;
+    height: 7px;
+    border: 1.5px solid var(--accent-brass);
+    background-color: var(--bg-canvas);
+    transform: rotate(45deg);
+    transition: background-color 180ms ease;
+  }
+
+  /* Attribute selector targeting Workshop items */
+  .schedule__item[data-track='Workshop']::before {
+    background-color: var(--accent-brass);
+  }
+
+  .schedule__item:hover::before {
+    background-color: var(--accent-brass);
+  }
+
+  .schedule__item--highlighted {
+    box-shadow: inset 0 0 0 1.5px var(--accent-brass);
+  }
+
+  /* Speaker Card Hover & Keyboard Focus Navigation (:hover, :focus-within, :has) */
+  .speaker-card {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid var(--border-hairline);
+    background-color: var(--bg-surface);
+    transition:
+      transform 200ms cubic-bezier(0.16, 1, 0.3, 1),
+      border-color 200ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .speaker-card:hover,
+  .speaker-card:focus-within {
+    transform: translateY(-2px);
+    border-color: var(--accent-brass);
+  }
+
+  .speaker-card:has(.speaker-card__trigger:focus-visible) {
+    outline: 2px solid var(--accent-brass);
+    outline-offset: 3px;
+    box-shadow: 0 0 0 5px var(--focus-ring-halo);
+  }
+
+  .speaker-card__trigger:focus-visible {
+    outline: none;
+    box-shadow: none;
+  }
+
+  .speaker-card__portrait {
+    transition:
+      transform 350ms cubic-bezier(0.16, 1, 0.3, 1),
+      filter 350ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .speaker-card:hover .speaker-card__portrait,
+  .speaker-card:focus-within .speaker-card__portrait {
+    filter: grayscale(100%) contrast(1.08);
+    transform: scale(1.04);
+  }
+
+  .speaker-card__overlay {
+    opacity: 0;
+    transform: translateY(10px);
+    transition:
+      opacity 200ms cubic-bezier(0.16, 1, 0.3, 1),
+      transform 200ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .speaker-card:hover .speaker-card__overlay,
+  .speaker-card:focus-within .speaker-card__overlay {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Attribute selector & structural pseudo-class on Ticket Cards */
+  .ticket-card {
+    border: 1px solid var(--border-hairline);
+    background-color: var(--bg-surface);
+    transition:
+      border-color 180ms ease,
+      transform 180ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .ticket-card:hover {
+    transform: translateY(-2px);
+  }
+
+  .ticket-card[data-featured='true'] {
+    border-color: var(--accent-brass);
+    box-shadow: 0 12px 32px -16px rgba(133, 77, 14, 0.25);
+  }
+
+  .ticket-grid > .ticket-grid__item:first-of-type > .ticket-card {
+    background-color: var(--bg-subtle);
+  }
+
+  /* CSS Animations */
+  .hero-emblem__ring {
+    animation: orbitSpin 68s linear infinite;
+    transform-origin: center;
+  }
+
+  .hero-emblem__ring--reverse {
+    animation: orbitSpin 48s linear infinite reverse;
+    transform-origin: center;
+  }
+
+  .modal-dialog__panel {
+    animation: fadeInUp 240ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+}
+
+@keyframes orbitSpin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .hero-emblem__ring,
+  .hero-emblem__ring--reverse,
+  .modal-dialog__panel {
+    animation: none;
+  }
+
+  .speaker-card,
+  .speaker-card__portrait,
+  .speaker-card__overlay,
+  .site-nav__list > .site-nav__item > .site-nav__link::after,
+  .btn-primary {
+    transition: none;
+  }
+}
