@@ -16,6 +16,7 @@ export function Header() {
       <div className="mx-auto flex max-w-[1200px] items-center justify-between gap-3 px-4 py-3 sm:gap-8 sm:px-6 sm:py-3.5">
         <a
           href="#top"
+          aria-label="Stjärnfall 2027 — Gå till sidans topp"
           className="typo-display text-lg font-semibold tracking-tight text-[var(--text-primary)] whitespace-nowrap shrink-0 sm:text-xl"
         >
           Stjärnfall
@@ -27,6 +28,7 @@ export function Header() {
               <li key={item.href} className="site-nav__item">
                 <a
                   href={item.href}
+                  aria-label={`Hoppa till sektionen ${item.label}`}
                   className="site-nav__link whitespace-nowrap shrink-0"
                 >
                   {item.label}
@@ -39,6 +41,7 @@ export function Header() {
         <div className="flex items-center gap-2 sm:gap-3 shrink-0">
           <a
             href="#biljetter"
+            aria-label="Boka plats — Gå till biljettnivåer"
             className="btn-primary px-3.5 py-2 text-xs sm:px-4"
           >
             Boka plats
@@ -49,7 +52,9 @@ export function Header() {
             onClick={() => setMobileOpen((prev) => !prev)}
             aria-expanded={mobileOpen}
             aria-controls="mobile-nav-menu"
-            aria-label={mobileOpen ? 'Stäng meny' : 'Öppna meny'}
+            aria-label={
+              mobileOpen ? 'Stäng navigationsmeny' : 'Öppna navigationsmeny'
+            }
             className="inline-flex md:hidden items-center justify-center rounded-md border border-[var(--border-hairline)] p-2 text-[var(--text-primary)] min-h-[44px] min-w-[44px]"
           >
             {mobileOpen ? (
@@ -72,6 +77,7 @@ export function Header() {
               <li key={item.href}>
                 <a
                   href={item.href}
+                  aria-label={`Hoppa till sektionen ${item.label}`}
                   onClick={() => setMobileOpen(false)}
                   className="block py-2.5 text-[var(--text-primary)] hover:text-[var(--accent-brass)] whitespace-nowrap"
                 >

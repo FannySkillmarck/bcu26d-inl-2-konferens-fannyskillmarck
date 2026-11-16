@@ -245,6 +245,7 @@ export default function App() {
                           );
                           if (found) setSelectedSpeaker(found);
                         }}
+                        aria-label={`Visa talarprofil för ${item.speaker}`}
                         className="inline-flex min-h-[44px] items-center text-sm font-medium text-[var(--accent-brass)] hover:underline"
                       >
                         {item.speaker}
@@ -321,7 +322,7 @@ export default function App() {
                         <button
                           type="button"
                           onClick={() => setSelectedSpeaker(speaker)}
-                          aria-label={`${speaker.name}, ${speaker.role}. Öppna fullständig biografi och kontaktuppgifter.`}
+                          aria-label={`${speaker.name}, ${speaker.role} från ${speaker.city}. Föreläsning: ${speaker.sessionTitle}, ${speaker.sessionTime}. Kontakt: ${speaker.email}. Öppna fullständig biografi.`}
                           className="speaker-card__trigger text-left after:absolute after:inset-0 after:content-['']"
                         >
                           {speaker.name}
@@ -407,6 +408,7 @@ export default function App() {
                     <button
                       type="button"
                       onClick={() => setSelectedTicket(tier)}
+                      aria-label={`Välj biljettnivå ${tier.name} för ${tier.priceFormatted}`}
                       className={
                         tier.featured
                           ? 'btn-primary w-full px-4 py-2.5 text-xs'
