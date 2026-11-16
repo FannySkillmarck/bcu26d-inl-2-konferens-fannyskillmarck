@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ArrowUpRight, Check, Mail, MapPin } from 'lucide-react';
 import { Header } from './components/Header';
+import { HowToGetHere } from './components/HowToGetHere';
 import { ResilientImage } from './components/ResilientImage';
 import { SpeakerModal } from './components/SpeakerModal';
 import { TicketModal } from './components/TicketModal';
@@ -31,6 +32,14 @@ export default function App() {
     string | null
   >(null);
   const [selectedTicket, setSelectedTicket] = useState<TicketTier | null>(null);
+  const [quotaExceeded, setQuotaExceeded] = useState(false);
+
+  useEffect(() => {
+    const handleQuotaExceeded = () => setQuotaExceeded(true);
+    window.addEventListener('gmp-quota-exceeded', handleQuotaExceeded);
+    return () =>
+      window.removeEventListener('gmp-quota-exceeded', handleQuotaExceeded);
+  }, []);
 
   const visibleSchedule =
     activeTrack === 'Alla'
@@ -50,6 +59,22 @@ export default function App() {
       id="top"
       className="min-h-screen bg-[var(--bg-canvas)] text-[var(--text-primary)]"
     >
+      {quotaExceeded && (
+        <div className="bg-amber-50 border-b border-amber-200 text-amber-900 px-4 py-2.5 text-xs md:text-sm text-center sticky top-0 z-50 shadow-sm">
+          <span>
+            Google Maps Platform quota reached. If you are the app owner, visit{' '}
+            <a
+              href="https://developers.google.com/maps/ai/ai-studio?utm_campaign=gmp_mcp_codeassist_v1_aistudio#quota_exceeded_errors"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline font-semibold text-amber-950 hover:text-amber-800"
+            >
+              maps developer site
+            </a>{' '}
+            for instructions to update your account.
+          </span>
+        </div>
+      )}
       <Header />
 
       <main>
@@ -481,6 +506,8 @@ export default function App() {
                 </figure>
               </div>
             </div>
+
+            <HowToGetHere />
           </div>
         </section>
       </main>

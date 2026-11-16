@@ -292,6 +292,15 @@
   .modal-dialog__panel {
     animation: fadeInUp 240ms cubic-bezier(0.16, 1, 0.3, 1) both;
   }
+
+  .directions-planner__map {
+    position: relative;
+    isolation: isolate;
+  }
+
+  .directions-planner__suggestions > li + li {
+    border-top: 1px solid var(--border-hairline);
+  }
 }
 
 @keyframes orbitSpin {
