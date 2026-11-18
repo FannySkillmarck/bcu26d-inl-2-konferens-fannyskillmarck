@@ -2,6 +2,7 @@ import { useEffect, useState, type FormEvent } from 'react';
 import { CheckCircle2, X } from 'lucide-react';
 import type { TicketTier } from '../data/conference';
 import { useLanguage } from '../i18n/LanguageContext';
+import { Web3PassCard } from './Web3PassCard';
 
 interface TicketModalProps {
   tier: TicketTier | null;
@@ -103,6 +104,7 @@ export function TicketModal({ tier, onClose }: TicketModalProps) {
               </strong>
               {t.ticketModal.confirmationSuffix}
             </p>
+            <Web3PassCard tierName={tier.name} quantity={quantity} compact />
             <div className="mt-6 flex justify-end">
               <button
                 type="button"

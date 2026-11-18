@@ -7,6 +7,7 @@ import { NewsletterSignup } from './components/NewsletterSignup';
 import { ResilientImage } from './components/ResilientImage';
 import { SpeakerModal } from './components/SpeakerModal';
 import { TicketModal } from './components/TicketModal';
+import { Web3PassCard } from './components/Web3PassCard';
 import { getConferenceData, type TrackType } from './data/conference';
 import { useLanguage } from './i18n/LanguageContext';
 
@@ -452,6 +453,13 @@ export default function App() {
               </li>
             ))}
           </ul>
+
+          <Web3PassCard
+            tierName={
+              data.ticketTiers.find((tier) => tier.featured)?.name ??
+              data.ticketTiers[0].name
+            }
+          />
         </section>
 
         {/* 5. PRACTICAL INFORMATION & STATIC MAP */}

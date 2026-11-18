@@ -166,6 +166,29 @@ export interface Translations {
     copyright: string;
     navAria: string;
   };
+  web3: {
+    badgeLabel: string;
+    title: string;
+    description: string;
+    connectBtn: string;
+    connectAria: string;
+    connecting: string;
+    signBtn: string;
+    signAria: string;
+    signing: string;
+    disconnectBtn: string;
+    disconnectAria: string;
+    walletLabel: string;
+    networkLabel: string;
+    signatureLabel: string;
+    tierLabel: string;
+    verifiedBadge: string;
+    noWalletError: string;
+    rejectedError: string;
+    genericError: string;
+    copySignatureBtn: string;
+    copiedSignatureBtn: string;
+  };
 }
 
 const TRANSLATIONS: Record<Language, Translations> = {
@@ -346,6 +369,31 @@ const TRANSLATIONS: Record<Language, Translations> = {
       copyright: '© 2027 Stjärnfall Symposium · Alla rättigheter förbehållna',
       navAria: 'Sidfotsnavigation',
     },
+    web3: {
+      badgeLabel: 'Blockchain · Valfritt',
+      title: 'Web3-verifierat konferensbevis (EVM)',
+      description:
+        'Koppla en Web3-plånbok (t.ex. MetaMask eller Rabby) för att signera ett kryptografiskt EIP-191-närvarobevis kopplat till din plånboksadress.',
+      connectBtn: 'Koppla plånbok',
+      connectAria: 'Koppla EVM-plånbok för att verifiera konferensbevis',
+      connecting: 'Ansluter plånbok...',
+      signBtn: 'Signera konferensbevis',
+      signAria: 'Signera kryptografiskt konferensbevis i din plånbok',
+      signing: 'Väntar på signatur...',
+      disconnectBtn: 'Koppla från',
+      disconnectAria: 'Koppla från ansluten plånbok',
+      walletLabel: 'Plånbok',
+      networkLabel: 'Nätverk',
+      signatureLabel: 'EIP-191 Signatur',
+      tierLabel: 'Passnivå',
+      verifiedBadge: 'Kryptografiskt signerat',
+      noWalletError:
+        'Ingen Web3-plånbok hittades i webbläsaren. Installera t.ex. MetaMask eller Rabby för att använda blockchain-verifiering.',
+      rejectedError: 'Signeringen eller anslutningen avbröts i din plånbok.',
+      genericError: 'Kunde inte kommunicera med plånboken. Försök igen.',
+      copySignatureBtn: 'Kopiera signatur',
+      copiedSignatureBtn: 'Signatur kopierad',
+    },
   },
   en: {
     documentTitle: 'Stjärnfall 2027 — Symposium on Astrology & Cosmic Time',
@@ -525,6 +573,31 @@ const TRANSLATIONS: Record<Language, Translations> = {
       copyright: '© 2027 Stjärnfall Symposium · All rights reserved',
       navAria: 'Footer navigation',
     },
+    web3: {
+      badgeLabel: 'Blockchain · Optional',
+      title: 'Web3-verified attendance pass (EVM)',
+      description:
+        'Connect an EVM browser wallet (such as MetaMask or Rabby) to sign a cryptographic EIP-191 symposium pass tied to your wallet address.',
+      connectBtn: 'Connect wallet',
+      connectAria: 'Connect EVM wallet to verify symposium pass',
+      connecting: 'Connecting wallet...',
+      signBtn: 'Sign attendance pass',
+      signAria: 'Sign cryptographic symposium pass in your wallet',
+      signing: 'Awaiting signature...',
+      disconnectBtn: 'Disconnect',
+      disconnectAria: 'Disconnect connected wallet',
+      walletLabel: 'Wallet',
+      networkLabel: 'Network',
+      signatureLabel: 'EIP-191 Signature',
+      tierLabel: 'Pass tier',
+      verifiedBadge: 'Cryptographically signed',
+      noWalletError:
+        'No browser Web3 wallet detected. Install an EVM wallet extension such as MetaMask or Rabby to use blockchain verification.',
+      rejectedError: 'Wallet connection or signature request was cancelled.',
+      genericError: 'Could not communicate with wallet. Please try again.',
+      copySignatureBtn: 'Copy signature',
+      copiedSignatureBtn: 'Signature copied',
+    },
   },
   zh: {
     documentTitle: 'Stjärnfall 2027 — 星象学与宇宙时间北欧研讨会',
@@ -697,6 +770,31 @@ const TRANSLATIONS: Record<Language, Translations> = {
         '于斯德哥尔摩慕尼黑啤酒厂会议中心举办的星象学、天体力学与宇宙时间北欧研讨会。',
       copyright: '© 2027 Stjärnfall Symposium · 保留所有权利',
       navAria: '页脚导航',
+    },
+    web3: {
+      badgeLabel: '区块链 · 可选功能',
+      title: 'Web3 加密参会凭证 (EVM)',
+      description:
+        '连接 EVM 浏览器钱包（如 MetaMask 或 Rabby），即可签署与您钱包地址绑定的 EIP-191 加密研讨会凭证。',
+      connectBtn: '连接钱包',
+      connectAria: '连接 EVM 钱包以验证参会凭证',
+      connecting: '正在连接钱包...',
+      signBtn: '签署参会凭证',
+      signAria: '在钱包中签署加密参会凭证',
+      signing: '等待钱包签名...',
+      disconnectBtn: '断开连接',
+      disconnectAria: '断开已连接的钱包',
+      walletLabel: '钱包地址',
+      networkLabel: '网络',
+      signatureLabel: 'EIP-191 签名',
+      tierLabel: '票种',
+      verifiedBadge: '已完成加密签名',
+      noWalletError:
+        '未检测到浏览器 Web3 钱包。请安装 MetaMask 或 Rabby 等 EVM 钱包扩展以启用区块链验证。',
+      rejectedError: '您已在钱包中取消连接或签名请求。',
+      genericError: '无法与钱包通信，请稍后重试。',
+      copySignatureBtn: '复制签名',
+      copiedSignatureBtn: '已复制签名',
     },
   },
 };
