@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { ArrowUpRight, Check, Mail, MapPin } from 'lucide-react';
 import { Header } from './components/Header';
 import { HowToGetHere } from './components/HowToGetHere';
+import { NewsletterSignup } from './components/NewsletterSignup';
 import { ResilientImage } from './components/ResilientImage';
 import { SpeakerModal } from './components/SpeakerModal';
 import { TicketModal } from './components/TicketModal';
@@ -512,53 +513,74 @@ export default function App() {
         </section>
       </main>
 
-      <footer className="border-t border-[var(--border-hairline)] bg-[var(--bg-canvas)] py-10">
-        <div className="mx-auto flex max-w-[1200px] flex-col justify-between gap-6 px-4 sm:flex-row sm:items-center sm:px-6">
-          <div>
-            <p className="typo-display text-base font-semibold text-[var(--text-primary)]">
-              Stjärnfall 2027
-            </p>
-            <address className="mt-1 text-xs not-italic text-[var(--text-muted)]">
-              © 2027 Stjärnfall Symposium ·{' '}
-              <a
-                href="mailto:info@stjarnfall.se"
-                className="hover:text-[var(--text-primary)]"
-              >
-                info@stjarnfall.se
-              </a>
-            </address>
+      <footer className="border-t border-[var(--border-hairline)] bg-[var(--bg-canvas)] py-12">
+        <div className="mx-auto max-w-[1200px] px-4 sm:px-6">
+          <div className="grid grid-cols-1 gap-10 pb-10 lg:grid-cols-12 lg:items-start">
+            <div className="lg:col-span-5">
+              <p className="typo-display text-lg font-semibold text-[var(--text-primary)]">
+                Stjärnfall 2027
+              </p>
+              <p className="mt-2 max-w-sm text-xs leading-relaxed text-[var(--text-muted)]">
+                Nordiskt symposium om astrologi, himmelsmekanik och kosmisk tid
+                på Münchenbryggeriet i Stockholm.
+              </p>
+              <address className="mt-4 text-xs not-italic text-[var(--text-muted)]">
+                <a
+                  href="mailto:info@stjarnfall.se"
+                  className="hover:text-[var(--text-primary)]"
+                >
+                  info@stjarnfall.se
+                </a>
+              </address>
+            </div>
+
+            <div className="lg:col-span-7">
+              <NewsletterSignup />
+            </div>
           </div>
 
-          <nav aria-label="Sidfotsnavigation">
-            <ul className="flex flex-wrap items-center gap-6 text-xs font-medium text-[var(--text-muted)]">
-              <li>
-                <a href="#program" className="hover:text-[var(--text-primary)]">
-                  Program
-                </a>
-              </li>
-              <li>
-                <a href="#talare" className="hover:text-[var(--text-primary)]">
-                  Talare
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#biljetter"
-                  className="hover:text-[var(--text-primary)]"
-                >
-                  Biljetter
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#praktiskt"
-                  className="hover:text-[var(--text-primary)]"
-                >
-                  Praktiskt
-                </a>
-              </li>
-            </ul>
-          </nav>
+          <div className="flex flex-col justify-between gap-4 border-t border-[var(--border-hairline)] pt-6 sm:flex-row sm:items-center">
+            <p className="text-xs text-[var(--text-muted)]">
+              © 2027 Stjärnfall Symposium · Alla rättigheter förbehållna
+            </p>
+
+            <nav aria-label="Sidfotsnavigation">
+              <ul className="flex flex-wrap items-center gap-6 text-xs font-medium text-[var(--text-muted)]">
+                <li>
+                  <a
+                    href="#program"
+                    className="hover:text-[var(--text-primary)]"
+                  >
+                    Program
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#talare"
+                    className="hover:text-[var(--text-primary)]"
+                  >
+                    Talare
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#biljetter"
+                    className="hover:text-[var(--text-primary)]"
+                  >
+                    Biljetter
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#praktiskt"
+                    className="hover:text-[var(--text-primary)]"
+                  >
+                    Praktiskt
+                  </a>
+                </li>
+              </ul>
+            </nav>
+          </div>
         </div>
       </footer>
 
