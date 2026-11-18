@@ -1,7 +1,9 @@
 import { useState, type FormEvent } from 'react';
 import { CheckCircle2 } from 'lucide-react';
+import { useLanguage } from '../i18n/LanguageContext';
 
 export function NewsletterSignup() {
+  const { t } = useLanguage();
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
   const [subscribedEmail, setSubscribedEmail] = useState<string | null>(null);
@@ -10,7 +12,7 @@ export function NewsletterSignup() {
     e.preventDefault();
     const trimmed = email.trim();
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmed)) {
-      setError('Ange en giltig e-postadress.');
+      setError(t.newsletter.invalidEmailError);
       return;
     }
     setError('');
@@ -27,11 +29,10 @@ export function NewsletterSignup() {
         id="heading-newsletter"
         className="typo-display text-lg font-semibold tracking-tight text-[var(--text-primary)]"
       >
-        Nyhetsbrev inför 2027
+        {t.newsletter.heading}
       </h2>
       <p className="mt-1 text-xs leading-relaxed text-[var(--text-muted)]">
-        Få utskick om programsläpp, talare och eventuella extraplatser till
-        symposiet.
+        {t.newsletter.description}
       </p>
 
       {subscribedEmail ? (
@@ -45,24 +46,24 @@ export function NewsletterSignup() {
               aria-hidden="true"
             />
             <span>
-              Anmäld! Utskicken skickas till{' '}
+              {t.newsletter.subscribedPrefix}{' '}
               <strong className="font-semibold">{subscribedEmail}</strong>.
             </span>
           </p>
           <button
             type="button"
             onClick={() => setSubscribedEmail(null)}
-            aria-label="Anmäl ytterligare en e-postadress till nyhetsbrevet"
+            aria-label={t.newsletter.changeEmailAria}
             className="text-xs font-medium text-[var(--accent-brass)] hover:underline min-h-[36px]"
           >
-            Ändra adress
+            {t.newsletter.changeEmailBtn}
           </button>
         </div>
       ) : (
         <form onSubmit={handleSubmit} noValidate className="mt-4">
           <div className="flex flex-col gap-2 sm:flex-row">
             <label htmlFor="footer-newsletter-email" className="sr-only">
-              E-postadress för nyhetsbrev
+              {t.newsletter.inputLabel}
             </label>
             <input
               id="footer-newsletter-email"
@@ -73,17 +74,17 @@ export function NewsletterSignup() {
                 setEmail(e.target.value);
                 if (error) setError('');
               }}
-              placeholder="namn@exempel.se"
-              aria-label="E-postadress för uppdateringar om Stjärnfall 2027"
+              placeholder={t.newsletter.inputPlaceholder}
+              aria-label={t.newsletter.inputAria}
               aria-invalid={Boolean(error)}
               className="min-w-0 flex-1 rounded-md border border-[var(--border-hairline)] bg-[var(--bg-surface)] px-3.5 py-2.5 text-sm text-[var(--text-primary)] min-h-[44px]"
             />
             <button
               type="submit"
-              aria-label="Prenumerera på uppdateringar om Stjärnfall 2027"
+              aria-label={t.newsletter.submitAria}
               className="btn-primary px-5 py-2.5 text-xs"
             >
-              Prenumerera
+              {t.newsletter.submitBtn}
             </button>
           </div>
           {error && (

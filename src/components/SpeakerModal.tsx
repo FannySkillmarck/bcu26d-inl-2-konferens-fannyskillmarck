@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { ArrowDownRight, Mail, X } from 'lucide-react';
 import type { Speaker } from '../data/conference';
+import { useLanguage } from '../i18n/LanguageContext';
 import { ResilientImage } from './ResilientImage';
 
 interface SpeakerModalProps {
@@ -14,6 +15,8 @@ export function SpeakerModal({
   onClose,
   onJumpToProgram,
 }: SpeakerModalProps) {
+  const { t } = useLanguage();
+
   useEffect(() => {
     if (!speaker) return;
     const handleKey = (e: KeyboardEvent) => {
@@ -40,7 +43,7 @@ export function SpeakerModal({
         <button
           type="button"
           onClick={onClose}
-          aria-label="Stäng talarprofil"
+          aria-label={t.speakerModal.closeAria}
           className="absolute right-4 top-4 z-10 inline-flex h-11 w-11 items-center justify-center rounded-md border border-[var(--border-hairline)] bg-[var(--bg-canvas)] text-[var(--text-primary)] hover:border-[var(--accent-brass)] transition-colors"
         >
           <X className="h-4 w-4" aria-hidden="true" />
@@ -50,7 +53,7 @@ export function SpeakerModal({
           <figure className="sm:col-span-2 aspect-[3/4] sm:aspect-auto">
             <ResilientImage
               src={speaker.image}
-              alt={`Porträtt av ${speaker.name}`}
+              alt={t.speakerModal.portraitAlt(speaker.name)}
               width={speaker.width}
               height={speaker.height}
               className="h-full w-full object-cover"
@@ -76,7 +79,7 @@ export function SpeakerModal({
 
               <section className="mt-6 border-t border-[var(--border-hairline)] pt-4">
                 <p className="text-xs font-medium text-[var(--text-muted)]">
-                  Föreläsning ·{' '}
+                  {t.speakerModal.sessionLabel} ·{' '}
                   <time className="typo-mono">{speaker.sessionTime}</time>
                 </p>
                 <p className="mt-1 text-sm font-medium text-[var(--text-primary)]">
@@ -99,7 +102,7 @@ export function SpeakerModal({
                 onClick={onJumpToProgram}
                 className="btn-primary px-4 py-2 text-xs"
               >
-                <span>Visa i programmet</span>
+                <span>{t.speakerModal.viewInSchedule}</span>
                 <ArrowDownRight className="h-3.5 w-3.5" aria-hidden="true" />
               </button>
             </footer>

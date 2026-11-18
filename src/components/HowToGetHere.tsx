@@ -25,6 +25,7 @@ import {
   Search,
   TrainFront,
 } from 'lucide-react';
+import { useLanguage, type Language } from '../i18n/LanguageContext';
 
 const MAPS_API_KEY: string =
   import.meta.env.VITE_GOOGLE_MAPS_API_KEY ||
@@ -41,37 +42,17 @@ const QUICK_ORIGINS = [
 ];
 
 type TravelModeOption = 'TRANSIT' | 'WALKING' | 'BICYCLING' | 'DRIVING';
+type RouteErrorType = 'NO_ROUTE' | 'FETCH_ERROR' | null;
+type VenueErrorType = 'RESOLVE_ERROR' | 'DATA_ERROR' | null;
 
-const TRAVEL_MODES: Array<{
+const TRAVEL_MODE_ICONS: Array<{
   mode: TravelModeOption;
-  label: string;
-  ariaLabel: string;
   icon: typeof TrainFront;
 }> = [
-  {
-    mode: 'TRANSIT',
-    label: 'Kollektivt',
-    ariaLabel: 'Välj kollektivtrafik som färdsätt',
-    icon: TrainFront,
-  },
-  {
-    mode: 'WALKING',
-    label: 'Till fots',
-    ariaLabel: 'Välj promenad som färdsätt',
-    icon: Footprints,
-  },
-  {
-    mode: 'BICYCLING',
-    label: 'Cykel',
-    ariaLabel: 'Välj cykel som färdsätt',
-    icon: Bike,
-  },
-  {
-    mode: 'DRIVING',
-    label: 'Bil',
-    ariaLabel: 'Välj bil som färdsätt',
-    icon: Car,
-  },
+  { mode: 'TRANSIT', icon: TrainFront },
+  { mode: 'WALKING', icon: Footprints },
+  { mode: 'BICYCLING', icon: Bike },
+  { mode: 'DRIVING', icon: Car },
 ];
 
 interface ResolvedVenue {
@@ -105,37 +86,42 @@ function isQuotaError(err: unknown): boolean {
   );
 }
 
-function formatDuration(millis: number): string {
+function formatDuration(
+  millis: number,
+  hoursUnit: string,
+  minutesUnit: string
+): string {
   const totalMinutes = Math.max(1, Math.round(millis / 60000));
   if (totalMinutes < 60) {
-    return `${totalMinutes} min`;
+    return `${totalMinutes} ${minutesUnit}`;
   }
   const hours = Math.floor(totalMinutes / 60);
   const mins = totalMinutes % 60;
-  return mins > 0 ? `${hours} tim ${mins} min` : `${hours} tim`;
+  return mins > 0
+    ? `${hours} ${hoursUnit} ${mins} ${minutesUnit}`
+    : `${hours} ${hoursUnit}`;
 }
 
-function formatDistance(meters: number): string {
+function formatDistance(meters: number, language: Language): string {
   if (meters < 1000) {
     return `${Math.round(meters)} m`;
   }
-  return `${(meters / 1000).toFixed(1).replace('.', ',')} km`;
+  const km = (meters / 1000).toFixed(1);
+  return `${language === 'sv' ? km.replace('.', ',') : km} km`;
 }
 
 interface RouteOverlayProps {
   venue: ResolvedVenue;
   origin: string | google.maps.LatLngLiteral;
-  originLabel: string;
   travelMode: TravelModeOption;
   onSummaryChange: (summary: RouteSummary | null) => void;
   onLoadingChange: (loading: boolean) => void;
-  onErrorChange: (error: string | null) => void;
+  onErrorChange: (error: RouteErrorType) => void;
 }
 
 function RouteOverlay({
   venue,
   origin,
-  originLabel,
   travelMode,
   onSummaryChange,
   onLoadingChange,
@@ -172,9 +158,7 @@ function RouteOverlay({
         const primaryRoute = routes?.[0];
         if (!primaryRoute) {
           onSummaryChange(null);
-          onErrorChange(
-            `Kunde inte hitta någon resväg från ${originLabel} med valt färdsätt.`
-          );
+          onErrorChange('NO_ROUTE');
           return;
         }
 
@@ -215,9 +199,7 @@ function RouteOverlay({
         if (isQuotaError(err)) {
           window.dispatchEvent(new CustomEvent('gmp-quota-exceeded'));
         }
-        onErrorChange(
-          'Vägbeskrivningen kunde inte hämtas just nu. Kontrollera startadressen och försök igen.'
-        );
+        onErrorChange('FETCH_ERROR');
       });
 
     return () => {
@@ -229,7 +211,6 @@ function RouteOverlay({
     routesLib,
     map,
     origin,
-    originLabel,
     travelMode,
     venue,
     onSummaryChange,
@@ -265,11 +246,12 @@ function RouteOverlay({
 }
 
 function DirectionsWorkspace() {
+  const { language, t } = useLanguage();
   const placesLib = useMapsLibrary('places');
   const loadingStatus = useApiLoadingStatus();
 
   const [venue, setVenue] = useState<ResolvedVenue | null>(null);
-  const [venueError, setVenueError] = useState<string | null>(null);
+  const [venueError, setVenueError] = useState<VenueErrorType>(null);
 
   const [originInput, setOriginInput] = useState('Stockholm Centralstation');
   const [activeOrigin, setActiveOrigin] = useState<
@@ -289,7 +271,7 @@ function DirectionsWorkspace() {
 
   const [routeSummary, setRouteSummary] = useState<RouteSummary | null>(null);
   const [isRouting, setIsRouting] = useState(false);
-  const [routeError, setRouteError] = useState<string | null>(null);
+  const [routeError, setRouteError] = useState<RouteErrorType>(null);
 
   // Resolve venue location and address dynamically from Google Places API (New)
   useEffect(() => {
@@ -314,7 +296,7 @@ function DirectionsWorkspace() {
             },
           });
         } else {
-          setVenueError('Kunde inte hämta platskoordinater från Google Maps.');
+          setVenueError('RESOLVE_ERROR');
         }
       })
       .catch((err: unknown) => {
@@ -322,7 +304,7 @@ function DirectionsWorkspace() {
         if (isQuotaError(err)) {
           window.dispatchEvent(new CustomEvent('gmp-quota-exceeded'));
         }
-        setVenueError('Kunde inte hämta platsdata från Google Maps.');
+        setVenueError('DATA_ERROR');
       });
 
     return () => {
@@ -410,17 +392,28 @@ function DirectionsWorkspace() {
     loadingStatus === APILoadingStatus.AUTH_FAILURE ||
     venueError
   ) {
+    const errorText =
+      venueError === 'RESOLVE_ERROR'
+        ? t.howToGetHere.venueResolveError
+        : venueError === 'DATA_ERROR'
+          ? t.howToGetHere.venueDataError
+          : t.howToGetHere.loadError;
     return (
       <div
         role="alert"
         className="rounded-lg border border-[var(--border-hairline)] bg-[var(--bg-canvas)] p-6 text-sm text-[var(--text-muted)]"
       >
-        Kunde inte ladda Google Maps-kartan just nu. Använd orienteringskartan
-        och kollektivtrafikinformationen ovan för att hitta till Torkel
-        Knutssonsgatan 2.
+        {errorText}
       </div>
     );
   }
+
+  const routeErrorText =
+    routeError === 'NO_ROUTE'
+      ? t.howToGetHere.noRouteError(activeOriginLabel)
+      : routeError === 'FETCH_ERROR'
+        ? t.howToGetHere.routeFetchError
+        : null;
 
   return (
     <div className="directions-planner grid grid-cols-1 gap-8 lg:grid-cols-12">
@@ -431,7 +424,7 @@ function DirectionsWorkspace() {
               htmlFor="directions-origin-input"
               className="block text-xs font-semibold text-[var(--text-primary)]"
             >
-              Var reser du ifrån?
+              {t.howToGetHere.originLabel}
             </label>
             <div className="mt-2 flex gap-2">
               <div className="relative flex-1">
@@ -440,8 +433,8 @@ function DirectionsWorkspace() {
                   type="text"
                   value={originInput}
                   onChange={(e) => void handleOriginChange(e.target.value)}
-                  placeholder="Skriv adress, station eller plats..."
-                  aria-label="Ange startadress eller hållplats för vägbeskrivning till Münchenbryggeriet"
+                  placeholder={t.howToGetHere.originPlaceholder}
+                  aria-label={t.howToGetHere.originInputAria}
                   aria-autocomplete="list"
                   aria-controls="origin-suggestions-list"
                   className="w-full rounded-md border border-[var(--border-hairline)] bg-[var(--bg-canvas)] px-3.5 py-2.5 text-sm text-[var(--text-primary)] min-h-[44px]"
@@ -450,7 +443,7 @@ function DirectionsWorkspace() {
                   <ul
                     id="origin-suggestions-list"
                     role="listbox"
-                    aria-label="Adressförslag"
+                    aria-label={t.howToGetHere.suggestionsAria}
                     className="directions-planner__suggestions absolute left-0 right-0 top-full z-20 mt-1 max-h-56 overflow-y-auto rounded-md border border-[var(--border-hairline)] bg-[var(--bg-surface)] shadow-lg"
                   >
                     {suggestions.map((suggestion, index) => {
@@ -463,7 +456,7 @@ function DirectionsWorkspace() {
                             onClick={() =>
                               void handleSelectSuggestion(suggestion)
                             }
-                            aria-label={`Välj startplats ${label}`}
+                            aria-label={t.howToGetHere.selectOriginAria(label)}
                             className="w-full px-3.5 py-2.5 text-left text-xs text-[var(--text-primary)] hover:bg-[var(--bg-subtle)] transition-colors min-h-[40px]"
                           >
                             {label}
@@ -477,23 +470,23 @@ function DirectionsWorkspace() {
 
               <button
                 type="submit"
-                aria-label="Sök vägbeskrivning från angiven startadress"
+                aria-label={t.howToGetHere.searchSubmitAria}
                 className="btn-primary px-4 py-2 text-xs"
               >
                 <Search className="h-4 w-4" aria-hidden="true" />
-                <span>Visa</span>
+                <span>{t.howToGetHere.searchSubmit}</span>
               </button>
             </div>
             {isSuggesting && (
               <p className="mt-1.5 text-xs text-[var(--text-muted)]">
-                Hämtar platsförslag...
+                {t.howToGetHere.loadingSuggestions}
               </p>
             )}
           </form>
 
           <div className="mt-4">
             <p className="text-xs font-medium text-[var(--text-muted)]">
-              Vanliga knutpunkter
+              {t.howToGetHere.quickOriginsTitle}
             </p>
             <div className="mt-2 flex flex-wrap gap-2">
               {QUICK_ORIGINS.map((hub) => {
@@ -509,7 +502,7 @@ function DirectionsWorkspace() {
                       setActiveOriginLabel(hub);
                     }}
                     aria-pressed={isSelected}
-                    aria-label={`Beräkna resväg från ${hub}`}
+                    aria-label={t.howToGetHere.quickOriginAria(hub)}
                     className={`rounded-md border px-3 py-1.5 text-xs font-medium transition-colors min-h-[36px] ${
                       isSelected
                         ? 'border-[var(--accent-brass)] bg-[var(--bg-surface)] text-[var(--text-primary)]'
@@ -525,22 +518,23 @@ function DirectionsWorkspace() {
 
           <div className="mt-5">
             <p className="text-xs font-medium text-[var(--text-muted)]">
-              Färdsätt
+              {t.howToGetHere.travelModeTitle}
             </p>
             <div
               role="group"
-              aria-label="Välj färdsätt"
+              aria-label={t.howToGetHere.travelModeGroupAria}
               className="mt-2 grid grid-cols-2 gap-2 sm:grid-cols-4"
             >
-              {TRAVEL_MODES.map(({ mode, label, ariaLabel, icon: Icon }) => {
+              {TRAVEL_MODE_ICONS.map(({ mode, icon: Icon }) => {
                 const isActive = travelMode === mode;
+                const modeCopy = t.howToGetHere.travelModes[mode];
                 return (
                   <button
                     key={mode}
                     type="button"
                     onClick={() => setTravelMode(mode)}
                     aria-pressed={isActive}
-                    aria-label={ariaLabel}
+                    aria-label={modeCopy.ariaLabel}
                     className={`inline-flex items-center justify-center gap-1.5 rounded-md border px-3 py-2 text-xs font-medium transition-colors min-h-[44px] ${
                       isActive
                         ? 'border-[var(--accent-brass)] bg-[var(--bg-surface)] text-[var(--text-primary)]'
@@ -548,7 +542,7 @@ function DirectionsWorkspace() {
                     }`}
                   >
                     <Icon className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
-                    <span>{label}</span>
+                    <span>{modeCopy.label}</span>
                   </button>
                 );
               })}
@@ -562,17 +556,17 @@ function DirectionsWorkspace() {
         >
           {isRouting && (
             <p className="text-xs text-[var(--text-muted)]">
-              Beräknar resväg från {activeOriginLabel}...
+              {t.howToGetHere.calculatingRoute(activeOriginLabel)}
             </p>
           )}
 
-          {!isRouting && routeError && (
+          {!isRouting && routeErrorText && (
             <p className="text-xs font-medium text-[var(--error-ink)]">
-              {routeError}
+              {routeErrorText}
             </p>
           )}
 
-          {!isRouting && !routeError && routeSummary && (
+          {!isRouting && !routeErrorText && routeSummary && (
             <div>
               <div className="flex flex-wrap items-baseline justify-between gap-2 border-b border-[var(--border-hairline)] pb-3">
                 <p className="inline-flex items-center gap-1.5 text-xs font-semibold text-[var(--text-primary)]">
@@ -580,11 +574,15 @@ function DirectionsWorkspace() {
                     className="h-3.5 w-3.5 text-[var(--accent-brass)]"
                     aria-hidden="true"
                   />
-                  <span>Från {activeOriginLabel}</span>
+                  <span>{t.howToGetHere.fromPrefix(activeOriginLabel)}</span>
                 </p>
                 <p className="typo-mono text-xs font-semibold text-[var(--accent-brass)]">
-                  {formatDuration(routeSummary.durationMillis)} ·{' '}
-                  {formatDistance(routeSummary.distanceMeters)}
+                  {formatDuration(
+                    routeSummary.durationMillis,
+                    t.howToGetHere.hoursUnit,
+                    t.howToGetHere.minutesUnit
+                  )}{' '}
+                  · {formatDistance(routeSummary.distanceMeters, language)}
                 </p>
               </div>
 
@@ -599,7 +597,7 @@ function DirectionsWorkspace() {
                         {idx + 1}. {step.instruction}
                       </span>
                       <span className="typo-mono shrink-0 text-[var(--text-primary)]">
-                        {formatDistance(step.distanceMeters)}
+                        {formatDistance(step.distanceMeters, language)}
                       </span>
                     </li>
                   ))}
@@ -624,7 +622,6 @@ function DirectionsWorkspace() {
               <RouteOverlay
                 venue={venue}
                 origin={activeOrigin}
-                originLabel={activeOriginLabel}
                 travelMode={travelMode}
                 onSummaryChange={setRouteSummary}
                 onLoadingChange={setIsRouting}
@@ -633,7 +630,7 @@ function DirectionsWorkspace() {
             </GoogleMap>
           ) : (
             <div className="flex h-full items-center justify-center p-6 text-sm text-[var(--text-muted)]">
-              Läser in Google Maps och platsdata...
+              {t.howToGetHere.loadingMap}
             </div>
           )}
         </div>
@@ -643,6 +640,8 @@ function DirectionsWorkspace() {
 }
 
 export function HowToGetHere() {
+  const { t } = useLanguage();
+
   if (!MAPS_API_KEY) {
     return (
       <section
@@ -654,13 +653,12 @@ export function HowToGetHere() {
           id="heading-hitta-hit"
           className="typo-display text-xl font-semibold text-[var(--text-primary)]"
         >
-          Hur du tar dig hit
+          {t.howToGetHere.heading}
         </h3>
         <p className="mt-2 text-sm text-[var(--text-muted)]">
-          Reseplaneraren kräver en konfigurerad Google Maps-nyckel (
-          <code className="typo-mono">VITE_GOOGLE_MAPS_API_KEY</code>). Se
-          kollektivtrafik och orienteringskarta ovan för vägbeskrivning till
-          Torkel Knutssonsgatan 2.
+          {t.howToGetHere.missingKeyNoticeBefore}
+          <code className="typo-mono">VITE_GOOGLE_MAPS_API_KEY</code>
+          {t.howToGetHere.missingKeyNoticeAfter}
         </p>
       </section>
     );
@@ -677,11 +675,10 @@ export function HowToGetHere() {
           id="heading-hitta-hit"
           className="typo-display text-2xl font-semibold tracking-tight text-[var(--text-primary)]"
         >
-          Hur du tar dig hit
+          {t.howToGetHere.heading}
         </h3>
         <p className="mt-1.5 text-sm leading-relaxed text-[var(--text-muted)]">
-          Planera din resväg till Münchenbryggeriet med kollektivtrafik, cykel,
-          bil eller till fots direkt via Google Maps.
+          {t.howToGetHere.intro}
         </p>
       </header>
 

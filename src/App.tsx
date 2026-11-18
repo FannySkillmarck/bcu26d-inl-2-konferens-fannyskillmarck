@@ -6,18 +6,8 @@ import { NewsletterSignup } from './components/NewsletterSignup';
 import { ResilientImage } from './components/ResilientImage';
 import { SpeakerModal } from './components/SpeakerModal';
 import { TicketModal } from './components/TicketModal';
-import {
-  HERO_MEDIA,
-  KEY_FACTS,
-  PRACTICAL_DETAILS,
-  SCHEDULE_ITEMS,
-  SPEAKERS,
-  TICKET_TIERS,
-  VENUE_MAP_MEDIA,
-  type Speaker,
-  type TicketTier,
-  type TrackType,
-} from './data/conference';
+import { getConferenceData, type TrackType } from './data/conference';
+import { useLanguage } from './i18n/LanguageContext';
 
 const TRACK_FILTERS: Array<'Alla' | TrackType> = [
   'Alla',
@@ -27,12 +17,17 @@ const TRACK_FILTERS: Array<'Alla' | TrackType> = [
 ];
 
 export default function App() {
+  const { language, t } = useLanguage();
+  const data = getConferenceData(language);
+
   const [activeTrack, setActiveTrack] = useState<'Alla' | TrackType>('Alla');
-  const [selectedSpeaker, setSelectedSpeaker] = useState<Speaker | null>(null);
+  const [selectedSpeakerId, setSelectedSpeakerId] = useState<string | null>(
+    null
+  );
   const [highlightedSpeakerId, setHighlightedSpeakerId] = useState<
     string | null
   >(null);
-  const [selectedTicket, setSelectedTicket] = useState<TicketTier | null>(null);
+  const [selectedTicketId, setSelectedTicketId] = useState<string | null>(null);
   const [quotaExceeded, setQuotaExceeded] = useState(false);
 
   useEffect(() => {
@@ -42,13 +37,18 @@ export default function App() {
       window.removeEventListener('gmp-quota-exceeded', handleQuotaExceeded);
   }, []);
 
+  const selectedSpeaker =
+    data.speakers.find((s) => s.id === selectedSpeakerId) ?? null;
+  const selectedTicket =
+    data.ticketTiers.find((tier) => tier.id === selectedTicketId) ?? null;
+
   const visibleSchedule =
     activeTrack === 'Alla'
-      ? SCHEDULE_ITEMS
-      : SCHEDULE_ITEMS.filter((item) => item.track === activeTrack);
+      ? data.scheduleItems
+      : data.scheduleItems.filter((item) => item.track === activeTrack);
 
   const handleJumpToProgram = (speakerId: string) => {
-    setSelectedSpeaker(null);
+    setSelectedSpeakerId(null);
     setActiveTrack('Alla');
     setHighlightedSpeakerId(speakerId);
     const section = document.getElementById('program');
@@ -119,9 +119,9 @@ export default function App() {
                     <circle cx="24" cy="24" r="2.2" fill="currentColor" />
                   </svg>
                   <p className="text-xs font-medium text-[var(--text-muted)]">
-                    Stockholm ·{' '}
-                    <time dateTime="2027-10-20">20 oktober 2027</time> ·
-                    Münchenbryggeriet
+                    {t.hero.dateLocation}{' '}
+                    <time dateTime="2027-10-20">{t.hero.dateLabel}</time>{' '}
+                    {t.hero.venueLabel}
                   </p>
                 </div>
 
@@ -134,26 +134,23 @@ export default function App() {
                     textWrap: 'balance',
                   }}
                 >
-                  Där himmelsmekanik möter samtida kultur
+                  {t.hero.heading}
                 </h1>
 
                 <p className="mt-5 max-w-[44ch] text-base leading-relaxed text-[var(--text-muted)]">
-                  Ett heldagssymposium om astrologi, historiska stjärnatlaser
-                  och planetära tidslinjer. Sex nordiska röster utforskar hur
-                  stjärnhimlen formar vår uppfattning om tid, arkitektur och
-                  berättande.
+                  {t.hero.description}
                 </p>
               </div>
 
               <div className="mt-8 flex flex-wrap items-center gap-5">
                 <a href="#biljetter" className="btn-primary px-6 py-3 text-sm">
-                  Välj biljett
+                  {t.hero.primaryCta}
                 </a>
                 <a
                   href="#program"
                   className="inline-flex items-center gap-1.5 text-sm font-medium text-[var(--text-primary)] hover:text-[var(--accent-brass)] transition-colors whitespace-nowrap min-h-[44px]"
                 >
-                  <span>Utforska schemat</span>
+                  <span>{t.hero.secondaryCta}</span>
                   <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
                 </a>
               </div>
@@ -161,19 +158,19 @@ export default function App() {
 
             <figure className="lg:col-span-7 overflow-hidden rounded-lg border border-[var(--border-hairline)] bg-[var(--bg-subtle)]">
               <ResilientImage
-                src={HERO_MEDIA.src}
-                alt={HERO_MEDIA.alt}
-                width={HERO_MEDIA.width}
-                height={HERO_MEDIA.height}
+                src={data.heroMedia.src}
+                alt={data.heroMedia.alt}
+                width={data.heroMedia.width}
+                height={data.heroMedia.height}
                 priority
                 className="aspect-[16/10] w-full object-cover lg:aspect-auto lg:h-full"
-                fallbackLabel="Münchenbryggeriet — Mälarsalen"
+                fallbackLabel={t.hero.imageFallback}
               />
             </figure>
           </div>
 
           <dl className="mt-10 grid grid-cols-1 gap-6 border-y border-[var(--border-hairline)] py-6 sm:grid-cols-2 lg:grid-cols-4">
-            {KEY_FACTS.map((fact) => (
+            {data.keyFacts.map((fact) => (
               <div key={fact.label} className="min-w-0">
                 <dt className="text-xs font-medium text-[var(--text-muted)]">
                   {fact.label}
@@ -194,23 +191,27 @@ export default function App() {
         >
           <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
             <div>
-              <p className="section-header__kicker">01. Dagsprogram</p>
+              <p className="section-header__kicker">{t.schedule.kicker}</p>
               <h2
                 id="heading-program"
                 className="typo-display mt-3 text-3xl font-semibold tracking-tight sm:text-4xl"
                 style={{ textWrap: 'balance' }}
               >
-                Sex föreläsningar från gryning till skymning
+                {t.schedule.heading}
               </h2>
             </div>
 
             <div
               role="group"
-              aria-label="Filtrera programpunkter efter format"
+              aria-label={t.schedule.filterGroupAria}
               className="inline-flex flex-wrap items-center gap-1 rounded-md border border-[var(--border-hairline)] bg-[var(--bg-subtle)] p-1 self-start md:self-auto"
             >
               {TRACK_FILTERS.map((track) => {
                 const isActive = activeTrack === track;
+                const trackLabel =
+                  track === 'Alla'
+                    ? t.schedule.filterAll
+                    : t.schedule.tracks[track];
                 return (
                   <button
                     key={track}
@@ -226,7 +227,7 @@ export default function App() {
                         : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
                     }`}
                   >
-                    {track}
+                    {trackLabel}
                   </button>
                 );
               })}
@@ -249,7 +250,7 @@ export default function App() {
                         {item.time}
                       </time>
                       <p className="mt-1 text-xs text-[var(--text-muted)]">
-                        {item.track} · {item.room}
+                        {t.schedule.tracks[item.track]} · {item.room}
                       </p>
                     </div>
 
@@ -265,13 +266,8 @@ export default function App() {
                     <div className="md:col-span-3 md:text-right">
                       <button
                         type="button"
-                        onClick={() => {
-                          const found = SPEAKERS.find(
-                            (s) => s.id === item.speakerId
-                          );
-                          if (found) setSelectedSpeaker(found);
-                        }}
-                        aria-label={`Visa talarprofil för ${item.speaker}`}
+                        onClick={() => setSelectedSpeakerId(item.speakerId)}
+                        aria-label={t.schedule.speakerProfileAria(item.speaker)}
                         className="inline-flex min-h-[44px] items-center text-sm font-medium text-[var(--accent-brass)] hover:underline"
                       >
                         {item.speaker}
@@ -292,29 +288,27 @@ export default function App() {
         >
           <div className="mx-auto max-w-[1200px] px-4 sm:px-6">
             <header className="max-w-2xl">
-              <p className="section-header__kicker">02. Medverkande talare</p>
+              <p className="section-header__kicker">{t.speakers.kicker}</p>
               <h2
                 id="heading-talare"
                 className="typo-display mt-3 text-3xl font-semibold tracking-tight sm:text-4xl"
                 style={{ textWrap: 'balance' }}
               >
-                Forskare, formgivare och astrologer
+                {t.speakers.heading}
               </h2>
               <p className="mt-3 text-sm leading-relaxed text-[var(--text-muted)]">
-                Håll muspekaren över eller navigera med Tab till ett porträtt
-                för att visa kontaktuppgifter och föreläsningstitel. Välj ett
-                kort för fullständig biografi.
+                {t.speakers.intro}
               </p>
             </header>
 
             <ul className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {SPEAKERS.map((speaker) => (
+              {data.speakers.map((speaker) => (
                 <li key={speaker.id}>
                   <article className="speaker-card rounded-lg">
                     <figure className="speaker-card__media relative aspect-[3/4] overflow-hidden bg-[var(--bg-subtle)]">
                       <ResilientImage
                         src={speaker.image}
-                        alt={`Porträtt av ${speaker.name}, ${speaker.role}`}
+                        alt={t.speakers.portraitAlt(speaker.name, speaker.role)}
                         width={speaker.width}
                         height={speaker.height}
                         className="speaker-card__portrait h-full w-full object-cover"
@@ -347,8 +341,15 @@ export default function App() {
                       <h3 className="typo-display text-lg font-semibold text-[var(--text-primary)]">
                         <button
                           type="button"
-                          onClick={() => setSelectedSpeaker(speaker)}
-                          aria-label={`${speaker.name}, ${speaker.role} från ${speaker.city}. Föreläsning: ${speaker.sessionTitle}, ${speaker.sessionTime}. Kontakt: ${speaker.email}. Öppna fullständig biografi.`}
+                          onClick={() => setSelectedSpeakerId(speaker.id)}
+                          aria-label={t.speakers.cardAria(
+                            speaker.name,
+                            speaker.role,
+                            speaker.city,
+                            speaker.sessionTitle,
+                            speaker.sessionTime,
+                            speaker.email
+                          )}
                           className="speaker-card__trigger text-left after:absolute after:inset-0 after:content-['']"
                         >
                           {speaker.name}
@@ -372,22 +373,21 @@ export default function App() {
           className="mx-auto max-w-[1200px] px-4 py-16 sm:px-6 lg:py-24"
         >
           <header className="max-w-2xl">
-            <p className="section-header__kicker">03. Biljettnivåer</p>
+            <p className="section-header__kicker">{t.tickets.kicker}</p>
             <h2
               id="heading-biljetter"
               className="typo-display mt-3 text-3xl font-semibold tracking-tight sm:text-4xl"
               style={{ textWrap: 'balance' }}
             >
-              Välj det pass som passar din dag
+              {t.tickets.heading}
             </h2>
             <p className="mt-3 text-sm leading-relaxed text-[var(--text-muted)]">
-              Alla biljetter inkluderar garderob, programhäfte och fri tillgång
-              till utställningsytan i foajén.
+              {t.tickets.intro}
             </p>
           </header>
 
           <ul className="ticket-grid mt-10 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
-            {TICKET_TIERS.map((tier) => (
+            {data.ticketTiers.map((tier) => (
               <li key={tier.id} className="ticket-grid__item flex">
                 <article
                   data-featured={tier.featured ? 'true' : 'false'}
@@ -400,7 +400,7 @@ export default function App() {
                       </h3>
                       {tier.featured && (
                         <strong className="text-xs font-semibold text-[var(--accent-brass)]">
-                          Rekommenderad
+                          {t.tickets.recommended}
                         </strong>
                       )}
                     </div>
@@ -433,15 +433,18 @@ export default function App() {
                     </p>
                     <button
                       type="button"
-                      onClick={() => setSelectedTicket(tier)}
-                      aria-label={`Välj biljettnivå ${tier.name} för ${tier.priceFormatted}`}
+                      onClick={() => setSelectedTicketId(tier.id)}
+                      aria-label={t.tickets.selectAria(
+                        tier.name,
+                        tier.priceFormatted
+                      )}
                       className={
                         tier.featured
                           ? 'btn-primary w-full px-4 py-2.5 text-xs'
                           : 'w-full rounded-md border border-[var(--border-hairline)] bg-[var(--bg-canvas)] px-4 py-2.5 text-xs font-semibold text-[var(--text-primary)] hover:border-[var(--accent-brass)] transition-colors whitespace-nowrap min-h-[44px]'
                       }
                     >
-                      Välj {tier.name}
+                      {t.tickets.selectCta(tier.name)}
                     </button>
                   </div>
                 </article>
@@ -459,19 +462,17 @@ export default function App() {
           <div className="mx-auto max-w-[1200px] px-4 sm:px-6">
             <div className="grid grid-cols-1 items-start gap-12 lg:grid-cols-12">
               <div className="lg:col-span-5">
-                <p className="section-header__kicker">
-                  04. Praktisk information
-                </p>
+                <p className="section-header__kicker">{t.practical.kicker}</p>
                 <h2
                   id="heading-praktiskt"
                   className="typo-display mt-3 text-3xl font-semibold tracking-tight sm:text-4xl"
                   style={{ textWrap: 'balance' }}
                 >
-                  Hitta till Münchenbryggeriet
+                  {t.practical.heading}
                 </h2>
 
                 <dl className="mt-8 divide-y divide-[var(--border-hairline)] border-y border-[var(--border-hairline)]">
-                  {PRACTICAL_DETAILS.map((row) => (
+                  {data.practicalDetails.map((row) => (
                     <div key={row.title} className="py-4">
                       <dt className="text-xs font-semibold text-[var(--text-primary)]">
                         {row.title}
@@ -487,12 +488,12 @@ export default function App() {
               <div className="lg:col-span-7">
                 <figure className="overflow-hidden rounded-lg border border-[var(--border-hairline)] bg-[var(--bg-surface)]">
                   <ResilientImage
-                    src={VENUE_MAP_MEDIA.src}
-                    alt={VENUE_MAP_MEDIA.alt}
-                    width={VENUE_MAP_MEDIA.width}
-                    height={VENUE_MAP_MEDIA.height}
+                    src={data.venueMapMedia.src}
+                    alt={data.venueMapMedia.alt}
+                    width={data.venueMapMedia.width}
+                    height={data.venueMapMedia.height}
                     className="aspect-[4/3] w-full object-cover"
-                    fallbackLabel="Karta: Torkel Knutssonsgatan 2, Stockholm"
+                    fallbackLabel={t.practical.mapFallback}
                   />
                   <figcaption className="flex flex-wrap items-center justify-between gap-2 border-t border-[var(--border-hairline)] px-4 py-3.5 text-xs text-[var(--text-muted)] sm:px-5">
                     <address className="inline-flex items-center gap-1.5 font-medium not-italic text-[var(--text-primary)]">
@@ -500,7 +501,7 @@ export default function App() {
                         className="h-3.5 w-3.5 shrink-0 text-[var(--accent-brass)]"
                         aria-hidden="true"
                       />
-                      Torkel Knutssonsgatan 2, Södermalm
+                      {t.practical.addressCaption}
                     </address>
                     <span className="typo-mono">59.3204° N, 18.0558° Ö</span>
                   </figcaption>
@@ -521,8 +522,7 @@ export default function App() {
                 Stjärnfall 2027
               </p>
               <p className="mt-2 max-w-sm text-xs leading-relaxed text-[var(--text-muted)]">
-                Nordiskt symposium om astrologi, himmelsmekanik och kosmisk tid
-                på Münchenbryggeriet i Stockholm.
+                {t.footer.tagline}
               </p>
               <address className="mt-4 text-xs not-italic text-[var(--text-muted)]">
                 <a
@@ -541,17 +541,17 @@ export default function App() {
 
           <div className="flex flex-col justify-between gap-4 border-t border-[var(--border-hairline)] pt-6 sm:flex-row sm:items-center">
             <p className="text-xs text-[var(--text-muted)]">
-              © 2027 Stjärnfall Symposium · Alla rättigheter förbehållna
+              {t.footer.copyright}
             </p>
 
-            <nav aria-label="Sidfotsnavigation">
+            <nav aria-label={t.footer.navAria}>
               <ul className="flex flex-wrap items-center gap-6 text-xs font-medium text-[var(--text-muted)]">
                 <li>
                   <a
                     href="#program"
                     className="hover:text-[var(--text-primary)]"
                   >
-                    Program
+                    {t.header.navProgram}
                   </a>
                 </li>
                 <li>
@@ -559,7 +559,7 @@ export default function App() {
                     href="#talare"
                     className="hover:text-[var(--text-primary)]"
                   >
-                    Talare
+                    {t.header.navSpeakers}
                   </a>
                 </li>
                 <li>
@@ -567,7 +567,7 @@ export default function App() {
                     href="#biljetter"
                     className="hover:text-[var(--text-primary)]"
                   >
-                    Biljetter
+                    {t.header.navTickets}
                   </a>
                 </li>
                 <li>
@@ -575,7 +575,7 @@ export default function App() {
                     href="#praktiskt"
                     className="hover:text-[var(--text-primary)]"
                   >
-                    Praktiskt
+                    {t.header.navPractical}
                   </a>
                 </li>
               </ul>
@@ -586,7 +586,7 @@ export default function App() {
 
       <SpeakerModal
         speaker={selectedSpeaker}
-        onClose={() => setSelectedSpeaker(null)}
+        onClose={() => setSelectedSpeakerId(null)}
         onJumpToProgram={() => {
           if (selectedSpeaker) handleJumpToProgram(selectedSpeaker.id);
         }}
@@ -594,7 +594,7 @@ export default function App() {
 
       <TicketModal
         tier={selectedTicket}
-        onClose={() => setSelectedTicket(null)}
+        onClose={() => setSelectedTicketId(null)}
       />
     </div>
   );
