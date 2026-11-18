@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { ArrowUpRight, Check, Mail, MapPin } from 'lucide-react';
+import { FaqSection } from './components/FaqSection';
 import { Header } from './components/Header';
 import { HowToGetHere } from './components/HowToGetHere';
 import { NewsletterSignup } from './components/NewsletterSignup';
@@ -512,6 +513,9 @@ export default function App() {
             <HowToGetHere />
           </div>
         </section>
+
+        {/* 6. FREQUENTLY ASKED QUESTIONS */}
+        <FaqSection items={data.faqItems} />
       </main>
 
       <footer className="border-t border-[var(--border-hairline)] bg-[var(--bg-canvas)] py-12">
@@ -576,6 +580,11 @@ export default function App() {
                     className="hover:text-[var(--text-primary)]"
                   >
                     {t.header.navPractical}
+                  </a>
+                </li>
+                <li>
+                  <a href="#faq" className="hover:text-[var(--text-primary)]">
+                    {t.faq.navLabel}
                   </a>
                 </li>
               </ul>

@@ -303,6 +303,27 @@
   .directions-planner__suggestions > li + li {
     border-top: 1px solid var(--border-hairline);
   }
+
+  /* FAQ Accordion BEM Component */
+  .faq-list > .faq-list__item + .faq-list__item {
+    border-top: 1px solid var(--border-hairline);
+  }
+
+  .faq-list__trigger {
+    transition: color 180ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .faq-list__trigger:hover {
+    color: var(--accent-brass);
+  }
+
+  .faq-list__icon {
+    transition: transform 200ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .faq-list__trigger[aria-expanded='true'] .faq-list__icon {
+    transform: rotate(180deg);
+  }
 }
 
 @keyframes orbitSpin {
@@ -356,6 +377,8 @@
   .speaker-card__portrait,
   .speaker-card__overlay,
   .ticket-card,
+  .faq-list__trigger,
+  .faq-list__icon,
   .site-nav__list > .site-nav__item > .site-nav__link::after,
   .btn-primary {
     transition: none;

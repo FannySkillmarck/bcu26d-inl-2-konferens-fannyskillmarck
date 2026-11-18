@@ -54,6 +54,12 @@ export interface TicketTier {
   quotaNote: string;
 }
 
+export interface FaqItem {
+  id: string;
+  question: string;
+  answer: string;
+}
+
 export interface ConferenceContent {
   heroMedia: ImageMedia;
   venueMapMedia: ImageMedia;
@@ -62,6 +68,7 @@ export interface ConferenceContent {
   speakers: Speaker[];
   ticketTiers: TicketTier[];
   practicalDetails: Array<{ title: string; detail: string }>;
+  faqItems: FaqItem[];
 }
 
 const CONFERENCE_DATA: Record<Language, ConferenceContent> = {
@@ -317,6 +324,38 @@ const CONFERENCE_DATA: Record<Language, ConferenceContent> = {
           'Stegfri entré och hiss till samtliga konferenssalar. Hörslinga finns installerad i Mälarsalen. Specialkost anges vid bokning.',
       },
     ],
+    faqItems: [
+      {
+        id: 'parking',
+        question: 'Var finns det parkering i närheten av Münchenbryggeriet?',
+        answer:
+          'Ett begränsat antal avgiftsbelagda gatuparkeringar finns längs Söder Mälarstrand och på Torkel Knutssonsgatan. Närmaste större parkeringshus ligger vid Hornsgatan och Mariatorget (cirka 5 minuters promenad). Vi rekommenderar i första hand tunnelbana till Mariatorget eller Slussen.',
+      },
+      {
+        id: 'dietary',
+        question: 'Hur hanteras specialkost, vegansk mat och allergier?',
+        answer:
+          'All fika och vår nordiska lunchbuffé märks tydligt med innehåll och erbjuder alltid vegetariska, veganska, glutenfria samt laktosfria alternativ. Ange eventuella matallergier direkt i fältet för specialkost vid biljettbokning, eller mejla info@stjarnfall.se senast fem dagar före symposiet.',
+      },
+      {
+        id: 'accessibility',
+        question: 'Är lokalerna anpassade för rullstol och hörselnedsättning?',
+        answer:
+          'Ja. Huvudentrén från Söder Mälarstrand har stegfri access och rymliga hissar leder direkt upp till både Mälarsalen och Bryggerisalen. Handikappanpassade toaletter finns på varje våningsplan, och hörslinga är installerad i Mälarsalen. Ledsagarbiljett ordnas kostnadsfritt via e-post.',
+      },
+      {
+        id: 'tickets-transfer',
+        question: 'Kan jag överlåta min biljett eller få återbetalning?',
+        answer:
+          'Biljetter kan överlåtas kostnadsfritt till en annan deltagare fram till 48 timmar före konferensens start. Återbetalning är möjlig fram till 30 dagar innan symposiet äger rum. Kontakta oss med ditt bokningsnamn så hjälper vi dig.',
+      },
+      {
+        id: 'coatcheck-wifi',
+        question: 'Ingår garderob, bagageförvaring och wifi?',
+        answer:
+          'Ja, bemannad garderob med plats för mindre resväskor ingår i alla biljettnivåer. Samtliga konferensytor har kostnadsfritt trådlöst nätverk samt eluttag i foajén.',
+      },
+    ],
   },
   en: {
     heroMedia: {
@@ -570,6 +609,39 @@ const CONFERENCE_DATA: Record<Language, ConferenceContent> = {
           'Step-free entrance and elevator access to all conference halls. Hearing loop installed in Mälarsalen. Dietary needs can be noted at booking.',
       },
     ],
+    faqItems: [
+      {
+        id: 'parking',
+        question: 'Where can I park near Münchenbryggeriet?',
+        answer:
+          'Limited paid street parking is available along Söder Mälarstrand and Torkel Knutssonsgatan. The nearest larger parking garages are located near Hornsgatan and Mariatorget (about a 5-minute walk). Whenever possible, we recommend taking the metro to Mariatorget or Slussen.',
+      },
+      {
+        id: 'dietary',
+        question: 'How are dietary requirements and food allergies handled?',
+        answer:
+          'All coffee breaks and our Nordic lunch buffet are clearly labelled and always include vegetarian, vegan, gluten-free, and lactose-free choices. Please enter any allergies in the dietary field when booking your ticket, or email info@stjarnfall.se at least five days before the event.',
+      },
+      {
+        id: 'accessibility',
+        question: 'Are the halls accessible for wheelchairs and hearing aids?',
+        answer:
+          'Yes. The main entrance via Söder Mälarstrand is step-free, and spacious elevators connect directly to both Mälarsalen and Bryggerisalen. Accessible restrooms are available on every floor, and a hearing loop is installed in Mälarsalen. Companion tickets are available free of charge upon request.',
+      },
+      {
+        id: 'tickets-transfer',
+        question:
+          'Can I transfer my ticket to someone else or request a refund?',
+        answer:
+          'Tickets can be transferred to another attendee free of charge up to 48 hours before the symposium begins. Full refunds are available up to 30 days prior to the event. Email us with your booking details and we will update your registration.',
+      },
+      {
+        id: 'coatcheck-wifi',
+        question: 'Are coat check, luggage storage, and Wi-Fi included?',
+        answer:
+          'Yes, attended coat check with space for cabin luggage is included with every pass. Free high-speed Wi-Fi and power outlets in the foyer are available throughout the day.',
+      },
+    ],
   },
   zh: {
     heroMedia: {
@@ -821,6 +893,38 @@ const CONFERENCE_DATA: Record<Language, ConferenceContent> = {
         title: '无障碍设施',
         detail:
           '无台阶平层入口，电梯直达所有会议厅；Mälarsalen 厅配有听力辅助感应环路。特殊饮食需求可在购票时备注。',
+      },
+    ],
+    faqItems: [
+      {
+        id: 'parking',
+        question: '慕尼黑啤酒厂会议中心附近有哪些停车位？',
+        answer:
+          'Söder Mälarstrand 沿线和 Torkel Knutssonsgatan 街道设有少量收费路边停车位。附近较大的室内停车场位于 Hornsgatan 与 Mariatorget 附近（步行约 5 分钟）。我们建议优先搭乘地铁前往 Mariatorget 或 Slussen 站。',
+      },
+      {
+        id: 'dietary',
+        question: '如何满足特殊饮食需求与食物过敏要求？',
+        answer:
+          '所有茶歇点心及北欧风味自助午餐均配有清晰成分标识，并常备素食、纯素、无麸质及无乳糖选项。请在预订门票时于“特殊饮食要求”栏注明过敏源，或最晚于活动前五天发送邮件至 info@stjarnfall.se。',
+      },
+      {
+        id: 'accessibility',
+        question: '场馆是否适合轮椅通行并配有听力辅助设备？',
+        answer:
+          '是的。Söder Mälarstrand 主入口提供无台阶平层通道，宽敞电梯可直达 Mälarsalen 厅与 Bryggerisalen 厅。每层均设无障碍洗手间，Mälarsalen 厅配有听力辅助感应环路。如有陪同人员需求，可通过邮件免费申请陪同席位。',
+      },
+      {
+        id: 'tickets-transfer',
+        question: '是否支持门票转让或退票？',
+        answer:
+          '门票可在研讨会开始前 48 小时内免费转让给其他参会者。活动前 30 天内支持全额退票。请将您的预订信息发送至联系邮箱，我们将为您办理变更。',
+      },
+      {
+        id: 'coatcheck-wifi',
+        question: '门票是否包含衣帽寄存、行李存放与无线网络？',
+        answer:
+          '包含。所有票种均免费提供专人看管的衣帽及随身登机箱寄存服务。会议全程覆盖免费无线网络，前厅亦配有电源插座。',
       },
     ],
   },

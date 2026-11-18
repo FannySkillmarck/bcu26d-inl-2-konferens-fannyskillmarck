@@ -78,6 +78,13 @@ export interface Translations {
     mapFallback: string;
     addressCaption: string;
   };
+  faq: {
+    kicker: string;
+    heading: string;
+    intro: string;
+    contactPrompt: string;
+    navLabel: string;
+  };
   howToGetHere: {
     heading: string;
     intro: string;
@@ -228,6 +235,14 @@ const TRANSLATIONS: Record<Language, Translations> = {
       heading: 'Hitta till Münchenbryggeriet',
       mapFallback: 'Karta: Torkel Knutssonsgatan 2, Stockholm',
       addressCaption: 'Torkel Knutssonsgatan 2, Södermalm',
+    },
+    faq: {
+      kicker: '05. Vanliga frågor',
+      heading: 'Vanliga frågor inför besöket',
+      intro:
+        'Här har vi samlat svar om parkering, specialkost, tillgänglighet och biljettvillkor på Münchenbryggeriet.',
+      contactPrompt: 'Saknar du svar på din fråga? Kontakta oss på',
+      navLabel: 'Vanliga frågor',
     },
     howToGetHere: {
       heading: 'Hur du tar dig hit',
@@ -399,6 +414,14 @@ const TRANSLATIONS: Record<Language, Translations> = {
       mapFallback: 'Map: Torkel Knutssonsgatan 2, Stockholm',
       addressCaption: 'Torkel Knutssonsgatan 2, Södermalm',
     },
+    faq: {
+      kicker: '05. FAQ',
+      heading: 'Frequently asked questions',
+      intro:
+        'Answers to common attendee questions regarding parking, dietary requirements, accessibility, and ticket policies at Münchenbryggeriet.',
+      contactPrompt: 'Still have a question? Reach us at',
+      navLabel: 'FAQ',
+    },
     howToGetHere: {
       heading: 'How to get here',
       intro:
@@ -569,6 +592,14 @@ const TRANSLATIONS: Record<Language, Translations> = {
       heading: '前往慕尼黑啤酒厂会议中心',
       mapFallback: '地图：Torkel Knutssonsgatan 2, Stockholm',
       addressCaption: 'Torkel Knutssonsgatan 2, 南岛区 (Södermalm)',
+    },
+    faq: {
+      kicker: '05. 常见问题',
+      heading: '参会常见问题解答',
+      intro:
+        '以下汇总了关于停车信息、特殊饮食需求、无障碍设施及门票政策的常见问题。',
+      contactPrompt: '仍有疑问？欢迎致信',
+      navLabel: '常见问题',
     },
     howToGetHere: {
       heading: '交通指南',
