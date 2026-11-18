@@ -15,11 +15,11 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-40 border-b border-[var(--border-hairline)] bg-[var(--bg-canvas)]/92 backdrop-blur-md">
-      <div className="mx-auto flex max-w-[1200px] items-center justify-between gap-2 px-3 py-3 sm:gap-8 sm:px-6 sm:py-3.5">
+      <div className="mx-auto flex max-w-[1200px] items-center justify-between gap-1.5 px-2.5 py-3 sm:gap-8 sm:px-6 sm:py-3.5">
         <a
           href="#top"
           aria-label={t.header.brandAria}
-          className="typo-display text-base font-semibold tracking-tight text-[var(--text-primary)] whitespace-nowrap shrink-0 sm:text-xl"
+          className="typo-display text-[15px] font-semibold tracking-tight text-[var(--text-primary)] whitespace-nowrap shrink-0 sm:text-xl"
         >
           Stjärnfall
         </a>
@@ -40,7 +40,7 @@ export function Header() {
           </ul>
         </nav>
 
-        <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
+        <div className="flex items-center gap-1 sm:gap-3 shrink-0">
           <div
             role="group"
             aria-label={t.header.languageGroupAria}
@@ -51,7 +51,7 @@ export function Header() {
               onClick={() => setLanguage('sv')}
               aria-pressed={language === 'sv'}
               aria-label={t.header.switchToSvAria}
-              className={`rounded px-2 py-1 text-[11px] font-semibold tracking-wide transition-colors min-h-[38px] min-w-[32px] ${
+              className={`rounded px-1.5 py-1 text-[11px] font-semibold tracking-wide transition-colors min-h-[38px] min-w-[26px] sm:px-2 sm:min-w-[32px] ${
                 language === 'sv'
                   ? 'bg-[var(--bg-surface)] text-[var(--text-primary)] shadow-xs'
                   : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
@@ -64,7 +64,7 @@ export function Header() {
               onClick={() => setLanguage('en')}
               aria-pressed={language === 'en'}
               aria-label={t.header.switchToEnAria}
-              className={`rounded px-2 py-1 text-[11px] font-semibold tracking-wide transition-colors min-h-[38px] min-w-[32px] ${
+              className={`rounded px-1.5 py-1 text-[11px] font-semibold tracking-wide transition-colors min-h-[38px] min-w-[26px] sm:px-2 sm:min-w-[32px] ${
                 language === 'en'
                   ? 'bg-[var(--bg-surface)] text-[var(--text-primary)] shadow-xs'
                   : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
@@ -72,12 +72,25 @@ export function Header() {
             >
               EN
             </button>
+            <button
+              type="button"
+              onClick={() => setLanguage('zh')}
+              aria-pressed={language === 'zh'}
+              aria-label={t.header.switchToZhAria}
+              className={`rounded px-1.5 py-1 text-[11px] font-semibold tracking-wide transition-colors min-h-[38px] min-w-[28px] sm:px-2 sm:min-w-[34px] whitespace-nowrap ${
+                language === 'zh'
+                  ? 'bg-[var(--bg-surface)] text-[var(--text-primary)] shadow-xs'
+                  : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
+              }`}
+            >
+              中文
+            </button>
           </div>
 
           <a
             href="#biljetter"
             aria-label={t.header.bookCtaAria}
-            className="btn-primary px-2.5 py-2 text-xs sm:px-4"
+            className="btn-primary px-2 py-2 text-[11px] sm:px-4 sm:text-xs"
           >
             {t.header.bookCta}
           </a>

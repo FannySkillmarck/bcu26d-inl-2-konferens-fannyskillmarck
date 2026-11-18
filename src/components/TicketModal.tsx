@@ -41,7 +41,7 @@ export function TicketModal({ tier, onClose }: TicketModalProps) {
 
   const totalSek = tier.priceSek * quantity;
   const formattedTotal = `${totalSek.toLocaleString(
-    language === 'sv' ? 'sv-SE' : 'en-US'
+    language === 'sv' ? 'sv-SE' : language === 'zh' ? 'zh-CN' : 'en-US'
   )} ${t.ticketModal.currencySuffix}`;
 
   const handleSubmit = (e: FormEvent) => {

@@ -6,7 +6,7 @@ import {
   type ReactNode,
 } from 'react';
 
-export type Language = 'sv' | 'en';
+export type Language = 'sv' | 'en' | 'zh';
 
 export interface Translations {
   documentTitle: string;
@@ -26,6 +26,7 @@ export interface Translations {
     languageGroupAria: string;
     switchToSvAria: string;
     switchToEnAria: string;
+    switchToZhAria: string;
   };
   hero: {
     dateLocation: string;
@@ -179,6 +180,7 @@ const TRANSLATIONS: Record<Language, Translations> = {
       languageGroupAria: 'Välj språk',
       switchToSvAria: 'Byt språk till svenska',
       switchToEnAria: 'Byt språk till engelska',
+      switchToZhAria: 'Byt språk till kinesiska',
     },
     hero: {
       dateLocation: 'Stockholm ·',
@@ -348,6 +350,7 @@ const TRANSLATIONS: Record<Language, Translations> = {
       languageGroupAria: 'Choose language',
       switchToSvAria: 'Switch language to Swedish',
       switchToEnAria: 'Switch language to English',
+      switchToZhAria: 'Switch language to Chinese',
     },
     hero: {
       dateLocation: 'Stockholm ·',
@@ -500,6 +503,171 @@ const TRANSLATIONS: Record<Language, Translations> = {
       navAria: 'Footer navigation',
     },
   },
+  zh: {
+    documentTitle: 'Stjärnfall 2027 — 星象学与宇宙时间北欧研讨会',
+    header: {
+      brandAria: 'Stjärnfall 2027 — 返回页面顶部',
+      mainNavAria: '主导航',
+      mobileNavAria: '移动端导航',
+      jumpToPrefix: '跳转至板块',
+      navProgram: '日程',
+      navSpeakers: '讲者',
+      navTickets: '门票',
+      navPractical: '实用信息',
+      bookCta: '预订席位',
+      bookCtaAria: '预订席位 — 前往门票类型',
+      openMenuAria: '打开导航菜单',
+      closeMenuAria: '关闭导航菜单',
+      languageGroupAria: '选择语言',
+      switchToSvAria: '切换语言为瑞典语',
+      switchToEnAria: '切换语言为英语',
+      switchToZhAria: '切换语言为中文',
+    },
+    hero: {
+      dateLocation: '斯德哥尔摩 ·',
+      dateLabel: '2027年10月20日',
+      venueLabel: '· 慕尼黑啤酒厂会议中心',
+      heading: '当天体力学遇上当代文化',
+      description:
+        '一场关于星象学、历史星图与行星时间轴的全日研讨会。六位北欧学者与创作者将共同探讨星空如何塑造我们对时间、建筑与叙事的理解。',
+      primaryCta: '选择门票',
+      secondaryCta: '浏览日程',
+      imageFallback: '慕尼黑啤酒厂会议中心 — Mälarsalen',
+    },
+    schedule: {
+      kicker: '01. 全日日程',
+      heading: '从清晨到黄昏的六场专题演讲',
+      filterGroupAria: '按环节类型筛选日程',
+      filterAll: '全部',
+      tracks: {
+        Huvudscen: '主舞台',
+        Workshop: '工作坊',
+        Samtal: '对谈',
+      },
+      speakerProfileAria: (speaker) => `查看 ${speaker} 的讲者简介`,
+    },
+    speakers: {
+      kicker: '02. 特邀讲者',
+      heading: '学者、设计师与占星研究者',
+      intro:
+        '将鼠标悬停在肖像上或使用 Tab 键聚焦，即可查看联系方式与演讲主题；点击卡片阅读完整个人简介。',
+      portraitAlt: (name, role) => `${name}肖像，${role}`,
+      cardAria: (name, role, city, sessionTitle, sessionTime, email) =>
+        `${name}，${role}，来自${city}。演讲：${sessionTitle}，${sessionTime}。联系邮箱：${email}。打开完整简介。`,
+    },
+    tickets: {
+      kicker: '03. 门票类型',
+      heading: '选择适合您行程的通行证',
+      intro:
+        '所有门票均包含衣帽寄存、纸质/电子议程手册以及前厅展览区的免费参观权限。',
+      recommended: '推荐选择',
+      selectCta: (name) => `选择${name}`,
+      selectAria: (name, price) => `选择${name}门票，价格 ${price}`,
+    },
+    practical: {
+      kicker: '04. 实用信息',
+      heading: '前往慕尼黑啤酒厂会议中心',
+      mapFallback: '地图：Torkel Knutssonsgatan 2, Stockholm',
+      addressCaption: 'Torkel Knutssonsgatan 2, 南岛区 (Södermalm)',
+    },
+    howToGetHere: {
+      heading: '交通指南',
+      intro:
+        '直接通过 Google Maps 规划前往慕尼黑啤酒厂会议中心的公共交通、骑行、驾车或步行路线。',
+      missingKeyNoticeBefore: '路线规划器需要配置 Google Maps 密钥（',
+      missingKeyNoticeAfter:
+        '）。请参阅上方公共交通说明与位置示意图前往 Torkel Knutssonsgatan 2。',
+      loadError:
+        '暂时无法加载 Google Maps 地图。请参考上方位置示意图与公共交通信息前往 Torkel Knutssonsgatan 2。',
+      originLabel: '您的出发地是？',
+      originPlaceholder: '输入地址、车站或地点名称...',
+      originInputAria: '输入出发地址或车站，获取前往慕尼黑啤酒厂会议中心的路线',
+      suggestionsAria: '地址建议',
+      selectOriginAria: (label) => `选择出发地点 ${label}`,
+      searchSubmit: '查询',
+      searchSubmitAria: '查询所填出发地的交通路线',
+      loadingSuggestions: '正在获取地点建议...',
+      quickOriginsTitle: '常用交通枢纽',
+      quickOriginAria: (hub) => `计算从 ${hub} 出发的路线`,
+      travelModeTitle: '出行方式',
+      travelModeGroupAria: '选择出行方式',
+      travelModes: {
+        TRANSIT: {
+          label: '公共交通',
+          ariaLabel: '选择公共交通出行',
+        },
+        WALKING: {
+          label: '步行',
+          ariaLabel: '选择步行出行',
+        },
+        BICYCLING: {
+          label: '骑行',
+          ariaLabel: '选择骑行出行',
+        },
+        DRIVING: {
+          label: '驾车',
+          ariaLabel: '选择驾车出行',
+        },
+      },
+      calculatingRoute: (origin) => `正在计算从 ${origin} 出发的路线...`,
+      fromPrefix: (origin) => `出发地：${origin}`,
+      loadingMap: '正在加载 Google Maps 与场馆位置数据...',
+      noRouteError: (origin) => `未找到从 ${origin} 出发的所选出行方式路线。`,
+      routeFetchError: '暂时无法获取路线指引，请检查出发地址后重试。',
+      venueResolveError: '无法从 Google Maps 获取场馆坐标。',
+      venueDataError: '无法从 Google Maps 获取场馆数据。',
+      hoursUnit: '小时',
+      minutesUnit: '分钟',
+    },
+    speakerModal: {
+      closeAria: '关闭讲者简介',
+      portraitAlt: (name) => `${name} 肖像`,
+      sessionLabel: '演讲场次',
+      viewInSchedule: '在日程中查看',
+    },
+    ticketModal: {
+      closeAria: '关闭预订表单',
+      reservedLabel: '席位已预留',
+      thankYou: (name) => `感谢您，${name}`,
+      confirmationPrefix: '您预订的',
+      confirmationMiddle: '已登记。确认函将发送至',
+      confirmationSuffix: '。',
+      closeBtn: '关闭',
+      bookingEyebrow: '门票预订 · Stjärnfall 2027',
+      nameLabel: '姓名',
+      namePlaceholder: '请输入您的姓名',
+      emailLabel: '电子邮箱',
+      emailPlaceholder: 'name@example.com',
+      quantityLabel: '门票数量',
+      quantityOption: (n) => `${n} 张`,
+      dietaryLabel: '特殊饮食要求（选填）',
+      dietaryPlaceholder: '例如：素食',
+      nameError: '请输入您的姓名。',
+      emailError: '请输入有效的电子邮箱以接收门票确认。',
+      totalLabel: '应付总额',
+      submitBtn: '完成预订',
+      currencySuffix: '瑞典克朗',
+    },
+    newsletter: {
+      heading: '2027 研讨会通讯',
+      description: '第一时间获取日程发布、讲者动态及增补席位通知。',
+      subscribedPrefix: '订阅成功！最新动态将发送至',
+      changeEmailBtn: '更换邮箱',
+      changeEmailAria: '使用另一个邮箱订阅研讨会通讯',
+      inputLabel: '订阅通讯的电子邮箱',
+      inputPlaceholder: 'name@example.com',
+      inputAria: '输入接收 Stjärnfall 2027 动态的电子邮箱',
+      submitBtn: '订阅',
+      submitAria: '订阅 Stjärnfall 2027 最新动态',
+      invalidEmailError: '请输入有效的电子邮箱地址。',
+    },
+    footer: {
+      tagline:
+        '于斯德哥尔摩慕尼黑啤酒厂会议中心举办的星象学、天体力学与宇宙时间北欧研讨会。',
+      copyright: '© 2027 Stjärnfall Symposium · 保留所有权利',
+      navAria: '页脚导航',
+    },
+  },
 };
 
 interface LanguageContextValue {
@@ -515,7 +683,7 @@ const STORAGE_KEY = 'stjarnfall-lang';
 function getInitialLanguage(): Language {
   try {
     const saved = window.localStorage.getItem(STORAGE_KEY);
-    if (saved === 'en' || saved === 'sv') return saved;
+    if (saved === 'en' || saved === 'sv' || saved === 'zh') return saved;
   } catch {
     // Ignore storage errors in restricted iframes
   }
@@ -537,7 +705,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   const t = TRANSLATIONS[language];
 
   useEffect(() => {
-    document.documentElement.lang = language;
+    document.documentElement.lang = language === 'zh' ? 'zh-CN' : language;
     document.title = t.documentTitle;
   }, [language, t.documentTitle]);
 
