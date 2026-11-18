@@ -49,6 +49,13 @@ export interface Translations {
       Samtal: string;
     };
     speakerProfileAria: (speaker: string) => string;
+    addToCalendarBtn: string;
+    addToCalendarAria: (title: string) => string;
+    calendarMenuAria: (title: string) => string;
+    googleCalendar: string;
+    outlookWeb: string;
+    outlookIcs: string;
+    savedConfirmation: string;
   };
   speakers: {
     kicker: string;
@@ -266,6 +273,13 @@ const TRANSLATIONS: Record<Language, Translations> = {
         Samtal: 'Samtal',
       },
       speakerProfileAria: (speaker) => `Visa talarprofil för ${speaker}`,
+      addToCalendarBtn: 'Lägg till i kalender',
+      addToCalendarAria: (title) => `Lägg till ${title} i kalender`,
+      calendarMenuAria: (title) => `Kalenderalternativ för ${title}`,
+      googleCalendar: 'Google Kalender',
+      outlookWeb: 'Outlook (Webb)',
+      outlookIcs: 'Outlook / Apple (.ics)',
+      savedConfirmation: 'Kalenderfil hämtad',
     },
     speakers: {
       kicker: '02. Medverkande talare',
@@ -503,6 +517,13 @@ const TRANSLATIONS: Record<Language, Translations> = {
         Samtal: 'Conversation',
       },
       speakerProfileAria: (speaker) => `View speaker profile for ${speaker}`,
+      addToCalendarBtn: 'Add to Calendar',
+      addToCalendarAria: (title) => `Add ${title} to calendar`,
+      calendarMenuAria: (title) => `Calendar options for ${title}`,
+      googleCalendar: 'Google Calendar',
+      outlookWeb: 'Outlook (Web)',
+      outlookIcs: 'Outlook / Apple (.ics)',
+      savedConfirmation: 'Calendar file downloaded',
     },
     speakers: {
       kicker: '02. Featured Speakers',
@@ -741,6 +762,13 @@ const TRANSLATIONS: Record<Language, Translations> = {
         Samtal: '对谈',
       },
       speakerProfileAria: (speaker) => `查看 ${speaker} 的讲者简介`,
+      addToCalendarBtn: '添加到日历',
+      addToCalendarAria: (title) => `将《${title}》添加到日历`,
+      calendarMenuAria: (title) => `《${title}》的日历选项`,
+      googleCalendar: 'Google 日历',
+      outlookWeb: 'Outlook（网页版）',
+      outlookIcs: 'Outlook / Apple (.ics)',
+      savedConfirmation: '已下载日历文件',
     },
     speakers: {
       kicker: '02. 特邀讲者',

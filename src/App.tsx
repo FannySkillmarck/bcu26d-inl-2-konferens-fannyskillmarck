@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { ArrowUpRight, Check, Mail, MapPin } from 'lucide-react';
+import { AddToCalendarButton } from './components/AddToCalendarButton';
 import { FaqSection } from './components/FaqSection';
 import { Header } from './components/Header';
 import { HowToGetHere } from './components/HowToGetHere';
@@ -248,7 +249,7 @@ export default function App() {
             </div>
           </div>
 
-          <ol className="schedule__list mt-10 overflow-hidden rounded-lg border border-[var(--border-hairline)] bg-[var(--bg-surface)]">
+          <ol className="schedule__list mt-10 rounded-lg border border-[var(--border-hairline)] bg-[var(--bg-surface)]">
             {visibleSchedule.map((item) => {
               const isHighlighted = highlightedSpeakerId === item.speakerId;
               return (
@@ -277,7 +278,7 @@ export default function App() {
                       </p>
                     </div>
 
-                    <div className="md:col-span-3 md:text-right">
+                    <div className="flex flex-wrap items-center justify-between gap-3 md:col-span-3 md:flex-col md:items-end md:justify-start">
                       <button
                         type="button"
                         onClick={() => setSelectedSpeakerId(item.speakerId)}
@@ -286,6 +287,8 @@ export default function App() {
                       >
                         {item.speaker}
                       </button>
+
+                      <AddToCalendarButton item={item} />
                     </div>
                   </article>
                 </li>
