@@ -125,6 +125,39 @@ export interface Translations {
     venueDataError: string;
     hoursUnit: string;
     minutesUnit: string;
+    tabGroupAria: string;
+    tabDirections: string;
+    tabHotels: string;
+    hotelSearchLabel: string;
+    hotelSearchPlaceholder: string;
+    hotelSearchAria: string;
+    hotelSearchBtn: string;
+    hotelRadiusLabel: string;
+    hotelRatingLabel: string;
+    hotelRatingAny: string;
+    hotelSearching: string;
+    hotelEmpty: string;
+    hotelError: string;
+    hotelDistanceFromVenue: (distance: string) => string;
+    hotelReviewsCount: (count: number) => string;
+    hotelShowOnMap: string;
+    hotelOpenMaps: string;
+    hotelVenuePinTitle: string;
+  };
+  weatherWidget: {
+    heading: string;
+    locationLabel: string;
+    refreshBtn: string;
+    refreshAria: string;
+    loading: string;
+    missingKeyNotice: string;
+    unavailableNotice: string;
+    feelsLike: string;
+    windLabel: string;
+    humidityLabel: string;
+    precipLabel: string;
+    forecastHeading: string;
+    todayLabel: string;
   };
   speakerModal: {
     closeAria: string;
@@ -365,6 +398,42 @@ const TRANSLATIONS: Record<Language, Translations> = {
       venueDataError: 'Kunde inte hämta platsdata från Google Maps.',
       hoursUnit: 'tim',
       minutesUnit: 'min',
+      tabGroupAria: 'Välj kartläge',
+      tabDirections: 'Vägbeskrivning',
+      tabHotels: 'Hotell i närheten',
+      hotelSearchLabel: 'Sök eller filtrera hotell nära Münchenbryggeriet',
+      hotelSearchPlaceholder: 'T.ex. boutique, Södermalm eller hotellnamn...',
+      hotelSearchAria: 'Sök efter hotell nära Münchenbryggeriet',
+      hotelSearchBtn: 'Sök hotell',
+      hotelRadiusLabel: 'Sökradie',
+      hotelRatingLabel: 'Lägsta betyg',
+      hotelRatingAny: 'Alla betyg',
+      hotelSearching: 'Söker hotell nära Münchenbryggeriet...',
+      hotelEmpty:
+        'Inga hotell hittades med valda filter. Prova en större sökradie.',
+      hotelError: 'Kunde inte hämta närliggande hotell just nu. Försök igen.',
+      hotelDistanceFromVenue: (distance) => `${distance} från lokalen`,
+      hotelReviewsCount: (count) => `${count} omdömen`,
+      hotelShowOnMap: 'Visa på kartan',
+      hotelOpenMaps: 'Google Maps',
+      hotelVenuePinTitle: 'Münchenbryggeriet (Symposium)',
+    },
+    weatherWidget: {
+      heading: 'Aktuellt väder & prognos · Stockholm',
+      locationLabel: 'Münchenbryggeriet, Södermalm',
+      refreshBtn: 'Uppdatera',
+      refreshAria: 'Uppdatera väderdata för Münchenbryggeriet',
+      loading: 'Hämtar väderprognos för Stockholm...',
+      missingKeyNotice:
+        'Väderwidgeten kräver en konfigurerad Google Maps Platform Weather API-nyckel.',
+      unavailableNotice:
+        'Väderdata från Google Maps Weather API är inte tillgänglig just nu.',
+      feelsLike: 'Känns som',
+      windLabel: 'Vind',
+      humidityLabel: 'Luftfuktighet',
+      precipLabel: 'Nederbörd',
+      forecastHeading: '5-dygnsprognos',
+      todayLabel: 'Idag',
     },
     speakerModal: {
       closeAria: 'Stäng talarprofil',
@@ -610,6 +679,42 @@ const TRANSLATIONS: Record<Language, Translations> = {
       venueDataError: 'Could not retrieve venue data from Google Maps.',
       hoursUnit: 'hr',
       minutesUnit: 'min',
+      tabGroupAria: 'Select map workspace mode',
+      tabDirections: 'Directions',
+      tabHotels: 'Nearby Hotels',
+      hotelSearchLabel: 'Search or filter hotels near Münchenbryggeriet',
+      hotelSearchPlaceholder: 'E.g. boutique, waterfront, or hotel name...',
+      hotelSearchAria: 'Search for hotels near Münchenbryggeriet',
+      hotelSearchBtn: 'Search',
+      hotelRadiusLabel: 'Radius',
+      hotelRatingLabel: 'Minimum rating',
+      hotelRatingAny: 'Any rating',
+      hotelSearching: 'Searching nearby hotels around Münchenbryggeriet...',
+      hotelEmpty:
+        'No hotels matched your current filters. Try expanding the radius.',
+      hotelError: 'Unable to load nearby hotels right now. Please try again.',
+      hotelDistanceFromVenue: (distance) => `${distance} from venue`,
+      hotelReviewsCount: (count) => `${count} reviews`,
+      hotelShowOnMap: 'Show on map',
+      hotelOpenMaps: 'Google Maps',
+      hotelVenuePinTitle: 'Münchenbryggeriet (Symposium)',
+    },
+    weatherWidget: {
+      heading: 'Local Weather & Forecast · Stockholm',
+      locationLabel: 'Münchenbryggeriet, Södermalm',
+      refreshBtn: 'Refresh',
+      refreshAria: 'Refresh weather forecast for Münchenbryggeriet',
+      loading: 'Loading Stockholm weather forecast...',
+      missingKeyNotice:
+        'The weather widget requires a configured Google Maps Platform Weather API key.',
+      unavailableNotice:
+        'Weather forecast data from Google Maps Weather API is currently unavailable.',
+      feelsLike: 'Feels like',
+      windLabel: 'Wind',
+      humidityLabel: 'Humidity',
+      precipLabel: 'Precipitation',
+      forecastHeading: '5-day outlook',
+      todayLabel: 'Today',
     },
     speakerModal: {
       closeAria: 'Close speaker profile',
@@ -850,6 +955,40 @@ const TRANSLATIONS: Record<Language, Translations> = {
       venueDataError: '无法从 Google Maps 获取场馆数据。',
       hoursUnit: '小时',
       minutesUnit: '分钟',
+      tabGroupAria: '选择地图功能视图',
+      tabDirections: '路线规划',
+      tabHotels: '周边酒店',
+      hotelSearchLabel: '搜索慕尼黑啤酒厂会议中心附近酒店',
+      hotelSearchPlaceholder: '输入酒店名称、街区或风格（可选）...',
+      hotelSearchAria: '搜索慕尼黑啤酒厂会议中心周边酒店',
+      hotelSearchBtn: '搜索酒店',
+      hotelRadiusLabel: '搜索半径',
+      hotelRatingLabel: '最低评分',
+      hotelRatingAny: '不限评分',
+      hotelSearching: '正在查找会场周边酒店...',
+      hotelEmpty: '当前筛选条件下未找到酒店，请尝试扩大搜索半径。',
+      hotelError: '暂时无法获取周边酒店信息，请稍后重试。',
+      hotelDistanceFromVenue: (distance) => `距会场 ${distance}`,
+      hotelReviewsCount: (count) => `${count} 条评价`,
+      hotelShowOnMap: '在地图上查看',
+      hotelOpenMaps: 'Google Maps',
+      hotelVenuePinTitle: '慕尼黑啤酒厂会议中心（会场）',
+    },
+    weatherWidget: {
+      heading: '场馆实时天气与预报 · 斯德哥尔摩',
+      locationLabel: 'Münchenbryggeriet, 南岛区',
+      refreshBtn: '刷新',
+      refreshAria: '刷新慕尼黑啤酒厂会议中心实时天气',
+      loading: '正在加载斯德哥尔摩天气预报...',
+      missingKeyNotice:
+        '天气组件需要配置 Google Maps Platform Weather API 密钥。',
+      unavailableNotice: 'Google Maps 天气服务当前不可用，请稍后重试。',
+      feelsLike: '体感温度',
+      windLabel: '风速',
+      humidityLabel: '湿度',
+      precipLabel: '降水概率',
+      forecastHeading: '未来 5 日预报',
+      todayLabel: '今天',
     },
     speakerModal: {
       closeAria: '关闭讲者简介',

@@ -12,6 +12,7 @@ import { NewsletterSignup } from './components/NewsletterSignup';
 import { ResilientImage } from './components/ResilientImage';
 import { SpeakerModal } from './components/SpeakerModal';
 import { TicketModal } from './components/TicketModal';
+import { VenueWeatherWidget } from './components/VenueWeatherWidget';
 import { Web3PassCard } from './components/Web3PassCard';
 import { getConferenceData, type TrackType } from './data/conference';
 import { useLanguage } from './i18n/LanguageContext';
@@ -532,6 +533,8 @@ export default function App() {
                 </figure>
               </div>
             </div>
+
+            <VenueWeatherWidget />
 
             <HowToGetHere />
           </div>

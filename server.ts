@@ -144,6 +144,97 @@ async function startServer(): Promise<void> {
     });
   });
 
+  app.get('/api/weather', async (req: Request, res: Response) => {
+    const mapsKey =
+      process.env.GOOGLE_MAPS_API_KEY ||
+      process.env.VITE_GOOGLE_MAPS_API_KEY ||
+      '';
+
+    if (!mapsKey) {
+      res.status(503).json({ error: 'MISSING_KEY' });
+      return;
+    }
+
+    const latRaw = Number(req.query.lat ?? 59.3204);
+    const lngRaw = Number(req.query.lng ?? 18.0558);
+    const lat = Number.isFinite(latRaw) ? latRaw : 59.3204;
+    const lng = Number.isFinite(lngRaw) ? lngRaw : 18.0558;
+
+    const currentUrl = new URL(
+      'https://weather.googleapis.com/v1/currentConditions:lookup'
+    );
+    currentUrl.searchParams.set('key', mapsKey);
+    currentUrl.searchParams.set('location.latitude', String(lat));
+    currentUrl.searchParams.set('location.longitude', String(lng));
+    currentUrl.searchParams.set('unitsSystem', 'METRIC');
+
+    const forecastUrl = new URL(
+      'https://weather.googleapis.com/v1/forecast/days:lookup'
+    );
+    forecastUrl.searchParams.set('key', mapsKey);
+    forecastUrl.searchParams.set('location.latitude', String(lat));
+    forecastUrl.searchParams.set('location.longitude', String(lng));
+    forecastUrl.searchParams.set('days', '5');
+    forecastUrl.searchParams.set('pageSize', '5');
+    forecastUrl.searchParams.set('unitsSystem', 'METRIC');
+
+    const headers: Record<string, string> = {
+      'X-Goog-Maps-Solution-ID': 'gmp_mcp_codeassist_v1_aistudio',
+    };
+    const referer = req.get('referer');
+    if (referer) {
+      headers['Referer'] = referer;
+    }
+
+    try {
+      const [currentRes, forecastRes] = await Promise.all([
+        fetch(currentUrl.toString(), { method: 'GET', headers }),
+        fetch(forecastUrl.toString(), { method: 'GET', headers }),
+      ]);
+
+      if (currentRes.status === 429 || forecastRes.status === 429) {
+        res.status(429).json({ error: 'QUOTA_EXCEEDED' });
+        return;
+      }
+
+      const currentJson = (await currentRes.json()) as Record<string, unknown>;
+      const forecastJson = (await forecastRes.json()) as Record<
+        string,
+        unknown
+      >;
+
+      const currentErrStatus = (
+        currentJson.error as { status?: string } | undefined
+      )?.status;
+      const forecastErrStatus = (
+        forecastJson.error as { status?: string } | undefined
+      )?.status;
+
+      if (
+        currentErrStatus === 'RESOURCE_EXHAUSTED' ||
+        forecastErrStatus === 'RESOURCE_EXHAUSTED'
+      ) {
+        res.status(429).json({ error: 'QUOTA_EXCEEDED' });
+        return;
+      }
+
+      if (!currentRes.ok) {
+        res.status(currentRes.status).json({ error: 'WEATHER_UNAVAILABLE' });
+        return;
+      }
+
+      res.setHeader('Cache-Control', 'no-store');
+      res.json({
+        current: currentJson,
+        forecastDays: Array.isArray(forecastJson.forecastDays)
+          ? forecastJson.forecastDays
+          : [],
+      });
+    } catch {
+      res.status(502).json({ error: 'WEATHER_UNAVAILABLE' });
+    }
+  });
+
   const isProduction =
     process.env.NODE_ENV === 'production' ||
     (process.env.npm_lifecycle_event === 'start' &&
