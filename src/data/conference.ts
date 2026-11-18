@@ -28,10 +28,17 @@ export interface ScheduleItem {
   description: string;
 }
 
+export interface Publication {
+  title: string;
+  venue: string;
+  year: string;
+}
+
 export interface Speaker {
   id: string;
   name: string;
   role: string;
+  affiliation: string;
   city: string;
   image: string;
   width: number;
@@ -41,6 +48,8 @@ export interface Speaker {
   sessionTitle: string;
   sessionTime: string;
   bio: string;
+  extendedBio: string;
+  publications: Publication[];
 }
 
 export interface TicketTier {
@@ -164,6 +173,8 @@ const CONFERENCE_DATA: Record<Language, ConferenceContent> = {
         id: 'astrid-lind',
         name: 'Astrid Lind',
         role: 'Idéhistoriker & författare',
+        affiliation:
+          'Uppsala universitet · Institutionen för idé- och lärdomshistoria',
         city: 'Uppsala',
         image: astridImg,
         width: 896,
@@ -173,11 +184,34 @@ const CONFERENCE_DATA: Record<Language, ConferenceContent> = {
         sessionTitle: 'Zodiakens återkomst i sekulär tid',
         sessionTime: '09:00 – 09:50',
         bio: 'Docent i idéhistoria vid Uppsala universitet och författare till "Almanackans dolda historia". Hon forskar om hur astronomiska trycksaker formade nordisk vardagstid från 1600-talet fram till i dag.',
+        extendedBio:
+          'Efter sin doktorsexamen i vetenskapshistoria har Astrid lett flera tvärvetenskapliga forskningsprojekt vid Kungliga Vetenskapsakademiens arkiv och Carolina Rediviva. Hennes aktuella forskning undersöker hur skiftet från tryckta folkkalendrar till digitala tidssystem skapat ett nytt kulturellt intresse för cyklisk tid och klassisk zodiaksymbolik.',
+        publications: [
+          {
+            title:
+              'Almanackans dolda historia: Himmelstecken och vardagstid i Norden 1650–1850',
+            venue: 'Nordic Academic Press, Lund',
+            year: '2024',
+          },
+          {
+            title:
+              'Secular Calendars and the Persistence of Zodiacal Metaphors in Late Modern Scandinavia',
+            venue: 'Journal of Northern European Cultural History, 18(2)',
+            year: '2022',
+          },
+          {
+            title:
+              'Tryckfrihet, spådomskonst och den kungliga vetenskapsalmanackan',
+            venue: 'Lychnos: Årsbok för idé- och lärdomshistoria',
+            year: '2020',
+          },
+        ],
       },
       {
         id: 'henrik-solberg',
         name: 'Henrik Solberg',
         role: 'Arkitekt & astrologihistoriker',
+        affiliation: 'Arkitektur- og designhøgskolen i Oslo (AHO)',
         city: 'Oslo',
         image: henrikImg,
         width: 896,
@@ -187,11 +221,34 @@ const CONFERENCE_DATA: Record<Language, ConferenceContent> = {
         sessionTitle: 'Saturnus återkomst och arkitekturens tidslinjer',
         sessionTime: '10:15 – 11:05',
         bio: 'Arkitekt SAR/MSA verksam i Oslo och Stockholm. Hans arbete undersöker ljusinsläpp, solur och kosmologisk orientering i nordiska byggnader och observatorier.',
+        extendedBio:
+          'Som gästforskare vid AHO i Oslo och tidigare rådgivare för kulturhistoriska restaureringar på Ven förenar Henrik praktisk byggnadskonst med arkitekturhistoria. Han studerar särskilt hur nordiskt lågt solvinkel-ljus och långa byggnadshorisonter inspirerat allt från renässansens Uraniborg till 1900-talets skandinaviska sakral- och institutionsarkitektur.',
+        publications: [
+          {
+            title:
+              'Uraniborg Reconsidered: Astronomical Orientation as Spatial Choreography',
+            venue: 'Nordic Journal of Architectural Research, 35(1)',
+            year: '2025',
+          },
+          {
+            title:
+              'Ljusaxel och livscykel: Långsamma tidsperspektiv i nordisk trä- och stenarkitektur',
+            venue: 'Arkitektur Förlag, Stockholm',
+            year: '2023',
+          },
+          {
+            title:
+              'Meridian Lines and Civic Timekeeping in Nineteenth-Century Observatories',
+            venue: 'Architectural Histories, 9(1)',
+            year: '2021',
+          },
+        ],
       },
       {
         id: 'maya-ekstrom',
         name: 'Maya Ekström',
         role: 'Astrolog & datavisualiserare',
+        affiliation: 'HDK-Valand · Göteborgs universitet',
         city: 'Göteborg',
         image: mayaImg,
         width: 896,
@@ -201,11 +258,33 @@ const CONFERENCE_DATA: Record<Language, ConferenceContent> = {
         sessionTitle: 'Att rita ett födelsehoroskop utan mystifikation',
         sessionTime: '11:30 – 12:20',
         bio: 'Informationsdesigner som förenar klassisk hellenistisk kartteknik med modern datagrafik. Hon leder regelbundet kurser i astronomisk geometri för formgivare.',
+        extendedBio:
+          'Maya är utbildad inom informationsdesign och tillämpad geometri vid HDK-Valand samt har arbetat med vetenskapliga museiutställningar i Köpenhamn och Göteborg. I sin praktik översätter hon ephemerisdata, ekliptiska koordinater och klassiska projektioner till klara, interaktiva diagram utan esoteriskt brus.',
+        publications: [
+          {
+            title:
+              'Visualizing the Ecliptic: Precision Diagramming from Alexandria to Vector Graphics',
+            venue: 'Information Design Journal, 29(3)',
+            year: '2025',
+          },
+          {
+            title:
+              'Cirkelns retorik: Om radiala grafer i astronomisk och astrologisk tradition',
+            venue: 'Form & Vetenskap, Göteborgs universitet',
+            year: '2023',
+          },
+          {
+            title: 'Open Ephemeris Schemas for Historical Chart Reconstruction',
+            venue: 'Proceedings of Nordic Visual Computing Symposium',
+            year: '2021',
+          },
+        ],
       },
       {
         id: 'freja-norberg',
         name: 'Freja Norberg',
         role: 'Etnolog & arkivforskare',
+        affiliation: 'Lunds universitet · Folklivsarkivet',
         city: 'Lund',
         image: frejaImg,
         width: 896,
@@ -215,11 +294,33 @@ const CONFERENCE_DATA: Record<Language, ConferenceContent> = {
         sessionTitle: 'Månfaser, tidvatten och folktro i Norden',
         sessionTime: '13:30 – 14:20',
         bio: 'Tidigare intendent vid Folklivsarkivet i Lund. Freja har katalogiserat över 400 handskrivna bondepraktikor och vädermärken längs den svenska västkusten.',
+        extendedBio:
+          'Freja disputerade i etnologi med fokus på maritim tidskultur och muntligt traderingsspråk kring månens skiften. Under femton års fältarbete och arkivinventering har hon digitaliserat sköra sjömansdagböcker och almanacksanteckningar från Bohuslän, Halland och Skåne för att visa hur himlavalvet fungerade som praktiskt arbetsredskap.',
+        publications: [
+          {
+            title:
+              'Månens makt över sill och sådd: Kustbefolkningens praktiska kosmologi 1720–1890',
+            venue: 'Rig: Kulturhistorisk tidskrift, 107(4)',
+            year: '2024',
+          },
+          {
+            title: 'Marginalia in Eighteenth-Century Swedish Peasant Almanacs',
+            venue: 'Ethnologia Scandinavica, 53',
+            year: '2022',
+          },
+          {
+            title:
+              'Vädermärken i handskrift: En arkivstudie från Folklivsarkivet i Lund',
+            venue: 'Arkiv för nordisk filologi & folkminne',
+            year: '2019',
+          },
+        ],
       },
       {
         id: 'oskar-nyman',
         name: 'Oskar Nyman',
         role: 'Typograf & bokformgivare',
+        affiliation: 'Nyman Bokform & Konstfack (gästlektor)',
         city: 'Stockholm',
         image: oskarImg,
         width: 896,
@@ -229,11 +330,32 @@ const CONFERENCE_DATA: Record<Language, ConferenceContent> = {
         sessionTitle: 'Kosmiska motiv i samtida skandinavisk typografi',
         sessionTime: '14:45 – 15:35',
         bio: 'Grundare av ateljén Nyman Bokform i Stockholm. Har formgivit uppmärksammade konstböcker, astronomiska kartverk och specialritade symboltypsnitt.',
+        extendedBio:
+          'Vid sidan av arbetet med Nyman Bokform undervisar Oskar som gästlektor i redaktionell typografi och bokarkitektur vid Konstfack. Han har tilldelats Svensk Bokkonst tre gånger och leder just nu ett forskningsbaserat typsnittsprojekt som rekonstruerar planet- och zodiakglyfer från 1500-talets nordiska träsnitt.',
+        publications: [
+          {
+            title:
+              'Glyphs of the Sphere: Designing Variable Astronomical Symbols for Print and Screen',
+            venue: 'Typography Papers, University of Reading',
+            year: '2025',
+          },
+          {
+            title: 'Kopparstickets disciplin i modern skandinavisk bokkonst',
+            venue: 'Biblis: Kvartalstidskrift för bokvänner, nr 104',
+            year: '2023',
+          },
+          {
+            title: 'Marginalnoter, kalendertabeller och typografisk rytm',
+            venue: 'Konstfack Visual Communication Essays',
+            year: '2021',
+          },
+        ],
       },
       {
         id: 'lucas-bergman',
         name: 'Lucas Bergman',
         role: 'Kulturpsykolog & essäist',
+        affiliation: 'Malmö universitet · Institutionen för kulturstudier',
         city: 'Malmö',
         image: lucasImg,
         width: 896,
@@ -243,6 +365,28 @@ const CONFERENCE_DATA: Record<Language, ConferenceContent> = {
         sessionTitle: 'Den personliga horisonten: Ascendenten som berättelse',
         sessionTime: '16:00 – 17:00',
         bio: 'Legitimerad psykolog och medarbetare i flera nordiska kulturtidskrifter. Han skriver om symbolik, självberättelser och ritualer i en sekulariserad tid.',
+        extendedBio:
+          'Lucas kombinerar klinisk erfarenhet av narrativ terapi med akademiska studier i kulturpsykologi vid Malmö universitet. I sina essäer utforskar han varför moderna människor vänder sig till symboliska språk och horoskopiska arketyper för att skapa sammanhang mellan inre identitet och yttre livshändelser.',
+        publications: [
+          {
+            title:
+              'Narrative Horizons: Symbolic Language and Self-Authorship in Secular Modernity',
+            venue: 'Nordic Psychology & Culture Quarterly, 41(2)',
+            year: '2025',
+          },
+          {
+            title:
+              'Ritualer utan dogm: Samtidens längtan efter meningsbärande tid',
+            venue: 'Ord & Bild, nr 3–4',
+            year: '2023',
+          },
+          {
+            title:
+              'Archetypal Framing in Contemporary Biographical Storytelling',
+            venue: 'European Journal of Cultural Psychology, 14(1)',
+            year: '2020',
+          },
+        ],
       },
     ],
     ticketTiers: [
@@ -449,6 +593,8 @@ const CONFERENCE_DATA: Record<Language, ConferenceContent> = {
         id: 'astrid-lind',
         name: 'Astrid Lind',
         role: 'Historian of Ideas & Author',
+        affiliation:
+          'Uppsala University · Department of History of Science and Ideas',
         city: 'Uppsala',
         image: astridImg,
         width: 896,
@@ -458,11 +604,34 @@ const CONFERENCE_DATA: Record<Language, ConferenceContent> = {
         sessionTitle: 'The Return of the Zodiac in Secular Time',
         sessionTime: '09:00 – 09:50',
         bio: 'Associate Professor in the History of Ideas at Uppsala University and author of "The Hidden History of the Almanac". She studies how astronomical print shaped Nordic everyday time from the 1600s to today.',
+        extendedBio:
+          'Following her PhD in the History of Science, Astrid has directed interdisciplinary archival studies at the Royal Swedish Academy of Sciences and Carolina Rediviva Library. Her recent scholarship investigates how the transition from printed folk calendars to digital scheduling sparked renewed cultural fascination with cyclical time and zodiacal symbolism.',
+        publications: [
+          {
+            title:
+              'The Hidden History of the Almanac: Celestial Signs and Everyday Time in the North 1650–1850',
+            venue: 'Nordic Academic Press, Lund',
+            year: '2024',
+          },
+          {
+            title:
+              'Secular Calendars and the Persistence of Zodiacal Metaphors in Late Modern Scandinavia',
+            venue: 'Journal of Northern European Cultural History, 18(2)',
+            year: '2022',
+          },
+          {
+            title:
+              'Press Freedom, Prognostication, and the Royal Swedish Almanac',
+            venue: 'Lychnos: Yearbook for History of Ideas and Science',
+            year: '2020',
+          },
+        ],
       },
       {
         id: 'henrik-solberg',
         name: 'Henrik Solberg',
         role: 'Architect & Astrological Historian',
+        affiliation: 'Oslo School of Architecture and Design (AHO)',
         city: 'Oslo',
         image: henrikImg,
         width: 896,
@@ -472,11 +641,34 @@ const CONFERENCE_DATA: Record<Language, ConferenceContent> = {
         sessionTitle: 'Saturn Return and the Timelines of Architecture',
         sessionTime: '10:15 – 11:05',
         bio: 'Architect SAR/MSA based in Oslo and Stockholm. His work investigates daylight apertures, sundials, and cosmological orientation in Nordic buildings and observatories.',
+        extendedBio:
+          'As a visiting researcher at AHO in Oslo and former heritage advisor for historical restorations on Ven, Henrik bridges architectural practice with early-modern science history. His research examines how low Nordic solar angles and multi-decade construction horizons shaped sites from Renaissance Uraniborg to twentieth-century Scandinavian civic architecture.',
+        publications: [
+          {
+            title:
+              'Uraniborg Reconsidered: Astronomical Orientation as Spatial Choreography',
+            venue: 'Nordic Journal of Architectural Research, 35(1)',
+            year: '2025',
+          },
+          {
+            title:
+              'Solar Axis and Lifecycle: Long-Horizon Perspectives in Nordic Timber and Stone',
+            venue: 'Arkitektur Förlag, Stockholm',
+            year: '2023',
+          },
+          {
+            title:
+              'Meridian Lines and Civic Timekeeping in Nineteenth-Century Observatories',
+            venue: 'Architectural Histories, 9(1)',
+            year: '2021',
+          },
+        ],
       },
       {
         id: 'maya-ekstrom',
         name: 'Maya Ekström',
         role: 'Astrologer & Data Visualiser',
+        affiliation: 'HDK-Valand · University of Gothenburg',
         city: 'Gothenburg',
         image: mayaImg,
         width: 896,
@@ -486,11 +678,33 @@ const CONFERENCE_DATA: Record<Language, ConferenceContent> = {
         sessionTitle: 'Drawing a Birth Chart Without Mystification',
         sessionTime: '11:30 – 12:20',
         bio: 'Information designer bridging classical Hellenistic charting techniques with modern data graphics. She regularly leads courses in astronomical geometry for designers.',
+        extendedBio:
+          'Trained in information design and applied geometry at HDK-Valand, Maya has curated scientific exhibition graphics for museums in Copenhagen and Gothenburg. Her studio practice translates planetary ephemeris datasets, ecliptic coordinates, and historical projections into clear visual diagrams stripped of unnecessary obscurity.',
+        publications: [
+          {
+            title:
+              'Visualizing the Ecliptic: Precision Diagramming from Alexandria to Vector Graphics',
+            venue: 'Information Design Journal, 29(3)',
+            year: '2025',
+          },
+          {
+            title:
+              'Rhetoric of the Circle: Radial Charts in Astronomical and Astrological Tradition',
+            venue: 'Form & Science, University of Gothenburg',
+            year: '2023',
+          },
+          {
+            title: 'Open Ephemeris Schemas for Historical Chart Reconstruction',
+            venue: 'Proceedings of Nordic Visual Computing Symposium',
+            year: '2021',
+          },
+        ],
       },
       {
         id: 'freja-norberg',
         name: 'Freja Norberg',
         role: 'Ethnologist & Archival Researcher',
+        affiliation: 'Lund University · Folklife Archives',
         city: 'Lund',
         image: frejaImg,
         width: 896,
@@ -500,11 +714,33 @@ const CONFERENCE_DATA: Record<Language, ConferenceContent> = {
         sessionTitle: 'Lunar Phases, Tides, and Nordic Folklore',
         sessionTime: '13:30 – 14:20',
         bio: 'Former curator at the Folklife Archives in Lund. Freja has catalogued over 400 handwritten farmers’ almanacs and weather proverbs along Sweden’s west coast.',
+        extendedBio:
+          'Freja earned her doctorate in ethnology studying maritime timekeeping and oral traditions tied to lunar phases. Over fifteen years of archival fieldwork, she has digitized fragile sailor logbooks and marginalia from Bohuslän, Halland, and Skåne, revealing how the night sky functioned as a practical agricultural and navigational instrument.',
+        publications: [
+          {
+            title:
+              'Lunar Influence on Catch and Harvest: Practical Coastal Cosmology 1720–1890',
+            venue: 'Rig: Nordic Cultural History Journal, 107(4)',
+            year: '2024',
+          },
+          {
+            title: 'Marginalia in Eighteenth-Century Swedish Peasant Almanacs',
+            venue: 'Ethnologia Scandinavica, 53',
+            year: '2022',
+          },
+          {
+            title:
+              'Weather Proverbs in Manuscript: An Archival Survey from Lund',
+            venue: 'Archive for Nordic Philology & Folklore',
+            year: '2019',
+          },
+        ],
       },
       {
         id: 'oskar-nyman',
         name: 'Oskar Nyman',
         role: 'Typographer & Book Designer',
+        affiliation: 'Nyman Bokform & Konstfack (Visiting Lecturer)',
         city: 'Stockholm',
         image: oskarImg,
         width: 896,
@@ -514,11 +750,33 @@ const CONFERENCE_DATA: Record<Language, ConferenceContent> = {
         sessionTitle: 'Cosmic Motifs in Contemporary Scandinavian Typography',
         sessionTime: '14:45 – 15:35',
         bio: 'Founder of studio Nyman Bokform in Stockholm. Has designed acclaimed art books, astronomical atlases, and bespoke symbolic typefaces.',
+        extendedBio:
+          'Alongside leading Nyman Bokform, Oskar teaches editorial typography and book architecture as a visiting lecturer at Konstfack in Stockholm. A three-time Swedish Book Design Award laureate, he currently directs a research typeface project reconstructing planetary and zodiacal glyphs from sixteenth-century Nordic woodcuts.',
+        publications: [
+          {
+            title:
+              'Glyphs of the Sphere: Designing Variable Astronomical Symbols for Print and Screen',
+            venue: 'Typography Papers, University of Reading',
+            year: '2025',
+          },
+          {
+            title:
+              'The Discipline of Copperplate Engraving in Modern Scandinavian Book Art',
+            venue: 'Biblis: Quarterly for Book Arts, Issue 104',
+            year: '2023',
+          },
+          {
+            title: 'Marginal Notes, Calendar Tables, and Typographic Rhythm',
+            venue: 'Konstfack Visual Communication Essays',
+            year: '2021',
+          },
+        ],
       },
       {
         id: 'lucas-bergman',
         name: 'Lucas Bergman',
         role: 'Cultural Psychologist & Essayist',
+        affiliation: 'Malmö University · Department of Cultural Studies',
         city: 'Malmö',
         image: lucasImg,
         width: 896,
@@ -528,6 +786,28 @@ const CONFERENCE_DATA: Record<Language, ConferenceContent> = {
         sessionTitle: 'The Personal Horizon: The Ascendant as Narrative',
         sessionTime: '16:00 – 17:00',
         bio: 'Licensed psychologist and contributor to several Nordic cultural journals. He writes on symbolism, personal narrative, and ritual in a secular age.',
+        extendedBio:
+          'Lucas combines clinical practice in narrative psychology with academic research in cultural studies at Malmö University. His essays examine why modern individuals gravitate toward symbolic systems and astrological archetypes to bridge inner identity with life transitions.',
+        publications: [
+          {
+            title:
+              'Narrative Horizons: Symbolic Language and Self-Authorship in Secular Modernity',
+            venue: 'Nordic Psychology & Culture Quarterly, 41(2)',
+            year: '2025',
+          },
+          {
+            title:
+              'Rituals Without Dogma: Contemporary Longing for Meaningful Time',
+            venue: 'Ord & Bild Cultural Review, 3–4',
+            year: '2023',
+          },
+          {
+            title:
+              'Archetypal Framing in Contemporary Biographical Storytelling',
+            venue: 'European Journal of Cultural Psychology, 14(1)',
+            year: '2020',
+          },
+        ],
       },
     ],
     ticketTiers: [
@@ -735,6 +1015,7 @@ const CONFERENCE_DATA: Record<Language, ConferenceContent> = {
         id: 'astrid-lind',
         name: 'Astrid Lind',
         role: '思想史学者兼作家',
+        affiliation: '乌普萨拉大学 · 思想与科学史系',
         city: '乌普萨拉',
         image: astridImg,
         width: 896,
@@ -744,11 +1025,32 @@ const CONFERENCE_DATA: Record<Language, ConferenceContent> = {
         sessionTitle: '世俗时代中的黄道十二宫回归',
         sessionTime: '09:00 – 09:50',
         bio: '乌普萨拉大学思想史副教授，《历书的隐秘历史》作者。长期研究17世纪以来天文出版物如何塑造北欧日常时间观念。',
+        extendedBio:
+          '取得科学史博士学位后，Astrid 先后主持瑞典皇家科学院档案馆与 Carolina Rediviva 图书馆多项跨学科研究项目。她的最新研究重点探讨从印刷民间历书向数字日程系统转型后，当代社会对循环时间与古典黄道象征重新燃起的文化兴趣。',
+        publications: [
+          {
+            title: '《历书的隐秘历史：1650–1850年北欧的天象符号与日常时间》',
+            venue: 'Nordic Academic Press，隆德',
+            year: '2024',
+          },
+          {
+            title:
+              'Secular Calendars and the Persistence of Zodiacal Metaphors in Late Modern Scandinavia',
+            venue: 'Journal of Northern European Cultural History, 18(2)',
+            year: '2022',
+          },
+          {
+            title: '《出版自由、占卜术与皇家科学历书》',
+            venue: '《Lychnos》思想与科学史年刊',
+            year: '2020',
+          },
+        ],
       },
       {
         id: 'henrik-solberg',
         name: 'Henrik Solberg',
         role: '建筑师兼星象史研究者',
+        affiliation: '奥斯陆建筑与设计学院 (AHO)',
         city: '奥斯陆',
         image: henrikImg,
         width: 896,
@@ -758,11 +1060,33 @@ const CONFERENCE_DATA: Record<Language, ConferenceContent> = {
         sessionTitle: '土星回归与建筑的时间轴',
         sessionTime: '10:15 – 11:05',
         bio: '活跃于奥斯陆与斯德哥尔摩的 SAR/MSA 注册建筑师，专注于北欧建筑与天文台中的采光、日晷与宇宙方位研究。',
+        extendedBio:
+          '作为奥斯陆建筑与设计学院 (AHO) 访问学者及文岛古迹修复历史顾问，Henrik 将建筑设计实践与近代科学史紧密结合。他的研究着重剖析北欧低太阳高度角及数十年建造周期如何塑造从文艺复兴时期天堡 (Uraniborg) 到二十世纪北欧公共建筑的空间格局。',
+        publications: [
+          {
+            title:
+              'Uraniborg Reconsidered: Astronomical Orientation as Spatial Choreography',
+            venue: 'Nordic Journal of Architectural Research, 35(1)',
+            year: '2025',
+          },
+          {
+            title: '《光轴与生命周期：北欧木石建筑中的长尺度时间观》',
+            venue: 'Arkitektur Förlag，斯德哥尔摩',
+            year: '2023',
+          },
+          {
+            title:
+              'Meridian Lines and Civic Timekeeping in Nineteenth-Century Observatories',
+            venue: 'Architectural Histories, 9(1)',
+            year: '2021',
+          },
+        ],
       },
       {
         id: 'maya-ekstrom',
         name: 'Maya Ekström',
         role: '占星学者兼数据可视化设计师',
+        affiliation: '哥德堡大学 · HDK-Valand 设计学院',
         city: '哥德堡',
         image: mayaImg,
         width: 896,
@@ -772,11 +1096,32 @@ const CONFERENCE_DATA: Record<Language, ConferenceContent> = {
         sessionTitle: '去神秘化地绘制出生星盘',
         sessionTime: '11:30 – 12:20',
         bio: '将古典希腊化时期制图技艺与现代数据图形相结合的信息设计师，定期为设计师群体开设天文几何课程。',
+        extendedBio:
+          'Maya 毕业于哥德堡大学 HDK-Valand 信息设计与应用几何专业，曾为哥本哈根及哥德堡多家科学博物馆策划展览视觉图形。在日常工作室实践中，她致力于将星历表数据、黄道坐标与历史天球投影转化为清晰直观、去神秘化的矢量图表。',
+        publications: [
+          {
+            title:
+              'Visualizing the Ecliptic: Precision Diagramming from Alexandria to Vector Graphics',
+            venue: 'Information Design Journal, 29(3)',
+            year: '2025',
+          },
+          {
+            title: '《圆的修辞：天文与星象传统中的径向图表》',
+            venue: '《Form & Science》，哥德堡大学',
+            year: '2023',
+          },
+          {
+            title: 'Open Ephemeris Schemas for Historical Chart Reconstruction',
+            venue: '北欧视觉计算研讨会论文集',
+            year: '2021',
+          },
+        ],
       },
       {
         id: 'freja-norberg',
         name: 'Freja Norberg',
         role: '民俗学家兼档案研究员',
+        affiliation: '隆德大学 · 民俗档案馆',
         city: '隆德',
         image: frejaImg,
         width: 896,
@@ -786,11 +1131,31 @@ const CONFERENCE_DATA: Record<Language, ConferenceContent> = {
         sessionTitle: '北欧的月相、潮汐与民间信仰',
         sessionTime: '13:30 – 14:20',
         bio: '曾任隆德民俗档案馆馆员，系统编目了瑞典西海岸四百余份手写农民历书与气象谚语。',
+        extendedBio:
+          'Freja 拥有民俗学博士学位，长期研究围绕月相变化形成的海洋时间文化与口述传统。在十五年的田野考察与档案整理工作中，她将布胡斯省、哈兰省与斯科讷省珍贵的水手航海日志和历书旁注悉数数字化，还原星空作为农耕与航海实用工具的历史面貌。',
+        publications: [
+          {
+            title: '《月相与渔获农耕：1720–1890年北欧沿海居民的实用宇宙观》',
+            venue: 'Rig：北欧文化史季刊, 107(4)',
+            year: '2024',
+          },
+          {
+            title: 'Marginalia in Eighteenth-Century Swedish Peasant Almanacs',
+            venue: 'Ethnologia Scandinavica, 53',
+            year: '2022',
+          },
+          {
+            title: '《手稿中的气象谚语：隆德民俗档案馆藏文献研究》',
+            venue: '北欧语文学与民俗档案集刊',
+            year: '2019',
+          },
+        ],
       },
       {
         id: 'oskar-nyman',
         name: 'Oskar Nyman',
         role: '字体设计师兼书籍装帧师',
+        affiliation: 'Nyman Bokform 工作室 & 瑞典国立艺术设计学院客座讲师',
         city: '斯德哥尔摩',
         image: oskarImg,
         width: 896,
@@ -800,11 +1165,32 @@ const CONFERENCE_DATA: Record<Language, ConferenceContent> = {
         sessionTitle: '当代斯堪的纳维亚字体排印中的宇宙意象',
         sessionTime: '14:45 – 15:35',
         bio: '斯德哥尔摩 Nyman Bokform 工作室创始人，设计过诸多备受赞誉的艺术画册、天文图集及定制符号字体。',
+        extendedBio:
+          '在主持 Nyman Bokform 工作室的同时，Oskar 亦担任瑞典国立艺术与设计学院 (Konstfack) 版面排印与书籍建筑客座讲师。他曾三度荣获“瑞典最美书籍奖”，目前正主持一项基于16世纪北欧木刻版画重建行星与黄道字形的研究型字体项目。',
+        publications: [
+          {
+            title:
+              'Glyphs of the Sphere: Designing Variable Astronomical Symbols for Print and Screen',
+            venue: 'Typography Papers，雷丁大学',
+            year: '2025',
+          },
+          {
+            title: '《铜版画秩序在当代斯堪的纳维亚书籍装帧中的延续》',
+            venue: 'Biblis 书籍艺术季刊，第104期',
+            year: '2023',
+          },
+          {
+            title: '《旁注、历法表格与字体排印韵律》',
+            venue: 'Konstfack 视觉传达研究论文集',
+            year: '2021',
+          },
+        ],
       },
       {
         id: 'lucas-bergman',
         name: 'Lucas Bergman',
         role: '文化心理学家兼随笔作家',
+        affiliation: '马尔默大学 · 文化研究系',
         city: '马尔默',
         image: lucasImg,
         width: 896,
@@ -814,6 +1200,27 @@ const CONFERENCE_DATA: Record<Language, ConferenceContent> = {
         sessionTitle: '个人地平线：作为叙事的上升星座',
         sessionTime: '16:00 – 17:00',
         bio: '执业心理学家及多家北欧文化期刊撰稿人，专注于世俗时代中的象征符号、自我叙事与仪式感研究。',
+        extendedBio:
+          'Lucas 将叙事心理治疗的临床实践与马尔默大学的文化研究学术探索融为一体。在多篇文化随笔中，他深入探讨现代人为何依然借助象征体系与星象原型，在内在自我认同与外部人生转折之间建立连贯的叙事意义。',
+        publications: [
+          {
+            title:
+              'Narrative Horizons: Symbolic Language and Self-Authorship in Secular Modernity',
+            venue: 'Nordic Psychology & Culture Quarterly, 41(2)',
+            year: '2025',
+          },
+          {
+            title: '《无教条的仪式：当代人对承载意义之时间的渴望》',
+            venue: '《Ord & Bild》文化评论，第3–4期',
+            year: '2023',
+          },
+          {
+            title:
+              'Archetypal Framing in Contemporary Biographical Storytelling',
+            venue: 'European Journal of Cultural Psychology, 14(1)',
+            year: '2020',
+          },
+        ],
       },
     ],
     ticketTiers: [

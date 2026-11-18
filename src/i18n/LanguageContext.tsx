@@ -122,6 +122,8 @@ export interface Translations {
   speakerModal: {
     closeAria: string;
     portraitAlt: (name: string) => string;
+    bioHeading: string;
+    publicationsHeading: string;
     sessionLabel: string;
     viewInSchedule: string;
   };
@@ -323,6 +325,8 @@ const TRANSLATIONS: Record<Language, Translations> = {
     speakerModal: {
       closeAria: 'Stäng talarprofil',
       portraitAlt: (name) => `Porträtt av ${name}`,
+      bioHeading: 'Bakgrund & forskning',
+      publicationsHeading: 'Relaterade akademiska publikationer',
       sessionLabel: 'Föreläsning',
       viewInSchedule: 'Visa i programmet',
     },
@@ -527,6 +531,8 @@ const TRANSLATIONS: Record<Language, Translations> = {
     speakerModal: {
       closeAria: 'Close speaker profile',
       portraitAlt: (name) => `Portrait of ${name}`,
+      bioHeading: 'Background & Research',
+      publicationsHeading: 'Related Academic Publications',
       sessionLabel: 'Lecture',
       viewInSchedule: 'View in schedule',
     },
@@ -726,6 +732,8 @@ const TRANSLATIONS: Record<Language, Translations> = {
     speakerModal: {
       closeAria: '关闭讲者简介',
       portraitAlt: (name) => `${name} 肖像`,
+      bioHeading: '学术背景与研究方向',
+      publicationsHeading: '相关学术出版物',
       sessionLabel: '演讲场次',
       viewInSchedule: '在日程中查看',
     },

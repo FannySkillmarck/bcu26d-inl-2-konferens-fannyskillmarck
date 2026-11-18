@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { ArrowDownRight, Mail, X } from 'lucide-react';
+import { ArrowDownRight, BookOpen, Mail, X } from 'lucide-react';
 import type { Speaker } from '../data/conference';
 import { useLanguage } from '../i18n/LanguageContext';
 import { ResilientImage } from './ResilientImage';
@@ -37,7 +37,7 @@ export function SpeakerModal({
       onClick={onClose}
     >
       <article
-        className="modal-dialog__panel relative max-h-[90dvh] w-full max-w-2xl overflow-y-auto rounded-lg border border-[var(--border-hairline)] bg-[var(--bg-surface)] text-[var(--text-primary)] shadow-2xl"
+        className="modal-dialog__panel relative max-h-[90dvh] w-full max-w-3xl overflow-y-auto rounded-lg border border-[var(--border-hairline)] bg-[var(--bg-surface)] text-[var(--text-primary)] shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
         <button
@@ -49,8 +49,8 @@ export function SpeakerModal({
           <X className="h-4 w-4" aria-hidden="true" />
         </button>
 
-        <div className="grid grid-cols-1 sm:grid-cols-5">
-          <figure className="sm:col-span-2 aspect-[3/4] sm:aspect-auto">
+        <div className="grid grid-cols-1 md:grid-cols-12">
+          <figure className="md:col-span-5 aspect-[3/4] md:aspect-auto">
             <ResilientImage
               src={speaker.image}
               alt={t.speakerModal.portraitAlt(speaker.name)}
@@ -61,21 +61,56 @@ export function SpeakerModal({
             />
           </figure>
 
-          <div className="sm:col-span-3 flex flex-col justify-between p-6 sm:p-8">
+          <div className="md:col-span-7 flex flex-col justify-between p-6 sm:p-8">
             <div>
-              <p className="text-xs font-medium text-[var(--accent-brass)]">
+              <p className="pr-12 text-xs font-semibold text-[var(--accent-brass)]">
                 {speaker.role} · {speaker.city}
+              </p>
+              <p className="mt-1 pr-12 text-xs text-[var(--text-muted)]">
+                {speaker.affiliation}
               </p>
               <h3
                 id="speaker-modal-title"
-                className="typo-display mt-2 text-2xl font-semibold tracking-tight"
+                className="typo-display mt-2.5 text-2xl font-semibold tracking-tight sm:text-3xl"
               >
                 {speaker.name}
               </h3>
 
-              <p className="mt-4 text-sm leading-relaxed text-[var(--text-muted)]">
-                {speaker.bio}
-              </p>
+              <section className="mt-5">
+                <h4 className="text-xs font-semibold tracking-wide uppercase text-[var(--text-primary)]">
+                  {t.speakerModal.bioHeading}
+                </h4>
+                <div className="mt-2 space-y-3 text-sm leading-relaxed text-[var(--text-muted)]">
+                  <p>{speaker.bio}</p>
+                  <p>{speaker.extendedBio}</p>
+                </div>
+              </section>
+
+              <section className="mt-6 border-t border-[var(--border-hairline)] pt-5">
+                <h4 className="inline-flex items-center gap-1.5 text-xs font-semibold tracking-wide uppercase text-[var(--text-primary)]">
+                  <BookOpen
+                    className="h-3.5 w-3.5 text-[var(--accent-brass)]"
+                    aria-hidden="true"
+                  />
+                  <span>{t.speakerModal.publicationsHeading}</span>
+                </h4>
+                <ul className="mt-3 space-y-3">
+                  {speaker.publications.map((pub) => (
+                    <li
+                      key={`${pub.title}-${pub.year}`}
+                      className="border-l-2 border-[var(--accent-brass)]/50 pl-3"
+                    >
+                      <p className="text-xs font-medium leading-snug text-[var(--text-primary)]">
+                        {pub.title}
+                      </p>
+                      <p className="mt-0.5 text-xs text-[var(--text-muted)]">
+                        {pub.venue} ·{' '}
+                        <span className="typo-mono">{pub.year}</span>
+                      </p>
+                    </li>
+                  ))}
+                </ul>
+              </section>
 
               <section className="mt-6 border-t border-[var(--border-hairline)] pt-4">
                 <p className="text-xs font-medium text-[var(--text-muted)]">
