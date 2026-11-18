@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Check, Copy, ShieldCheck, Wallet } from 'lucide-react';
+import { Check, Copy, ScanLine, ShieldCheck, Wallet } from 'lucide-react';
 import { useLanguage } from '../i18n/LanguageContext';
 import {
   connectEvmWallet,
@@ -11,6 +11,7 @@ import {
   type SignedPassReceipt,
   type WalletConnection,
 } from '../lib/web3';
+import { CheckInScanner } from './CheckInScanner';
 import { DigitalBadge } from './DigitalBadge';
 
 interface Web3PassCardProps {
@@ -39,6 +40,7 @@ export function Web3PassCard({
   const [isSigning, setIsSigning] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
+  const [scannerOpen, setScannerOpen] = useState(false);
 
   const updateReceipt = (next: SignedPassReceipt | null) => {
     setReceipt(next);
@@ -210,6 +212,28 @@ export function Web3PassCard({
               </button>
             </>
           )}
+
+          <button
+            type="button"
+            onClick={() => setScannerOpen((prev) => !prev)}
+            aria-expanded={scannerOpen}
+            aria-label={t.checkInScanner.toggleAria}
+            className={`inline-flex min-h-[44px] items-center justify-center gap-2 rounded-md border px-4 py-2 text-xs font-semibold transition-colors whitespace-nowrap ${
+              scannerOpen
+                ? 'border-[var(--accent-brass)] bg-[var(--bg-surface)] text-[var(--accent-brass)]'
+                : 'border-[var(--border-hairline)] bg-[var(--bg-surface)] text-[var(--text-primary)] hover:border-[var(--accent-brass)]'
+            }`}
+          >
+            <ScanLine
+              className="h-4 w-4 shrink-0 text-[var(--accent-brass)]"
+              aria-hidden="true"
+            />
+            <span>
+              {scannerOpen
+                ? t.checkInScanner.toggleCloseBtn
+                : t.checkInScanner.toggleOpenBtn}
+            </span>
+          </button>
         </div>
       </div>
 
@@ -280,6 +304,8 @@ export function Web3PassCard({
           compact={compact}
         />
       )}
+
+      {scannerOpen && <CheckInScanner compact={compact} />}
 
       {error && (
         <p

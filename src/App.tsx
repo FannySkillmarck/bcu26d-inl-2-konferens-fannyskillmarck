@@ -1,5 +1,12 @@
 import { useEffect, useState } from 'react';
-import { ArrowUpRight, Check, Mail, MapPin } from 'lucide-react';
+import {
+  ArrowUpRight,
+  Bell,
+  BellRing,
+  Check,
+  Mail,
+  MapPin,
+} from 'lucide-react';
 import { AddToCalendarButton } from './components/AddToCalendarButton';
 import { FaqSection } from './components/FaqSection';
 import { Header } from './components/Header';
@@ -11,11 +18,13 @@ import {
 import { NewsletterSignup } from './components/NewsletterSignup';
 import { ResilientImage } from './components/ResilientImage';
 import { SpeakerModal } from './components/SpeakerModal';
+import { TalkRemindersBar } from './components/TalkRemindersBar';
 import { TicketModal } from './components/TicketModal';
 import { VenueWeatherWidget } from './components/VenueWeatherWidget';
 import { Web3PassCard } from './components/Web3PassCard';
 import { getConferenceData, type TrackType } from './data/conference';
 import { useLanguage } from './i18n/LanguageContext';
+import { useTalkReminders } from './lib/talkReminders';
 
 const TRACK_FILTERS: Array<'Alla' | TrackType> = [
   'Alla',
@@ -40,6 +49,20 @@ export default function App() {
   const [attendeeStats, setAttendeeStats] = useState<AttendeeStats | null>(
     null
   );
+
+  const {
+    savedIds: savedReminderIds,
+    permission: notificationPermission,
+    activeNotice: activeReminderNotice,
+    toggleReminder,
+    clearAllReminders,
+    requestPermission: requestNotificationPermission,
+    sendTestNotification,
+    dismissNotice: dismissReminderNotice,
+  } = useTalkReminders(data.scheduleItems, {
+    formatNotificationTitle: t.schedule.reminderNotificationTitle,
+    formatNotificationBody: t.schedule.reminderNotificationBody,
+  });
 
   useEffect(() => {
     const handleQuotaExceeded = () => setQuotaExceeded(true);
@@ -250,9 +273,20 @@ export default function App() {
             </div>
           </div>
 
-          <ol className="schedule__list mt-10 rounded-lg border border-[var(--border-hairline)] bg-[var(--bg-surface)]">
+          <TalkRemindersBar
+            savedCount={savedReminderIds.length}
+            permission={notificationPermission}
+            activeNotice={activeReminderNotice}
+            onRequestPermission={requestNotificationPermission}
+            onSendTest={sendTestNotification}
+            onClearAll={clearAllReminders}
+            onDismissNotice={dismissReminderNotice}
+          />
+
+          <ol className="schedule__list mt-4 rounded-lg border border-[var(--border-hairline)] bg-[var(--bg-surface)]">
             {visibleSchedule.map((item) => {
               const isHighlighted = highlightedSpeakerId === item.speakerId;
+              const isReminderSaved = savedReminderIds.includes(item.id);
               return (
                 <li key={item.id} className="schedule__row">
                   <article
@@ -289,7 +323,44 @@ export default function App() {
                         {item.speaker}
                       </button>
 
-                      <AddToCalendarButton item={item} />
+                      <div className="flex flex-wrap items-center gap-2 md:justify-end">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            void toggleReminder(item.id);
+                          }}
+                          aria-pressed={isReminderSaved}
+                          aria-label={
+                            isReminderSaved
+                              ? t.schedule.reminderActiveAria(item.title)
+                              : t.schedule.remindMeAria(item.title)
+                          }
+                          className={`inline-flex min-h-[40px] items-center gap-1.5 rounded-md border px-3 py-1.5 text-xs font-medium transition-colors whitespace-nowrap ${
+                            isReminderSaved
+                              ? 'border-[var(--accent-brass)] bg-[var(--bg-subtle)] text-[var(--accent-brass)]'
+                              : 'border-[var(--border-hairline)] bg-[var(--bg-canvas)] text-[var(--text-primary)] hover:border-[var(--accent-brass)]'
+                          }`}
+                        >
+                          {isReminderSaved ? (
+                            <BellRing
+                              className="h-3.5 w-3.5 shrink-0 text-[var(--accent-brass)]"
+                              aria-hidden="true"
+                            />
+                          ) : (
+                            <Bell
+                              className="h-3.5 w-3.5 shrink-0 text-[var(--accent-brass)]"
+                              aria-hidden="true"
+                            />
+                          )}
+                          <span>
+                            {isReminderSaved
+                              ? t.schedule.reminderActiveBtn
+                              : t.schedule.remindMeBtn}
+                          </span>
+                        </button>
+
+                        <AddToCalendarButton item={item} />
+                      </div>
                     </div>
                   </article>
                 </li>

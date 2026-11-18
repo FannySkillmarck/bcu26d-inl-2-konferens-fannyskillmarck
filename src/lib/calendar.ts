@@ -6,7 +6,9 @@ const EVENT_DAY = 20;
 // October 20, 2027 is in CEST (UTC+2) in Europe/Stockholm
 const STOCKHOLM_UTC_OFFSET_HOURS = 2;
 
-function parseSessionTimeRange(timeStr: string): {
+export const REMINDER_OFFSET_MINUTES = 15;
+
+export function parseSessionTimeRange(timeStr: string): {
   startUtc: Date;
   endUtc: Date;
 } {

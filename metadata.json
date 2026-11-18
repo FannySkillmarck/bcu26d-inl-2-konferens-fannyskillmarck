@@ -1,6 +1,6 @@
 {
   "name": "Stjärnfall i Stockholm 2027",
   "description": "Nordiskt symposium om astrologi, himmelsmekanik och kosmisk tid i Stockholm.",
-  "requestFramePermissions": [],
+  "requestFramePermissions": ["camera"],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

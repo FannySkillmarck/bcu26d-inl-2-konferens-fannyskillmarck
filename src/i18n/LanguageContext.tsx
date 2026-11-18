@@ -56,6 +56,25 @@ export interface Translations {
     outlookWeb: string;
     outlookIcs: string;
     savedConfirmation: string;
+    remindMeBtn: string;
+    reminderActiveBtn: string;
+    remindMeAria: (title: string) => string;
+    reminderActiveAria: (title: string) => string;
+    remindersBarLabel: (count: number) => string;
+    remindersBarEmpty: string;
+    remindersTestBtn: string;
+    remindersTestAria: string;
+    remindersEnableBtn: string;
+    remindersClearBtn: string;
+    remindersBlockedNotice: string;
+    remindersUnsupportedNotice: string;
+    remindersDismissAria: string;
+    reminderNotificationTitle: (title: string) => string;
+    reminderNotificationBody: (
+      time: string,
+      room: string,
+      speaker: string
+    ) => string;
   };
   speakers: {
     kicker: string;
@@ -261,6 +280,43 @@ export interface Translations {
     soldOut: string;
     loading: string;
   };
+  checkInScanner: {
+    toggleOpenBtn: string;
+    toggleCloseBtn: string;
+    toggleAria: string;
+    heading: string;
+    subtitle: string;
+    startCameraBtn: string;
+    startingCamera: string;
+    stopCameraBtn: string;
+    switchCameraBtn: string;
+    uploadQrBtn: string;
+    uploadQrAria: string;
+    scanNextBtn: string;
+    videoAria: string;
+    idleHint: string;
+    scanningStatus: string;
+    pausedStatus: string;
+    validTitle: string;
+    duplicateTitle: (time: string) => string;
+    invalidTitle: string;
+    invalidHint: string;
+    holderLabel: string;
+    passIdLabel: string;
+    tierLabel: string;
+    verificationLabel: string;
+    web3VerifiedValue: string;
+    standardTicketValue: string;
+    walletLabel: string;
+    checkedInAtLabel: string;
+    recentHeading: (count: number) => string;
+    clearLogBtn: string;
+    unsupportedError: string;
+    permissionDeniedError: string;
+    noCameraError: string;
+    cameraError: string;
+    imageDecodeError: string;
+  };
 }
 
 const TRANSLATIONS: Record<Language, Translations> = {
@@ -313,6 +369,27 @@ const TRANSLATIONS: Record<Language, Translations> = {
       outlookWeb: 'Outlook (Webb)',
       outlookIcs: 'Outlook / Apple (.ics)',
       savedConfirmation: 'Kalenderfil hämtad',
+      remindMeBtn: 'Påminn 15 min',
+      reminderActiveBtn: 'Påminnelse på',
+      remindMeAria: (title) =>
+        `Aktivera lokal påminnelse 15 minuter före ${title}`,
+      reminderActiveAria: (title) => `Stäng av lokal påminnelse för ${title}`,
+      remindersBarLabel: (count) =>
+        `${count} ${count === 1 ? 'programpunkt' : 'programpunkter'} med 15-minuterspåminnelse`,
+      remindersBarEmpty:
+        'Aktivera lokala webbläsarpåminnelser 15 min före dina sparade föreläsningar.',
+      remindersTestBtn: 'Testa notis',
+      remindersTestAria: 'Skicka en lokal testnotis i webbläsaren',
+      remindersEnableBtn: 'Tillåt notiser',
+      remindersClearBtn: 'Rensa alla',
+      remindersBlockedNotice:
+        'Webbläsarnotiser är blockerade — påminnelser visas här på sidan medan fliken är öppen.',
+      remindersUnsupportedNotice:
+        'Webbläsarnotiser stöds inte här — påminnelser visas här på sidan medan fliken är öppen.',
+      remindersDismissAria: 'Stäng påminnelse',
+      reminderNotificationTitle: (title) => `Börjar om 15 min: ${title}`,
+      reminderNotificationBody: (time, room, speaker) =>
+        `${time} · ${room} · ${speaker}`,
     },
     speakers: {
       kicker: '02. Medverkande talare',
@@ -543,6 +620,52 @@ const TRANSLATIONS: Record<Language, Translations> = {
       soldOut: 'Fullbokat',
       loading: 'Hämtar deltagarantal...',
     },
+    checkInScanner: {
+      toggleOpenBtn: 'Incheckningsskanner',
+      toggleCloseBtn: 'Stäng skanner',
+      toggleAria: 'Öppna eller stäng personalens kameraskanner för incheckning',
+      heading: 'Check-in Scanner · Entrékontroll',
+      subtitle:
+        'Skanna deltagarnas Digital Badge QR-koder med enhetens kamera (MediaDevices API) eller ladda upp en QR-bild.',
+      startCameraBtn: 'Starta kamera',
+      startingCamera: 'Startar kamera...',
+      stopCameraBtn: 'Stoppa kamera',
+      switchCameraBtn: 'Byt kamera',
+      uploadQrBtn: 'Skanna QR-bild',
+      uploadQrAria: 'Ladda upp en sparad Digital Badge QR-bild för kontroll',
+      scanNextBtn: 'Skanna nästa pass',
+      videoAria: 'Kameravy för skanning av digitala entrépass',
+      idleHint:
+        'Kameran är avstängd. Starta kameran eller välj en QR-bild för att verifiera ett entrépass.',
+      scanningStatus: 'Aktiv skanning · Rikta QR-koden mot ramen',
+      pausedStatus:
+        'Pass avläst · Tryck på Skanna nästa pass för att fortsätta',
+      validTitle: 'Giltigt entrépass — Incheckad',
+      duplicateTitle: (time) => `Redan incheckad kl. ${time}`,
+      invalidTitle: 'Okänd QR-kod',
+      invalidHint:
+        'Koden motsvarar inte ett giltigt Stjärnfall 2027 Digital Badge-pass.',
+      holderLabel: 'Innehavare',
+      passIdLabel: 'Pass-ID',
+      tierLabel: 'Biljettnivå',
+      verificationLabel: 'Verifiering',
+      web3VerifiedValue: 'Web3 EIP-191 signerad',
+      standardTicketValue: 'Standardbiljett',
+      walletLabel: 'Plånbok',
+      checkedInAtLabel: 'Incheckad',
+      recentHeading: (count) => `Senaste incheckningar (${count})`,
+      clearLogBtn: 'Rensa logg',
+      unsupportedError:
+        'Kamerastöd (MediaDevices API) saknas i denna webbläsare eller i osäker kontext.',
+      permissionDeniedError:
+        'Kameraåtkomst nekades. Tillåt kamerabehörighet i webbläsaren eller skanna en QR-bild.',
+      noCameraError:
+        'Ingen kamera hittades på enheten. Du kan i stället välja en sparad QR-bild.',
+      cameraError:
+        'Kunde inte starta kameran. Kontrollera att ingen annan app använder den och försök igen.',
+      imageDecodeError:
+        'Hittade ingen läsbar QR-kod i den valda bilden. Försök med en tydligare bild.',
+    },
   },
   en: {
     documentTitle: 'Stjärnfall 2027 — Symposium on Astrology & Cosmic Time',
@@ -593,6 +716,28 @@ const TRANSLATIONS: Record<Language, Translations> = {
       outlookWeb: 'Outlook (Web)',
       outlookIcs: 'Outlook / Apple (.ics)',
       savedConfirmation: 'Calendar file downloaded',
+      remindMeBtn: 'Remind 15m',
+      reminderActiveBtn: 'Reminder on',
+      remindMeAria: (title) =>
+        `Enable local browser reminder 15 minutes before ${title}`,
+      reminderActiveAria: (title) =>
+        `Disable local browser reminder for ${title}`,
+      remindersBarLabel: (count) =>
+        `${count} ${count === 1 ? 'talk' : 'talks'} set for 15-min reminders`,
+      remindersBarEmpty:
+        'Enable local browser reminders 15 minutes before your saved talks begin.',
+      remindersTestBtn: 'Test notification',
+      remindersTestAria: 'Send a test local browser notification',
+      remindersEnableBtn: 'Allow notifications',
+      remindersClearBtn: 'Clear all',
+      remindersBlockedNotice:
+        'Browser notifications are blocked — reminders will appear on this page while the tab is open.',
+      remindersUnsupportedNotice:
+        'Browser notifications are unavailable here — reminders will appear on this page while the tab is open.',
+      remindersDismissAria: 'Dismiss reminder banner',
+      reminderNotificationTitle: (title) => `Starts in 15 min: ${title}`,
+      reminderNotificationBody: (time, room, speaker) =>
+        `${time} · ${room} · ${speaker}`,
     },
     speakers: {
       kicker: '02. Featured Speakers',
@@ -824,6 +969,51 @@ const TRANSLATIONS: Record<Language, Translations> = {
       soldOut: 'Sold out',
       loading: 'Fetching attendee count...',
     },
+    checkInScanner: {
+      toggleOpenBtn: 'Check-in Scanner',
+      toggleCloseBtn: 'Close Scanner',
+      toggleAria: 'Toggle staff camera scanner for attendee digital badges',
+      heading: 'Check-in Scanner · Entrance Desk',
+      subtitle:
+        'Scan attendee Digital Badge QR codes using the device camera (MediaDevices API) or load a badge QR image.',
+      startCameraBtn: 'Start camera',
+      startingCamera: 'Starting camera...',
+      stopCameraBtn: 'Stop camera',
+      switchCameraBtn: 'Switch camera',
+      uploadQrBtn: 'Scan QR image',
+      uploadQrAria: 'Upload a saved Digital Badge QR image to verify',
+      scanNextBtn: 'Scan next badge',
+      videoAria: 'Live camera viewfinder for scanning attendee digital badges',
+      idleHint:
+        'Camera is off. Start the camera or choose a QR image file to verify an attendee pass.',
+      scanningStatus: 'Scanning active · Align QR code inside the frame',
+      pausedStatus: 'Badge captured · Select Scan next badge to continue',
+      validTitle: 'Valid Symposium Pass — Checked In',
+      duplicateTitle: (time) => `Already checked in at ${time}`,
+      invalidTitle: 'Unrecognized QR Code',
+      invalidHint:
+        'This QR payload is not a valid Stjärnfall 2027 Digital Badge pass.',
+      holderLabel: 'Holder',
+      passIdLabel: 'Pass ID',
+      tierLabel: 'Ticket Tier',
+      verificationLabel: 'Verification',
+      web3VerifiedValue: 'Web3 EIP-191 Signed',
+      standardTicketValue: 'Confirmed Ticket',
+      walletLabel: 'Wallet',
+      checkedInAtLabel: 'Checked in',
+      recentHeading: (count) => `Recent check-ins (${count})`,
+      clearLogBtn: 'Clear log',
+      unsupportedError:
+        'Camera access (MediaDevices API) is unavailable in this browser or context.',
+      permissionDeniedError:
+        'Camera permission was denied. Allow camera access in browser settings or scan a QR image.',
+      noCameraError:
+        'No camera device detected. You can upload a saved Digital Badge QR image instead.',
+      cameraError:
+        'Unable to access the camera. Ensure no other app is using it and try again.',
+      imageDecodeError:
+        'No readable QR code was found in the selected image. Try a clearer image.',
+    },
   },
   zh: {
     documentTitle: 'Stjärnfall 2027 — 星象学与宇宙时间北欧研讨会',
@@ -874,6 +1064,26 @@ const TRANSLATIONS: Record<Language, Translations> = {
       outlookWeb: 'Outlook（网页版）',
       outlookIcs: 'Outlook / Apple (.ics)',
       savedConfirmation: '已下载日历文件',
+      remindMeBtn: '提前15分提醒',
+      reminderActiveBtn: '已设提醒',
+      remindMeAria: (title) => `开启《${title}》开场前 15 分钟本地浏览器提醒`,
+      reminderActiveAria: (title) => `取消《${title}》的开场前 15 分钟提醒`,
+      remindersBarLabel: (count) =>
+        `已为 ${count} 场演讲开启开场前 15 分钟提醒`,
+      remindersBarEmpty:
+        '为收藏的演讲开启本地浏览器提醒，开场前 15 分钟通知您。',
+      remindersTestBtn: '测试提醒',
+      remindersTestAria: '发送一条本地浏览器测试提醒',
+      remindersEnableBtn: '开启通知权限',
+      remindersClearBtn: '全部清除',
+      remindersBlockedNotice:
+        '浏览器通知权限已被屏蔽 — 保持页面打开时仍会在页面内弹出提醒。',
+      remindersUnsupportedNotice:
+        '当前环境不支持桌面通知 — 保持页面打开时会在页面内显示提醒。',
+      remindersDismissAria: '关闭提醒横幅',
+      reminderNotificationTitle: (title) => `15 分钟后开场：${title}`,
+      reminderNotificationBody: (time, room, speaker) =>
+        `${time} · ${room} · ${speaker}`,
     },
     speakers: {
       kicker: '02. 特邀讲者',
@@ -1095,6 +1305,48 @@ const TRANSLATIONS: Record<Language, Translations> = {
       seatsRemaining: (remaining) => `仅剩 ${remaining} 席`,
       soldOut: '名额已满',
       loading: '正在获取最新参会人数...',
+    },
+    checkInScanner: {
+      toggleOpenBtn: '签到扫码器',
+      toggleCloseBtn: '关闭扫码器',
+      toggleAria: '展开或收起工作人员入场签到相机扫码器',
+      heading: 'Check-in Scanner · 入场核验终端',
+      subtitle:
+        '调用设备摄像头（MediaDevices API）实时扫描参会者数字通行证二维码，或上传二维码图片核验。',
+      startCameraBtn: '开启摄像头',
+      startingCamera: '正在启动摄像头...',
+      stopCameraBtn: '停止摄像头',
+      switchCameraBtn: '切换镜头',
+      uploadQrBtn: '扫描二维码图片',
+      uploadQrAria: '上传已保存的数字通行证二维码图片进行核验',
+      scanNextBtn: '继续扫描下一位',
+      videoAria: '用于扫描参会者数字通行证的实时相机取景框',
+      idleHint:
+        '摄像头未开启。请开启摄像头或选择一张二维码图片以核验参会通行证。',
+      scanningStatus: '正在扫描 · 请将通行证二维码置于取景框内',
+      pausedStatus: '已读取通行证 · 点击“继续扫描下一位”恢复扫描',
+      validTitle: '有效通行证 — 已完成签到',
+      duplicateTitle: (time) => `该通行证已于 ${time} 签到`,
+      invalidTitle: '无法识别的二维码',
+      invalidHint: '该二维码不是有效的 Stjärnfall 2027 数字入场通行证。',
+      holderLabel: '持票人',
+      passIdLabel: '通行证编号',
+      tierLabel: '票种',
+      verificationLabel: '核验状态',
+      web3VerifiedValue: 'Web3 EIP-191 加密签名',
+      standardTicketValue: '标准确认门票',
+      walletLabel: '钱包地址',
+      checkedInAtLabel: '签到时间',
+      recentHeading: (count) => `近期签到记录 (${count})`,
+      clearLogBtn: '清空记录',
+      unsupportedError:
+        '当前浏览器或安全上下文不支持摄像头调用（MediaDevices API）。',
+      permissionDeniedError:
+        '摄像头权限被拒绝。请在浏览器设置中允许访问摄像头，或改为上传二维码图片。',
+      noCameraError: '未检测到可用摄像头设备，您可以上传二维码图片完成核验。',
+      cameraError: '无法启动摄像头，请确认没有其他应用正在占用后重试。',
+      imageDecodeError:
+        '未能从所选图片中识别出二维码，请更换更清晰的图片重试。',
     },
   },
 };
