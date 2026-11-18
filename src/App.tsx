@@ -3,6 +3,10 @@ import { ArrowUpRight, Check, Mail, MapPin } from 'lucide-react';
 import { FaqSection } from './components/FaqSection';
 import { Header } from './components/Header';
 import { HowToGetHere } from './components/HowToGetHere';
+import {
+  LiveAttendeeCounter,
+  type AttendeeStats,
+} from './components/LiveAttendeeCounter';
 import { NewsletterSignup } from './components/NewsletterSignup';
 import { ResilientImage } from './components/ResilientImage';
 import { SpeakerModal } from './components/SpeakerModal';
@@ -31,6 +35,9 @@ export default function App() {
   >(null);
   const [selectedTicketId, setSelectedTicketId] = useState<string | null>(null);
   const [quotaExceeded, setQuotaExceeded] = useState(false);
+  const [attendeeStats, setAttendeeStats] = useState<AttendeeStats | null>(
+    null
+  );
 
   useEffect(() => {
     const handleQuotaExceeded = () => setQuotaExceeded(true);
@@ -156,6 +163,11 @@ export default function App() {
                   <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
                 </a>
               </div>
+
+              <LiveAttendeeCounter
+                stats={attendeeStats}
+                onStatsUpdate={setAttendeeStats}
+              />
             </div>
 
             <figure className="lg:col-span-7 overflow-hidden rounded-lg border border-[var(--border-hairline)] bg-[var(--bg-subtle)]">
@@ -711,6 +723,7 @@ export default function App() {
       <TicketModal
         tier={selectedTicket}
         onClose={() => setSelectedTicketId(null)}
+        onRegistrationComplete={setAttendeeStats}
       />
     </div>
   );

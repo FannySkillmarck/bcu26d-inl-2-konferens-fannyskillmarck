@@ -213,6 +213,14 @@ export interface Translations {
     downloadQrAria: string;
     scanNote: string;
   };
+  attendeeCounter: {
+    regionAria: string;
+    label: string;
+    ofCapacity: (capacity: number) => string;
+    seatsRemaining: (remaining: number) => string;
+    soldOut: string;
+    loading: string;
+  };
 }
 
 const TRANSLATIONS: Record<Language, Translations> = {
@@ -444,6 +452,14 @@ const TRANSLATIONS: Record<Language, Translations> = {
       downloadQrAria: 'Ladda ner QR-kod som bild för snabb incheckning',
       scanNote: 'Skannas i entrén · Uppdateras automatiskt vid Web3-signering',
     },
+    attendeeCounter: {
+      regionAria: 'Aktuellt antal registrerade deltagare till Stjärnfall 2027',
+      label: 'Live · Anmälda deltagare',
+      ofCapacity: (capacity) => `av ${capacity} platser`,
+      seatsRemaining: (remaining) => `${remaining} platser kvar`,
+      soldOut: 'Fullbokat',
+      loading: 'Hämtar deltagarantal...',
+    },
   },
   en: {
     documentTitle: 'Stjärnfall 2027 — Symposium on Astrology & Cosmic Time',
@@ -674,6 +690,14 @@ const TRANSLATIONS: Record<Language, Translations> = {
       downloadQrAria: 'Download QR code image for fast check-in',
       scanNote: 'Scan at entrance · Live-updates when signed with Web3',
     },
+    attendeeCounter: {
+      regionAria: 'Live count of registered attendees for Stjärnfall 2027',
+      label: 'Live · Registered attendees',
+      ofCapacity: (capacity) => `of ${capacity} seats`,
+      seatsRemaining: (remaining) => `${remaining} seats remaining`,
+      soldOut: 'Sold out',
+      loading: 'Fetching attendee count...',
+    },
   },
   zh: {
     documentTitle: 'Stjärnfall 2027 — 星象学与宇宙时间北欧研讨会',
@@ -896,6 +920,14 @@ const TRANSLATIONS: Record<Language, Translations> = {
       downloadQrBtn: '下载二维码',
       downloadQrAria: '下载入场签到二维码图片',
       scanNote: '入口扫码签到 · 完成 Web3 签名后实时同步加密凭证',
+    },
+    attendeeCounter: {
+      regionAria: 'Stjärnfall 2027 实时已报名参会人数',
+      label: '实时 · 已报名参会人数',
+      ofCapacity: (capacity) => `/ ${capacity} 席`,
+      seatsRemaining: (remaining) => `仅剩 ${remaining} 席`,
+      soldOut: '名额已满',
+      loading: '正在获取最新参会人数...',
     },
   },
 };

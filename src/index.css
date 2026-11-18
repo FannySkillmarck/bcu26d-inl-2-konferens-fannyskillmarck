@@ -347,6 +347,15 @@
     border-color: var(--accent-brass);
     transform: translateY(-2px);
   }
+
+  /* Live Attendee Counter */
+  .live-counter__dot {
+    animation: pulseBeacon 2.4s ease-in-out infinite;
+  }
+
+  .live-counter__bar {
+    transition: width 500ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
 }
 
 @keyframes orbitSpin {
@@ -384,6 +393,18 @@
   }
 }
 
+@keyframes pulseBeacon {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.45;
+    transform: scale(0.85);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -392,7 +413,8 @@
   .hero-emblem__ring,
   .hero-emblem__ring--reverse,
   .modal-dialog__panel,
-  .ticket-card:hover {
+  .ticket-card:hover,
+  .live-counter__dot {
     animation: none;
   }
 
@@ -403,6 +425,7 @@
   .faq-list__trigger,
   .faq-list__icon,
   .footer-connect__link,
+  .live-counter__bar,
   .site-nav__list > .site-nav__item > .site-nav__link::after,
   .btn-primary {
     transition: none;

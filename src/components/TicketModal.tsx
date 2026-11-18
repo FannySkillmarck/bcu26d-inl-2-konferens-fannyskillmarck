@@ -4,14 +4,20 @@ import type { TicketTier } from '../data/conference';
 import { useLanguage } from '../i18n/LanguageContext';
 import type { SignedPassReceipt } from '../lib/web3';
 import { DigitalBadge } from './DigitalBadge';
+import type { AttendeeStats } from './LiveAttendeeCounter';
 import { Web3PassCard } from './Web3PassCard';
 
 interface TicketModalProps {
   tier: TicketTier | null;
   onClose: () => void;
+  onRegistrationComplete?: (stats: AttendeeStats) => void;
 }
 
-export function TicketModal({ tier, onClose }: TicketModalProps) {
+export function TicketModal({
+  tier,
+  onClose,
+  onRegistrationComplete,
+}: TicketModalProps) {
   const { language, t } = useLanguage();
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
@@ -63,6 +69,30 @@ export function TicketModal({ tier, onClose }: TicketModalProps) {
     }
     setError('');
     setConfirmed(true);
+
+    void fetch('/api/attendees/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ tierId: tier.id, quantity }),
+    })
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data: Partial<AttendeeStats> | null) => {
+        if (
+          data &&
+          typeof data.count === 'number' &&
+          typeof data.capacity === 'number' &&
+          typeof data.updatedAt === 'string'
+        ) {
+          onRegistrationComplete?.({
+            count: data.count,
+            capacity: data.capacity,
+            updatedAt: data.updatedAt,
+          });
+        }
+      })
+      .catch(() => {
+        // Confirmation still completes locally if offline
+      });
   };
 
   return (
