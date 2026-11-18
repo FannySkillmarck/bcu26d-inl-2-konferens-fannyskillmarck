@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { ArrowDownRight, BookOpen, Mail, X } from 'lucide-react';
+import { ArrowDownRight, BookOpen, FileText, Mail, X } from 'lucide-react';
 import type { Speaker } from '../data/conference';
 import { useLanguage } from '../i18n/LanguageContext';
 import { ResilientImage } from './ResilientImage';
@@ -75,6 +75,27 @@ export function SpeakerModal({
               >
                 {speaker.name}
               </h3>
+
+              <section
+                aria-label={t.speakerModal.quickReadHeading}
+                className="mt-5 rounded-md border border-[var(--accent-brass)]/45 bg-[var(--bg-subtle)]/75 p-4"
+              >
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <h4 className="inline-flex items-center gap-1.5 text-[11px] font-semibold tracking-wide uppercase text-[var(--accent-brass)]">
+                    <FileText className="h-3.5 w-3.5" aria-hidden="true" />
+                    <span>{t.speakerModal.quickReadHeading}</span>
+                  </h4>
+                  <time className="typo-mono text-[11px] font-medium text-[var(--text-muted)]">
+                    {speaker.sessionTime}
+                  </time>
+                </div>
+                <p className="mt-2 text-sm font-semibold leading-snug text-[var(--text-primary)]">
+                  {speaker.sessionTitle}
+                </p>
+                <p className="mt-1.5 text-xs leading-relaxed text-[var(--text-muted)]">
+                  {speaker.quickRead}
+                </p>
+              </section>
 
               <section className="mt-5">
                 <h4 className="text-xs font-semibold tracking-wide uppercase text-[var(--text-primary)]">
