@@ -11,16 +11,25 @@ import {
   type SignedPassReceipt,
   type WalletConnection,
 } from '../lib/web3';
+import { DigitalBadge } from './DigitalBadge';
 
 interface Web3PassCardProps {
   tierName: string;
   quantity?: number;
+  attendeeName?: string;
+  attendeeEmail?: string;
+  showInlineBadge?: boolean;
+  onReceiptChange?: (receipt: SignedPassReceipt | null) => void;
   compact?: boolean;
 }
 
 export function Web3PassCard({
   tierName,
   quantity = 1,
+  attendeeName,
+  attendeeEmail,
+  showInlineBadge = true,
+  onReceiptChange,
   compact = false,
 }: Web3PassCardProps) {
   const { t } = useLanguage();
@@ -30,6 +39,11 @@ export function Web3PassCard({
   const [isSigning, setIsSigning] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
+
+  const updateReceipt = (next: SignedPassReceipt | null) => {
+    setReceipt(next);
+    onReceiptChange?.(next);
+  };
 
   useEffect(() => {
     const provider = getEthereumProvider();
@@ -42,11 +56,11 @@ export function Web3PassCard({
       const nextAddress = accounts[0];
       if (!nextAddress) {
         setWallet(null);
-        setReceipt(null);
+        updateReceipt(null);
         return;
       }
       setWallet((prev) => (prev ? { ...prev, address: nextAddress } : null));
-      setReceipt(null);
+      updateReceipt(null);
     };
 
     const handleChainChanged = (chainIdArg: unknown) => {
@@ -61,7 +75,7 @@ export function Web3PassCard({
             }
           : null
       );
-      setReceipt(null);
+      updateReceipt(null);
     };
 
     provider.on('accountsChanged', handleAccountsChanged);
@@ -103,7 +117,7 @@ export function Web3PassCard({
         tierName,
         quantity,
       });
-      setReceipt(signed);
+      updateReceipt(signed);
     } catch (err: unknown) {
       if (isUserRejectedError(err)) {
         setError(t.web3.rejectedError);
@@ -117,7 +131,7 @@ export function Web3PassCard({
 
   const handleDisconnect = () => {
     setWallet(null);
-    setReceipt(null);
+    updateReceipt(null);
     setError(null);
     setCopied(false);
   };
@@ -137,7 +151,7 @@ export function Web3PassCard({
     <aside
       aria-label={t.web3.title}
       className={`rounded-lg border border-[var(--border-hairline)] bg-[var(--bg-subtle)]/70 ${
-        compact ? 'mt-6 p-4' : 'mt-10 p-6 sm:p-7'
+        compact ? 'mt-5 p-4' : 'mt-10 p-6 sm:p-7'
       }`}
     >
       <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
@@ -254,6 +268,17 @@ export function Web3PassCard({
             </code>
           </p>
         </div>
+      )}
+
+      {showInlineBadge && receipt && (
+        <DigitalBadge
+          tierName={tierName}
+          quantity={quantity}
+          attendeeName={attendeeName}
+          attendeeEmail={attendeeEmail}
+          receipt={receipt}
+          compact={compact}
+        />
       )}
 
       {error && (

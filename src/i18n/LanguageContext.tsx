@@ -191,6 +191,22 @@ export interface Translations {
     copySignatureBtn: string;
     copiedSignatureBtn: string;
   };
+  digitalBadge: {
+    eyebrow: string;
+    title: string;
+    subtitle: string;
+    verifiedStatus: string;
+    standardStatus: string;
+    holderLabel: string;
+    tierLabel: string;
+    passIdLabel: string;
+    entranceLabel: string;
+    entranceValue: string;
+    qrAlt: (passId: string) => string;
+    downloadQrBtn: string;
+    downloadQrAria: string;
+    scanNote: string;
+  };
 }
 
 const TRANSLATIONS: Record<Language, Translations> = {
@@ -398,6 +414,23 @@ const TRANSLATIONS: Record<Language, Translations> = {
       copySignatureBtn: 'Kopiera signatur',
       copiedSignatureBtn: 'Signatur kopierad',
     },
+    digitalBadge: {
+      eyebrow: 'Digitalt entrépass',
+      title: 'Digital Badge · Snabbentré',
+      subtitle:
+        'Visa denna QR-kod i entrén på Münchenbryggeriet för snabb incheckning.',
+      verifiedStatus: 'Web3-verifierat pass',
+      standardStatus: 'Bekräftad entré',
+      holderLabel: 'Innehavare',
+      tierLabel: 'Biljettnivå',
+      passIdLabel: 'Pass-ID',
+      entranceLabel: 'Entré & sal',
+      entranceValue: '20 okt 2027 · Från kl. 08:15',
+      qrAlt: (passId) => `QR-kod för digitalt entrépass ${passId}`,
+      downloadQrBtn: 'Ladda ner QR',
+      downloadQrAria: 'Ladda ner QR-kod som bild för snabb incheckning',
+      scanNote: 'Skannas i entrén · Uppdateras automatiskt vid Web3-signering',
+    },
   },
   en: {
     documentTitle: 'Stjärnfall 2027 — Symposium on Astrology & Cosmic Time',
@@ -604,6 +637,23 @@ const TRANSLATIONS: Record<Language, Translations> = {
       copySignatureBtn: 'Copy signature',
       copiedSignatureBtn: 'Signature copied',
     },
+    digitalBadge: {
+      eyebrow: 'Digital Entry Pass',
+      title: 'Digital Badge · Fast Check-In',
+      subtitle:
+        'Present this QR code at the Münchenbryggeriet entrance for express check-in.',
+      verifiedStatus: 'Web3 Verified Pass',
+      standardStatus: 'Confirmed Ticket',
+      holderLabel: 'Holder',
+      tierLabel: 'Ticket Tier',
+      passIdLabel: 'Pass ID',
+      entranceLabel: 'Entry & Hall',
+      entranceValue: 'Oct 20, 2027 · From 08:15',
+      qrAlt: (passId) => `QR code for digital symposium badge ${passId}`,
+      downloadQrBtn: 'Download QR',
+      downloadQrAria: 'Download QR code image for fast check-in',
+      scanNote: 'Scan at entrance · Live-updates when signed with Web3',
+    },
   },
   zh: {
     documentTitle: 'Stjärnfall 2027 — 星象学与宇宙时间北欧研讨会',
@@ -803,6 +853,22 @@ const TRANSLATIONS: Record<Language, Translations> = {
       genericError: '无法与钱包通信，请稍后重试。',
       copySignatureBtn: '复制签名',
       copiedSignatureBtn: '已复制签名',
+    },
+    digitalBadge: {
+      eyebrow: '数字入场通行证',
+      title: 'Digital Badge · 快速签到',
+      subtitle: '入场时请在慕尼黑啤酒厂会议中心入口处出示此二维码快速核验。',
+      verifiedStatus: 'Web3 加密已验证',
+      standardStatus: '已确认门票',
+      holderLabel: '持票人',
+      tierLabel: '票种',
+      passIdLabel: '通行证编号',
+      entranceLabel: '入场时间',
+      entranceValue: '2027年10月20日 · 08:15 起',
+      qrAlt: (passId) => `数字参会通行证 ${passId} 二维码`,
+      downloadQrBtn: '下载二维码',
+      downloadQrAria: '下载入场签到二维码图片',
+      scanNote: '入口扫码签到 · 完成 Web3 签名后实时同步加密凭证',
     },
   },
 };

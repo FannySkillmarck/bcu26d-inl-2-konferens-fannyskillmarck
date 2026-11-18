@@ -2,6 +2,8 @@ import { useEffect, useState, type FormEvent } from 'react';
 import { CheckCircle2, X } from 'lucide-react';
 import type { TicketTier } from '../data/conference';
 import { useLanguage } from '../i18n/LanguageContext';
+import type { SignedPassReceipt } from '../lib/web3';
+import { DigitalBadge } from './DigitalBadge';
 import { Web3PassCard } from './Web3PassCard';
 
 interface TicketModalProps {
@@ -17,6 +19,9 @@ export function TicketModal({ tier, onClose }: TicketModalProps) {
   const [dietary, setDietary] = useState('');
   const [error, setError] = useState('');
   const [confirmed, setConfirmed] = useState(false);
+  const [signedReceipt, setSignedReceipt] = useState<SignedPassReceipt | null>(
+    null
+  );
 
   const tierId = tier?.id ?? null;
 
@@ -27,6 +32,7 @@ export function TicketModal({ tier, onClose }: TicketModalProps) {
     setDietary('');
     setError('');
     setConfirmed(false);
+    setSignedReceipt(null);
   }, [tierId]);
 
   useEffect(() => {
@@ -68,7 +74,9 @@ export function TicketModal({ tier, onClose }: TicketModalProps) {
       onClick={onClose}
     >
       <article
-        className="modal-dialog__panel relative max-h-[90dvh] w-full max-w-lg overflow-y-auto rounded-lg border border-[var(--border-hairline)] bg-[var(--bg-surface)] p-6 text-[var(--text-primary)] shadow-2xl sm:p-8"
+        className={`modal-dialog__panel relative max-h-[90dvh] w-full overflow-y-auto rounded-lg border border-[var(--border-hairline)] bg-[var(--bg-surface)] p-6 text-[var(--text-primary)] shadow-2xl sm:p-8 ${
+          confirmed ? 'max-w-2xl' : 'max-w-lg'
+        }`}
         onClick={(e) => e.stopPropagation()}
       >
         <button
@@ -81,14 +89,14 @@ export function TicketModal({ tier, onClose }: TicketModalProps) {
         </button>
 
         {confirmed ? (
-          <div className="py-4">
+          <div className="py-2">
             <p className="inline-flex items-center gap-2 text-sm font-semibold text-[var(--accent-brass)]">
               <CheckCircle2 className="h-5 w-5" aria-hidden="true" />
               <span>{t.ticketModal.reservedLabel}</span>
             </p>
             <h3
               id="ticket-modal-title"
-              className="typo-display mt-3 text-2xl font-semibold"
+              className="typo-display mt-3 pr-10 text-2xl font-semibold"
             >
               {t.ticketModal.thankYou(fullName.trim())}
             </h3>
@@ -104,7 +112,26 @@ export function TicketModal({ tier, onClose }: TicketModalProps) {
               </strong>
               {t.ticketModal.confirmationSuffix}
             </p>
-            <Web3PassCard tierName={tier.name} quantity={quantity} compact />
+
+            <DigitalBadge
+              tierName={tier.name}
+              quantity={quantity}
+              attendeeName={fullName.trim()}
+              attendeeEmail={email.trim()}
+              receipt={signedReceipt}
+              compact
+            />
+
+            <Web3PassCard
+              tierName={tier.name}
+              quantity={quantity}
+              attendeeName={fullName.trim()}
+              attendeeEmail={email.trim()}
+              showInlineBadge={false}
+              onReceiptChange={setSignedReceipt}
+              compact
+            />
+
             <div className="mt-6 flex justify-end">
               <button
                 type="button"
@@ -122,7 +149,7 @@ export function TicketModal({ tier, onClose }: TicketModalProps) {
             </p>
             <h3
               id="ticket-modal-title"
-              className="typo-display mt-1.5 text-2xl font-semibold"
+              className="typo-display mt-1.5 pr-10 text-2xl font-semibold"
             >
               {tier.name} —{' '}
               <span className="typo-mono">{tier.priceFormatted}</span>
