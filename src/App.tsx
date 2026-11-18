@@ -529,7 +529,7 @@ export default function App() {
       <footer className="border-t border-[var(--border-hairline)] bg-[var(--bg-canvas)] py-12">
         <div className="mx-auto max-w-[1200px] px-4 sm:px-6">
           <div className="grid grid-cols-1 gap-10 pb-10 lg:grid-cols-12 lg:items-start">
-            <div className="lg:col-span-5">
+            <div className="lg:col-span-4">
               <p className="typo-display text-lg font-semibold text-[var(--text-primary)]">
                 Stjärnfall 2027
               </p>
@@ -546,7 +546,106 @@ export default function App() {
               </address>
             </div>
 
-            <div className="lg:col-span-7">
+            <section
+              aria-labelledby="heading-footer-connect"
+              className="lg:col-span-3"
+            >
+              <h2
+                id="heading-footer-connect"
+                className="typo-display text-lg font-semibold tracking-tight text-[var(--text-primary)]"
+              >
+                {t.footer.connectHeading}
+              </h2>
+              <p className="mt-1 max-w-xs text-xs leading-relaxed text-[var(--text-muted)]">
+                {t.footer.connectDescription}
+              </p>
+              <nav aria-label={t.footer.connectNavAria} className="mt-4">
+                <ul className="flex flex-wrap items-center gap-3">
+                  <li>
+                    <a
+                      href="https://twitter.com/stjarnfall2027"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={t.footer.twitterAria}
+                      title="Twitter"
+                      className="footer-connect__link"
+                    >
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth={1.75}
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="h-[18px] w-[18px]"
+                        aria-hidden="true"
+                      >
+                        <path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z" />
+                      </svg>
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href="https://www.linkedin.com/company/stjarnfall-symposium"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={t.footer.linkedinAria}
+                      title="LinkedIn"
+                      className="footer-connect__link"
+                    >
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth={1.75}
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="h-[18px] w-[18px]"
+                        aria-hidden="true"
+                      >
+                        <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
+                        <rect width="4" height="12" x="2" y="9" />
+                        <circle cx="4" cy="4" r="2" />
+                      </svg>
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href="https://www.instagram.com/stjarnfall2027"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={t.footer.instagramAria}
+                      title="Instagram"
+                      className="footer-connect__link"
+                    >
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth={1.75}
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="h-[18px] w-[18px]"
+                        aria-hidden="true"
+                      >
+                        <rect
+                          width="20"
+                          height="20"
+                          x="2"
+                          y="2"
+                          rx="5"
+                          ry="5"
+                        />
+                        <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+                        <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
+                      </svg>
+                    </a>
+                  </li>
+                </ul>
+              </nav>
+            </section>
+
+            <div className="lg:col-span-5">
               <NewsletterSignup />
             </div>
           </div>

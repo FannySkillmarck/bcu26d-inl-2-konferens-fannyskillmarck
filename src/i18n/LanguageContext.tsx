@@ -167,6 +167,12 @@ export interface Translations {
     tagline: string;
     copyright: string;
     navAria: string;
+    connectHeading: string;
+    connectDescription: string;
+    connectNavAria: string;
+    twitterAria: string;
+    linkedinAria: string;
+    instagramAria: string;
   };
   web3: {
     badgeLabel: string;
@@ -388,6 +394,13 @@ const TRANSLATIONS: Record<Language, Translations> = {
         'Nordiskt symposium om astrologi, himmelsmekanik och kosmisk tid på Münchenbryggeriet i Stockholm.',
       copyright: '© 2027 Stjärnfall Symposium · Alla rättigheter förbehållna',
       navAria: 'Sidfotsnavigation',
+      connectHeading: 'Connect · Gemenskap',
+      connectDescription:
+        'Följ samtal, talaruppdateringar och gemenskap inför symposiet 2027.',
+      connectNavAria: 'Sociala medier för Stjärnfall 2027',
+      twitterAria: 'Stjärnfall 2027 på Twitter (öppnas i ny flik)',
+      linkedinAria: 'Stjärnfall 2027 på LinkedIn (öppnas i ny flik)',
+      instagramAria: 'Stjärnfall 2027 på Instagram (öppnas i ny flik)',
     },
     web3: {
       badgeLabel: 'Blockchain · Valfritt',
@@ -611,6 +624,13 @@ const TRANSLATIONS: Record<Language, Translations> = {
         'Nordic symposium on astrology, celestial mechanics, and cosmic time at Münchenbryggeriet in Stockholm.',
       copyright: '© 2027 Stjärnfall Symposium · All rights reserved',
       navAria: 'Footer navigation',
+      connectHeading: 'Connect',
+      connectDescription:
+        'Follow speaker updates, essays, and community conversations ahead of the 2027 symposium.',
+      connectNavAria: 'Social media channels for Stjärnfall 2027',
+      twitterAria: 'Stjärnfall 2027 on Twitter (opens in a new tab)',
+      linkedinAria: 'Stjärnfall 2027 on LinkedIn (opens in a new tab)',
+      instagramAria: 'Stjärnfall 2027 on Instagram (opens in a new tab)',
     },
     web3: {
       badgeLabel: 'Blockchain · Optional',
@@ -828,6 +848,13 @@ const TRANSLATIONS: Record<Language, Translations> = {
         '于斯德哥尔摩慕尼黑啤酒厂会议中心举办的星象学、天体力学与宇宙时间北欧研讨会。',
       copyright: '© 2027 Stjärnfall Symposium · 保留所有权利',
       navAria: '页脚导航',
+      connectHeading: 'Connect · 社区互动',
+      connectDescription:
+        '关注讲者动态、专题短评，加入 2027 年研讨会前的社群讨论。',
+      connectNavAria: 'Stjärnfall 2027 社交媒体频道',
+      twitterAria: '在 Twitter 关注 Stjärnfall 2027（在新标签页打开）',
+      linkedinAria: '在 LinkedIn 关注 Stjärnfall 2027（在新标签页打开）',
+      instagramAria: '在 Instagram 关注 Stjärnfall 2027（在新标签页打开）',
     },
     web3: {
       badgeLabel: '区块链 · 可选功能',

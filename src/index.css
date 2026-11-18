@@ -324,6 +324,29 @@
   .faq-list__trigger[aria-expanded='true'] .faq-list__icon {
     transform: rotate(180deg);
   }
+
+  /* Footer Connect Social Links */
+  .footer-connect__link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 0.375rem;
+    border: 1px solid var(--border-hairline);
+    background-color: var(--bg-surface);
+    color: var(--text-muted);
+    transition:
+      color 180ms cubic-bezier(0.16, 1, 0.3, 1),
+      border-color 180ms cubic-bezier(0.16, 1, 0.3, 1),
+      transform 180ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .footer-connect__link:hover {
+    color: var(--accent-brass);
+    border-color: var(--accent-brass);
+    transform: translateY(-2px);
+  }
 }
 
 @keyframes orbitSpin {
@@ -379,6 +402,7 @@
   .ticket-card,
   .faq-list__trigger,
   .faq-list__icon,
+  .footer-connect__link,
   .site-nav__list > .site-nav__item > .site-nav__link::after,
   .btn-primary {
     transition: none;
