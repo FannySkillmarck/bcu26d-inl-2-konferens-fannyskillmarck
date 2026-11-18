@@ -1,6 +1,62 @@
 import { useState } from 'react';
 import { Menu, X } from 'lucide-react';
-import { useLanguage } from '../i18n/LanguageContext';
+import { useLanguage, type Language } from '../i18n/LanguageContext';
+
+function FlagIcon({ lang }: { lang: Language }) {
+  if (lang === 'sv') {
+    return (
+      <svg
+        viewBox="0 0 24 16"
+        width="20"
+        height="14"
+        aria-hidden="true"
+        className="h-3.5 w-5 shrink-0 rounded-[2px] border border-black/15"
+      >
+        <rect width="24" height="16" fill="#006AA7" />
+        <rect x="7" width="3.2" height="16" fill="#FECC00" />
+        <rect y="6.4" width="24" height="3.2" fill="#FECC00" />
+      </svg>
+    );
+  }
+
+  if (lang === 'en') {
+    return (
+      <svg
+        viewBox="0 0 24 16"
+        width="20"
+        height="14"
+        aria-hidden="true"
+        className="h-3.5 w-5 shrink-0 rounded-[2px] border border-black/15"
+      >
+        <rect width="24" height="16" fill="#012169" />
+        <path d="M0 0 L24 16 M24 0 L0 16" stroke="#FFFFFF" strokeWidth="3.2" />
+        <path d="M0 0 L24 16 M24 0 L0 16" stroke="#C8102E" strokeWidth="1.4" />
+        <path d="M12 0 V16 M0 8 H24" stroke="#FFFFFF" strokeWidth="4.6" />
+        <path d="M12 0 V16 M0 8 H24" stroke="#C8102E" strokeWidth="2.6" />
+      </svg>
+    );
+  }
+
+  return (
+    <svg
+      viewBox="0 0 24 16"
+      width="20"
+      height="14"
+      aria-hidden="true"
+      className="h-3.5 w-5 shrink-0 rounded-[2px] border border-black/15"
+    >
+      <rect width="24" height="16" fill="#DE2910" />
+      <polygon
+        points="4.8,2.1 5.4,3.9 7.3,3.9 5.8,5.0 6.3,6.8 4.8,5.7 3.3,6.8 3.8,5.0 2.3,3.9 4.2,3.9"
+        fill="#FFDE00"
+      />
+      <circle cx="9.2" cy="2.2" r="0.7" fill="#FFDE00" />
+      <circle cx="10.6" cy="3.8" r="0.7" fill="#FFDE00" />
+      <circle cx="10.6" cy="6.0" r="0.7" fill="#FFDE00" />
+      <circle cx="9.2" cy="7.6" r="0.7" fill="#FFDE00" />
+    </svg>
+  );
+}
 
 export function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -11,6 +67,16 @@ export function Header() {
     { href: '#talare', label: t.header.navSpeakers },
     { href: '#biljetter', label: t.header.navTickets },
     { href: '#praktiskt', label: t.header.navPractical },
+  ];
+
+  const languageOptions: Array<{
+    code: Language;
+    ariaLabel: string;
+    title: string;
+  }> = [
+    { code: 'sv', ariaLabel: t.header.switchToSvAria, title: 'Svenska' },
+    { code: 'en', ariaLabel: t.header.switchToEnAria, title: 'English' },
+    { code: 'zh', ariaLabel: t.header.switchToZhAria, title: '中文' },
   ];
 
   return (
@@ -40,57 +106,38 @@ export function Header() {
           </ul>
         </nav>
 
-        <div className="flex items-center gap-1 sm:gap-3 shrink-0">
+        <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
           <div
             role="group"
             aria-label={t.header.languageGroupAria}
-            className="inline-flex items-center rounded-md border border-[var(--border-hairline)] bg-[var(--bg-subtle)] p-0.5"
+            className="inline-flex items-center gap-0.5 rounded-md border border-[var(--border-hairline)] bg-[var(--bg-subtle)] p-0.5"
           >
-            <button
-              type="button"
-              onClick={() => setLanguage('sv')}
-              aria-pressed={language === 'sv'}
-              aria-label={t.header.switchToSvAria}
-              className={`rounded px-1.5 py-1 text-[11px] font-semibold tracking-wide transition-colors min-h-[38px] min-w-[26px] sm:px-2 sm:min-w-[32px] ${
-                language === 'sv'
-                  ? 'bg-[var(--bg-surface)] text-[var(--text-primary)] shadow-xs'
-                  : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
-              }`}
-            >
-              SV
-            </button>
-            <button
-              type="button"
-              onClick={() => setLanguage('en')}
-              aria-pressed={language === 'en'}
-              aria-label={t.header.switchToEnAria}
-              className={`rounded px-1.5 py-1 text-[11px] font-semibold tracking-wide transition-colors min-h-[38px] min-w-[26px] sm:px-2 sm:min-w-[32px] ${
-                language === 'en'
-                  ? 'bg-[var(--bg-surface)] text-[var(--text-primary)] shadow-xs'
-                  : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
-              }`}
-            >
-              EN
-            </button>
-            <button
-              type="button"
-              onClick={() => setLanguage('zh')}
-              aria-pressed={language === 'zh'}
-              aria-label={t.header.switchToZhAria}
-              className={`rounded px-1.5 py-1 text-[11px] font-semibold tracking-wide transition-colors min-h-[38px] min-w-[28px] sm:px-2 sm:min-w-[34px] whitespace-nowrap ${
-                language === 'zh'
-                  ? 'bg-[var(--bg-surface)] text-[var(--text-primary)] shadow-xs'
-                  : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
-              }`}
-            >
-              中文
-            </button>
+            {languageOptions.map(({ code, ariaLabel, title }) => {
+              const isActive = language === code;
+              return (
+                <button
+                  key={code}
+                  type="button"
+                  onClick={() => setLanguage(code)}
+                  aria-pressed={isActive}
+                  aria-label={ariaLabel}
+                  title={title}
+                  className={`inline-flex items-center justify-center rounded px-1.5 py-1 transition-all min-h-[38px] min-w-[30px] sm:px-2 sm:min-w-[34px] ${
+                    isActive
+                      ? 'bg-[var(--bg-surface)] ring-1 ring-[var(--accent-brass)] shadow-xs opacity-100'
+                      : 'opacity-70 hover:opacity-100'
+                  }`}
+                >
+                  <FlagIcon lang={code} />
+                </button>
+              );
+            })}
           </div>
 
           <a
             href="#biljetter"
             aria-label={t.header.bookCtaAria}
-            className="btn-primary px-2 py-2 text-[11px] sm:px-4 sm:text-xs"
+            className="btn-primary px-2.5 py-2 text-[11px] sm:px-4 sm:text-xs"
           >
             {t.header.bookCta}
           </a>
