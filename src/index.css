@@ -262,11 +262,13 @@
     background-color: var(--bg-surface);
     transition:
       border-color 180ms ease,
-      transform 180ms cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow 220ms ease,
+      transform 220ms cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   .ticket-card:hover {
-    transform: translateY(-2px);
+    border-color: var(--accent-brass);
+    animation: ticketCardBounce 440ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
   }
 
   .ticket-card[data-featured='true'] {
@@ -323,6 +325,21 @@
   }
 }
 
+@keyframes ticketCardBounce {
+  0% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-7px);
+  }
+  72% {
+    transform: translateY(-2px);
+  }
+  100% {
+    transform: translateY(-4px);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -330,13 +347,15 @@
 
   .hero-emblem__ring,
   .hero-emblem__ring--reverse,
-  .modal-dialog__panel {
+  .modal-dialog__panel,
+  .ticket-card:hover {
     animation: none;
   }
 
   .speaker-card,
   .speaker-card__portrait,
   .speaker-card__overlay,
+  .ticket-card,
   .site-nav__list > .site-nav__item > .site-nav__link::after,
   .btn-primary {
     transition: none;
