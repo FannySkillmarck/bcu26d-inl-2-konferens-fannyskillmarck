@@ -92,6 +92,8 @@ interface UseTalkRemindersOptions {
     room: string,
     speaker: string
   ) => string;
+  cloudSavedIds?: string[] | null;
+  onSyncSavedIds?: (ids: string[]) => Promise<void> | void;
 }
 
 export function useTalkReminders(
@@ -119,6 +121,12 @@ export function useTalkReminders(
 
   const firedIdsRef = useRef(firedIds);
   firedIdsRef.current = firedIds;
+
+  useEffect(() => {
+    if (options.cloudSavedIds) {
+      setSavedIds(options.cloudSavedIds);
+    }
+  }, [options.cloudSavedIds]);
 
   useEffect(() => {
     writeStoredIdList(SAVED_REMINDERS_KEY, savedIds);
@@ -195,12 +203,18 @@ export function useTalkReminders(
     const currentlySaved = savedIdsRef.current.includes(itemId);
 
     if (currentlySaved) {
-      setSavedIds((prev) => prev.filter((id) => id !== itemId));
+      const nextIds = savedIdsRef.current.filter((id) => id !== itemId);
+      setSavedIds(nextIds);
       setFiredIds((prev) => prev.filter((id) => id !== itemId));
+      void optionsRef.current.onSyncSavedIds?.(nextIds);
       return;
     }
 
-    setSavedIds((prev) => (prev.includes(itemId) ? prev : [...prev, itemId]));
+    const nextIds = savedIdsRef.current.includes(itemId)
+      ? savedIdsRef.current
+      : [...savedIdsRef.current, itemId];
+    setSavedIds(nextIds);
+    void optionsRef.current.onSyncSavedIds?.(nextIds);
 
     if (getBrowserNotificationPermission() === 'default') {
       const next = await requestPermissionSafely();
@@ -211,6 +225,7 @@ export function useTalkReminders(
   const clearAllReminders = useCallback(() => {
     setSavedIds([]);
     setFiredIds([]);
+    void optionsRef.current.onSyncSavedIds?.([]);
   }, []);
 
   const sendTestNotification = useCallback(async () => {

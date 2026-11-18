@@ -18,6 +18,7 @@ import {
   Trash2,
   XCircle,
 } from 'lucide-react';
+import { useFirebase } from '../context/FirebaseContext';
 import { useLanguage } from '../i18n/LanguageContext';
 import {
   parseDigitalBadgePayload,
@@ -36,6 +37,8 @@ const SCAN_INTERVAL_MS = 120;
 
 export function CheckInScanner({ compact = false }: CheckInScannerProps) {
   const { language, t } = useLanguage();
+  const { user, cloudCheckIns, saveCheckInRecord, clearCheckInRecords } =
+    useFirebase();
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -53,9 +56,13 @@ export function CheckInScanner({ compact = false }: CheckInScannerProps) {
   const [hasMultipleCameras, setHasMultipleCameras] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [scanResult, setScanResult] = useState<ScanEvaluation | null>(null);
-  const [checkedInRecords, setCheckedInRecords] = useState<
+  const [localRecords, setLocalRecords] = useState<
     Record<string, CheckedInRecord>
   >(() => readCheckedInRecords());
+
+  const checkedInRecords = user
+    ? { ...localRecords, ...cloudCheckIns }
+    : localRecords;
 
   const checkedInRef = useRef(checkedInRecords);
   checkedInRef.current = checkedInRecords;
@@ -74,55 +81,62 @@ export function CheckInScanner({ compact = false }: CheckInScannerProps) {
     [language]
   );
 
-  const evaluateRawQr = useCallback((rawData: string) => {
-    const parsed = parseDigitalBadgePayload(rawData);
-    const nowIso = new Date().toISOString();
+  const evaluateRawQr = useCallback(
+    (rawData: string) => {
+      const parsed = parseDigitalBadgePayload(rawData);
+      const nowIso = new Date().toISOString();
 
-    if (!parsed) {
-      setScanResult({
-        status: 'invalid',
-        scannedAtIso: nowIso,
-        raw: rawData,
-      });
-      return;
-    }
+      if (!parsed) {
+        setScanResult({
+          status: 'invalid',
+          scannedAtIso: nowIso,
+          raw: rawData,
+        });
+        return;
+      }
 
-    const existing = checkedInRef.current[parsed.passId];
-    if (existing) {
+      const existing = checkedInRef.current[parsed.passId];
+      if (existing) {
+        setScanResult({
+          status: 'duplicate',
+          badge: parsed,
+          checkedInAtIso: existing.checkedInAtIso,
+          raw: rawData,
+        });
+        return;
+      }
+
+      const nextRecord: CheckedInRecord = {
+        passId: parsed.passId,
+        holder: parsed.holder,
+        tier: parsed.tier,
+        qty: parsed.qty,
+        web3Verified: parsed.web3Verified,
+        wallet: parsed.wallet,
+        checkedInAtIso: nowIso,
+      };
+
+      const nextMap = {
+        ...checkedInRef.current,
+        [parsed.passId]: nextRecord,
+      };
+      checkedInRef.current = nextMap;
+      setLocalRecords(nextMap);
+      writeCheckedInRecords(nextMap);
+
+      if (user) {
+        void saveCheckInRecord(nextRecord);
+      }
+
       setScanResult({
-        status: 'duplicate',
+        status: 'valid',
         badge: parsed,
-        checkedInAtIso: existing.checkedInAtIso,
+        checkedInAtIso: nowIso,
         raw: rawData,
       });
-      return;
-    }
-
-    const nextRecord: CheckedInRecord = {
-      passId: parsed.passId,
-      holder: parsed.holder,
-      tier: parsed.tier,
-      qty: parsed.qty,
-      web3Verified: parsed.web3Verified,
-      wallet: parsed.wallet,
-      checkedInAtIso: nowIso,
-    };
-
-    const nextMap = {
-      ...checkedInRef.current,
-      [parsed.passId]: nextRecord,
-    };
-    checkedInRef.current = nextMap;
-    setCheckedInRecords(nextMap);
-    writeCheckedInRecords(nextMap);
-
-    setScanResult({
-      status: 'valid',
-      badge: parsed,
-      checkedInAtIso: nowIso,
-      raw: rawData,
-    });
-  }, []);
+    },
+    [saveCheckInRecord, user]
+  );
 
   const stopCamera = useCallback(() => {
     if (rafRef.current !== null) {
@@ -326,8 +340,11 @@ export function CheckInScanner({ compact = false }: CheckInScannerProps) {
 
   const handleClearLog = () => {
     checkedInRef.current = {};
-    setCheckedInRecords({});
+    setLocalRecords({});
     writeCheckedInRecords({});
+    if (user) {
+      void clearCheckInRecords();
+    }
   };
 
   const recentList = Object.values(checkedInRecords).sort((a, b) =>

@@ -1,5 +1,6 @@
-import { useEffect, useState, type FormEvent } from 'react';
-import { CheckCircle2, X } from 'lucide-react';
+import { useEffect, useRef, useState, type FormEvent } from 'react';
+import { CheckCircle2, LogIn, X } from 'lucide-react';
+import { useFirebase } from '../context/FirebaseContext';
 import type { TicketTier } from '../data/conference';
 import { useLanguage } from '../i18n/LanguageContext';
 import type { SignedPassReceipt } from '../lib/web3';
@@ -19,6 +20,13 @@ export function TicketModal({
   onRegistrationComplete,
 }: TicketModalProps) {
   const { language, t } = useLanguage();
+  const {
+    user,
+    isSigningIn,
+    signIn,
+    saveTicketRegistration,
+    attachWeb3ToRegistration,
+  } = useFirebase();
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [quantity, setQuantity] = useState(1);
@@ -28,18 +36,68 @@ export function TicketModal({
   const [signedReceipt, setSignedReceipt] = useState<SignedPassReceipt | null>(
     null
   );
+  const [savedRegId, setSavedRegId] = useState<string | null>(null);
+  const [savedPassId, setSavedPassId] = useState<string | null>(null);
+  const savingCloudRef = useRef(false);
 
   const tierId = tier?.id ?? null;
 
   useEffect(() => {
-    setFullName('');
-    setEmail('');
+    setFullName(user?.displayName ?? '');
+    setEmail(user?.email ?? '');
     setQuantity(1);
     setDietary('');
     setError('');
     setConfirmed(false);
     setSignedReceipt(null);
+    setSavedRegId(null);
+    setSavedPassId(null);
+    savingCloudRef.current = false;
   }, [tierId]);
+
+  useEffect(() => {
+    if (!tier || !user || confirmed) return;
+    setFullName((prev) => (prev.trim() ? prev : (user.displayName ?? '')));
+    setEmail((prev) => (prev.trim() ? prev : (user.email ?? '')));
+  }, [tier, user, confirmed]);
+
+  useEffect(() => {
+    if (!tier || !confirmed || !user || savedRegId || savingCloudRef.current) {
+      return;
+    }
+    savingCloudRef.current = true;
+    void saveTicketRegistration({
+      tierId: tier.id,
+      tierName: tier.name,
+      quantity,
+      fullName: fullName.trim(),
+      email: email.trim(),
+      dietary: dietary.trim(),
+      web3Wallet: signedReceipt?.address,
+      web3ChainId: signedReceipt?.chainId,
+      web3Signature: signedReceipt?.signature,
+    })
+      .then((saved) => {
+        if (saved) {
+          setSavedRegId(saved.registrationId);
+          setSavedPassId(saved.passId);
+        }
+      })
+      .finally(() => {
+        savingCloudRef.current = false;
+      });
+  }, [
+    tier,
+    confirmed,
+    user,
+    savedRegId,
+    quantity,
+    fullName,
+    email,
+    dietary,
+    signedReceipt,
+    saveTicketRegistration,
+  ]);
 
   useEffect(() => {
     if (!tier) return;
@@ -149,6 +207,7 @@ export function TicketModal({
               attendeeName={fullName.trim()}
               attendeeEmail={email.trim()}
               receipt={signedReceipt}
+              passIdOverride={savedPassId ?? undefined}
               compact
             />
 
@@ -158,9 +217,46 @@ export function TicketModal({
               attendeeName={fullName.trim()}
               attendeeEmail={email.trim()}
               showInlineBadge={false}
-              onReceiptChange={setSignedReceipt}
+              onReceiptChange={(receipt) => {
+                setSignedReceipt(receipt);
+                if (receipt && savedRegId) {
+                  void attachWeb3ToRegistration(savedRegId, {
+                    wallet: receipt.address,
+                    chainId: receipt.chainId,
+                    signature: receipt.signature,
+                  });
+                }
+              }}
               compact
             />
+
+            {!user ? (
+              <div className="mt-4 flex flex-col gap-3 rounded-md border border-[var(--border-hairline)] bg-[var(--bg-subtle)]/70 p-4 sm:flex-row sm:items-center sm:justify-between">
+                <p className="text-xs leading-relaxed text-[var(--text-muted)]">
+                  {t.auth.modalSignInPrompt}
+                </p>
+                <button
+                  type="button"
+                  onClick={() => void signIn()}
+                  disabled={isSigningIn}
+                  className="inline-flex min-h-[40px] shrink-0 items-center justify-center gap-1.5 rounded-md border border-[var(--accent-brass)] bg-[var(--bg-surface)] px-3.5 py-2 text-xs font-semibold text-[var(--text-primary)] hover:border-[var(--accent-brass)] transition-colors whitespace-nowrap disabled:opacity-60"
+                >
+                  <LogIn
+                    className="h-3.5 w-3.5 shrink-0 text-[var(--accent-brass)]"
+                    aria-hidden="true"
+                  />
+                  <span>
+                    {isSigningIn ? t.auth.signingInBtn : t.auth.modalSignInBtn}
+                  </span>
+                </button>
+              </div>
+            ) : (
+              savedRegId && (
+                <p className="mt-3 text-xs font-medium text-[var(--accent-brass)]">
+                  ✓ {t.auth.syncedWithGoogleBadge}
+                </p>
+              )
+            )}
 
             <div className="mt-6 flex justify-end">
               <button

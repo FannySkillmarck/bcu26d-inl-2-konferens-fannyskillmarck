@@ -10,6 +10,7 @@ interface DigitalBadgeProps {
   attendeeName?: string;
   attendeeEmail?: string;
   receipt?: SignedPassReceipt | null;
+  passIdOverride?: string;
   compact?: boolean;
 }
 
@@ -27,17 +28,26 @@ export function DigitalBadge({
   attendeeName,
   attendeeEmail,
   receipt = null,
+  passIdOverride,
   compact = false,
 }: DigitalBadgeProps) {
   const { t } = useLanguage();
   const [qrDataUrl, setQrDataUrl] = useState<string>('');
 
   const passId = useMemo(() => {
+    if (passIdOverride) return passIdOverride;
     const seed =
       receipt?.signature ||
       `${attendeeEmail || ''}|${attendeeName || ''}|${tierName}|${quantity}`;
     return derivePassId(seed);
-  }, [receipt?.signature, attendeeEmail, attendeeName, tierName, quantity]);
+  }, [
+    passIdOverride,
+    receipt?.signature,
+    attendeeEmail,
+    attendeeName,
+    tierName,
+    quantity,
+  ]);
 
   const qrPayload = useMemo(() => {
     return JSON.stringify({

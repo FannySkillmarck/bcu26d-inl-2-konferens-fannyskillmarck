@@ -1,0 +1,238 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "Authenticated symposium attendee profile and saved schedule reminder preferences.",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "description": "Firebase Auth UID owning this profile document."
+        },
+        "displayName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120,
+          "description": "User display name from Google Sign-In."
+        },
+        "email": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 254,
+          "description": "Verified user email address."
+        },
+        "photoURL": {
+          "type": "string",
+          "maxLength": 500,
+          "description": "Optional profile avatar URL."
+        },
+        "savedTalkIds": {
+          "type": "array",
+          "description": "Bounded list (max 12) of schedule session IDs with 15-minute reminders enabled."
+        },
+        "preferredLanguage": {
+          "type": "string",
+          "enum": ["sv", "en", "zh"],
+          "maxLength": 8,
+          "description": "User interface language preference."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp of initial profile creation."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp of most recent profile update."
+        }
+      },
+      "required": [
+        "uid",
+        "displayName",
+        "email",
+        "savedTalkIds",
+        "preferredLanguage",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "TicketRegistration": {
+      "title": "TicketRegistration",
+      "description": "Symposium ticket reservation and Digital Badge QR metadata owned by a signed-in attendee.",
+      "type": "object",
+      "properties": {
+        "registrationId": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "description": "Unique registration document identifier."
+        },
+        "userId": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "description": "Firebase Auth UID of the ticket holder."
+        },
+        "tierId": {
+          "type": "string",
+          "enum": ["student", "ordinarie", "after-work", "utstallare"],
+          "maxLength": 32,
+          "description": "Ticket tier identifier."
+        },
+        "tierName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80,
+          "description": "Localized display name of the selected ticket tier."
+        },
+        "quantity": {
+          "type": "integer",
+          "description": "Number of reserved passes (1 to 5)."
+        },
+        "fullName": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 120,
+          "description": "Attendee full name printed on the badge."
+        },
+        "email": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 254,
+          "description": "Attendee confirmation email address."
+        },
+        "dietary": {
+          "type": "string",
+          "maxLength": 200,
+          "description": "Optional dietary preferences."
+        },
+        "passId": {
+          "type": "string",
+          "maxLength": 32,
+          "pattern": "^SF27-[A-F0-9]{6}$",
+          "description": "Deterministic Stjärnfall 2027 digital pass identifier."
+        },
+        "web3Wallet": {
+          "type": "string",
+          "maxLength": 64,
+          "description": "Optional connected EVM wallet address."
+        },
+        "web3ChainId": {
+          "type": "string",
+          "maxLength": 32,
+          "description": "Optional EVM chain ID."
+        },
+        "web3Signature": {
+          "type": "string",
+          "maxLength": 256,
+          "description": "Optional EIP-191 personal_sign attestation signature."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp of ticket creation."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp of last update (e.g. Web3 signing)."
+        }
+      },
+      "required": [
+        "registrationId",
+        "userId",
+        "tierId",
+        "tierName",
+        "quantity",
+        "fullName",
+        "email",
+        "dietary",
+        "passId",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "CheckInEntry": {
+      "title": "CheckInEntry",
+      "description": "Verified Digital Badge scan recorded by a signed-in staff user.",
+      "type": "object",
+      "properties": {
+        "passId": {
+          "type": "string",
+          "maxLength": 32,
+          "pattern": "^SF27-[A-F0-9]{6}$",
+          "description": "Scanned symposium pass ID."
+        },
+        "scannerUid": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "description": "Firebase Auth UID of the staff member performing check-in."
+        },
+        "holder": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120,
+          "description": "Attendee name or shortened wallet displayed on the badge."
+        },
+        "tier": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80,
+          "description": "Ticket tier encoded in the scanned QR badge."
+        },
+        "qty": {
+          "type": "integer",
+          "description": "Pass quantity encoded in the badge (1 to 10)."
+        },
+        "web3Verified": {
+          "type": "boolean",
+          "description": "Whether the badge carried a Web3 EIP-191 signature."
+        },
+        "wallet": {
+          "type": "string",
+          "maxLength": 64,
+          "description": "Optional wallet address encoded in the badge."
+        },
+        "checkedInAtIso": {
+          "type": "string",
+          "minLength": 10,
+          "maxLength": 40,
+          "description": "ISO-8601 timestamp when the badge was scanned."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp when the check-in record was persisted."
+        }
+      },
+      "required": [
+        "passId",
+        "scannerUid",
+        "holder",
+        "tier",
+        "qty",
+        "web3Verified",
+        "checkedInAtIso",
+        "createdAt"
+      ]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/UserProfile" },
+      "description": "Private attendee profile, language setting, and saved talk reminder IDs scoped to the signed-in user."
+    },
+    "/users/{userId}/registrations/{registrationId}": {
+      "schema": { "$ref": "#/entities/TicketRegistration" },
+      "description": "Attendee ticket reservations and Digital Badge / Web3 signature records owned by the user."
+    },
+    "/users/{userId}/checkIns/{passId}": {
+      "schema": { "$ref": "#/entities/CheckInEntry" },
+      "description": "Entrance scanner check-in log entries scoped to the signed-in staff user."
+    }
+  }
+}

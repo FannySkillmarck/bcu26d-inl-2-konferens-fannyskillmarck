@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   ArrowUpRight,
   Bell,
@@ -8,6 +8,7 @@ import {
   MapPin,
 } from 'lucide-react';
 import { AddToCalendarButton } from './components/AddToCalendarButton';
+import { DigitalBadge } from './components/DigitalBadge';
 import { FaqSection } from './components/FaqSection';
 import { Header } from './components/Header';
 import { HowToGetHere } from './components/HowToGetHere';
@@ -22,9 +23,11 @@ import { TalkRemindersBar } from './components/TalkRemindersBar';
 import { TicketModal } from './components/TicketModal';
 import { VenueWeatherWidget } from './components/VenueWeatherWidget';
 import { Web3PassCard } from './components/Web3PassCard';
+import { useFirebase } from './context/FirebaseContext';
 import { getConferenceData, type TrackType } from './data/conference';
 import { useLanguage } from './i18n/LanguageContext';
 import { useTalkReminders } from './lib/talkReminders';
+import { getChainName } from './lib/web3';
 
 const TRACK_FILTERS: Array<'Alla' | TrackType> = [
   'Alla',
@@ -35,6 +38,14 @@ const TRACK_FILTERS: Array<'Alla' | TrackType> = [
 
 export default function App() {
   const { language, t } = useLanguage();
+  const {
+    user,
+    authReady,
+    savedTalkIdsFromCloud,
+    registrations,
+    syncSavedTalkIds,
+    syncPreferredLanguage,
+  } = useFirebase();
   const data = getConferenceData(language);
 
   const [activeTrack, setActiveTrack] = useState<'Alla' | TrackType>('Alla');
@@ -49,6 +60,7 @@ export default function App() {
   const [attendeeStats, setAttendeeStats] = useState<AttendeeStats | null>(
     null
   );
+  const lastSyncedLangRef = useRef<string | null>(null);
 
   const {
     savedIds: savedReminderIds,
@@ -62,7 +74,16 @@ export default function App() {
   } = useTalkReminders(data.scheduleItems, {
     formatNotificationTitle: t.schedule.reminderNotificationTitle,
     formatNotificationBody: t.schedule.reminderNotificationBody,
+    cloudSavedIds: savedTalkIdsFromCloud,
+    onSyncSavedIds: syncSavedTalkIds,
   });
+
+  useEffect(() => {
+    if (!authReady || !user || savedTalkIdsFromCloud === null) return;
+    if (lastSyncedLangRef.current === `${user.uid}:${language}`) return;
+    lastSyncedLangRef.current = `${user.uid}:${language}`;
+    void syncPreferredLanguage(language);
+  }, [authReady, user, language, savedTalkIdsFromCloud, syncPreferredLanguage]);
 
   useEffect(() => {
     const handleQuotaExceeded = () => setQuotaExceeded(true);
@@ -277,6 +298,7 @@ export default function App() {
             savedCount={savedReminderIds.length}
             permission={notificationPermission}
             activeNotice={activeReminderNotice}
+            isCloudSynced={Boolean(user)}
             onRequestPermission={requestNotificationPermission}
             onSendTest={sendTestNotification}
             onClearAll={clearAllReminders}
@@ -540,6 +562,52 @@ export default function App() {
               </li>
             ))}
           </ul>
+
+          {user && registrations.length > 0 && (
+            <div className="mt-10 rounded-lg border border-[var(--accent-brass)]/40 bg-[var(--bg-subtle)]/55 p-6">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <div>
+                  <h3 className="typo-display text-xl font-semibold text-[var(--text-primary)]">
+                    {t.auth.savedPassesHeading}
+                  </h3>
+                  <p className="mt-1 text-xs text-[var(--text-muted)]">
+                    {t.auth.savedPassesSubtitle}
+                  </p>
+                </div>
+                <span className="inline-flex items-center gap-1.5 rounded border border-[var(--border-hairline)] bg-[var(--bg-surface)] px-2.5 py-1 text-[11px] font-medium text-[var(--accent-brass)]">
+                  {t.auth.syncedWithGoogleBadge}
+                </span>
+              </div>
+
+              <div className="mt-2 grid grid-cols-1 gap-4">
+                {registrations.map((reg) => {
+                  const restoredReceipt =
+                    reg.web3Wallet && reg.web3ChainId && reg.web3Signature
+                      ? {
+                          address: reg.web3Wallet,
+                          chainId: reg.web3ChainId,
+                          chainName: getChainName(reg.web3ChainId),
+                          signature: reg.web3Signature,
+                          message: '',
+                          signedAtIso: '',
+                        }
+                      : null;
+                  return (
+                    <DigitalBadge
+                      key={reg.registrationId}
+                      tierName={reg.tierName}
+                      quantity={reg.quantity}
+                      attendeeName={reg.fullName}
+                      attendeeEmail={reg.email}
+                      receipt={restoredReceipt}
+                      passIdOverride={reg.passId}
+                      compact
+                    />
+                  );
+                })}
+              </div>
+            </div>
+          )}
 
           <Web3PassCard
             tierName={

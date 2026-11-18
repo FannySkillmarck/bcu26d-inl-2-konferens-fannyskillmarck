@@ -318,6 +318,22 @@ export interface Translations {
     cameraError: string;
     imageDecodeError: string;
   };
+  auth: {
+    signInBtn: string;
+    signingInBtn: string;
+    signOutBtn: string;
+    signInAria: string;
+    signOutAria: string;
+    signedInLabel: string;
+    popupClosedError: string;
+    signInFailedError: string;
+    savedPassesHeading: string;
+    savedPassesSubtitle: string;
+    syncedWithGoogleBadge: string;
+    modalSignInPrompt: string;
+    modalSignInBtn: string;
+    remindersSyncedHint: string;
+  };
 }
 
 const TRANSLATIONS: Record<Language, Translations> = {
@@ -668,6 +684,24 @@ const TRANSLATIONS: Record<Language, Translations> = {
       imageDecodeError:
         'Hittade ingen läsbar QR-kod i den valda bilden. Försök med en tydligare bild.',
     },
+    auth: {
+      signInBtn: 'Logga in',
+      signingInBtn: 'Loggar in...',
+      signOutBtn: 'Logga ut',
+      signInAria: 'Logga in med Google för att spara biljetter och påminnelser',
+      signOutAria: 'Logga ut från ditt Google-konto',
+      signedInLabel: 'Inloggad som',
+      popupClosedError: 'Google-inloggningen avbröts innan den slutfördes.',
+      signInFailedError: 'Kunde inte logga in med Google. Försök igen.',
+      savedPassesHeading: 'Dina sparade entrépass',
+      savedPassesSubtitle:
+        'Sparade i molnet via ditt Google-konto och synkade mellan dina enheter.',
+      syncedWithGoogleBadge: 'Synkad med Google',
+      modalSignInPrompt:
+        'Logga in med Google för att spara ditt digitala entrépass säkert i ditt konto.',
+      modalSignInBtn: 'Logga in med Google',
+      remindersSyncedHint: 'Synkat med ditt Google-konto',
+    },
   },
   en: {
     documentTitle: 'Stjärnfall 2027 — Symposium on Astrology & Cosmic Time',
@@ -1017,6 +1051,24 @@ const TRANSLATIONS: Record<Language, Translations> = {
       imageDecodeError:
         'No readable QR code was found in the selected image. Try a clearer image.',
     },
+    auth: {
+      signInBtn: 'Sign in',
+      signingInBtn: 'Signing in...',
+      signOutBtn: 'Sign out',
+      signInAria: 'Sign in with Google to save tickets and talk reminders',
+      signOutAria: 'Sign out of your Google account',
+      signedInLabel: 'Signed in as',
+      popupClosedError: 'Google sign-in popup was closed before completing.',
+      signInFailedError: 'Could not sign in with Google. Please try again.',
+      savedPassesHeading: 'Your Saved Passes',
+      savedPassesSubtitle:
+        'Persisted to your Google account and synced across devices.',
+      syncedWithGoogleBadge: 'Synced to Google',
+      modalSignInPrompt:
+        'Sign in with Google to persist your Digital Badge across sessions and devices.',
+      modalSignInBtn: 'Sign in with Google',
+      remindersSyncedHint: 'Synced to your Google account',
+    },
   },
   zh: {
     documentTitle: 'Stjärnfall 2027 — 星象学与宇宙时间北欧研讨会',
@@ -1351,6 +1403,23 @@ const TRANSLATIONS: Record<Language, Translations> = {
       cameraError: '无法启动摄像头，请确认没有其他应用正在占用后重试。',
       imageDecodeError:
         '未能从所选图片中识别出二维码，请更换更清晰的图片重试。',
+    },
+    auth: {
+      signInBtn: 'Google 登录',
+      signingInBtn: '登录中...',
+      signOutBtn: '退出登录',
+      signInAria: '使用 Google 账号登录以保存门票与日程提醒',
+      signOutAria: '退出当前 Google 账号',
+      signedInLabel: '已登录',
+      popupClosedError: '登录窗口已关闭，未完成 Google 登录。',
+      signInFailedError: 'Google 登录失败，请稍后重试。',
+      savedPassesHeading: '已保存的参会通行证',
+      savedPassesSubtitle: '已安全保存至您的 Google 账号并在多设备间同步。',
+      syncedWithGoogleBadge: '已同步至 Google',
+      modalSignInPrompt:
+        '使用 Google 登录即可将您的数字通行证永久保存至个人账户。',
+      modalSignInBtn: '使用 Google 登录',
+      remindersSyncedHint: '已同步至您的 Google 账号',
     },
   },
 };

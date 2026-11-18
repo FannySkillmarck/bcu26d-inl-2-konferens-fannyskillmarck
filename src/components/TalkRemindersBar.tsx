@@ -9,6 +9,7 @@ interface TalkRemindersBarProps {
   savedCount: number;
   permission: BrowserNotificationPermission;
   activeNotice: ActiveReminderNotice | null;
+  isCloudSynced?: boolean;
   onRequestPermission: () => void;
   onSendTest: () => void;
   onClearAll: () => void;
@@ -19,6 +20,7 @@ export function TalkRemindersBar({
   savedCount,
   permission,
   activeNotice,
+  isCloudSynced = false,
   onRequestPermission,
   onSendTest,
   onClearAll,
@@ -46,6 +48,11 @@ export function TalkRemindersBar({
               {savedCount > 0
                 ? t.schedule.remindersBarLabel(savedCount)
                 : t.schedule.remindersBarEmpty}
+              {isCloudSynced && (
+                <span className="ml-2 text-[11px] font-normal text-[var(--accent-brass)]">
+                  · {t.auth.remindersSyncedHint}
+                </span>
+              )}
             </p>
             {permission === 'denied' && (
               <p className="mt-0.5 text-xs text-[var(--text-muted)]">

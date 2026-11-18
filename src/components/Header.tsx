@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { Menu, X } from 'lucide-react';
+import { LogIn, LogOut, Menu, X } from 'lucide-react';
+import { useFirebase } from '../context/FirebaseContext';
 import { useLanguage, type Language } from '../i18n/LanguageContext';
 
 function FlagIcon({ lang }: { lang: Language }) {
@@ -61,6 +62,18 @@ function FlagIcon({ lang }: { lang: Language }) {
 export function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const { language, setLanguage, t } = useLanguage();
+  const {
+    user,
+    authReady,
+    isSigningIn,
+    authError,
+    signIn,
+    signOut,
+    clearAuthError,
+  } = useFirebase();
+
+  const userFirstName =
+    user?.displayName?.split(' ')[0] || user?.email?.split('@')[0] || 'Guest';
 
   const navItems = [
     { href: '#program', label: t.header.navProgram },
@@ -134,6 +147,60 @@ export function Header() {
             })}
           </div>
 
+          {authReady &&
+            (user ? (
+              <div className="hidden md:inline-flex items-center gap-2 rounded-md border border-[var(--border-hairline)] bg-[var(--bg-surface)] pl-2 pr-1.5 py-1">
+                {user.photoURL ? (
+                  <img
+                    src={user.photoURL}
+                    alt=""
+                    width={24}
+                    height={24}
+                    referrerPolicy="no-referrer"
+                    className="h-6 w-6 rounded-full object-cover"
+                  />
+                ) : (
+                  <span
+                    aria-hidden="true"
+                    className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-[var(--bg-subtle)] text-[11px] font-semibold text-[var(--accent-brass)]"
+                  >
+                    {userFirstName.slice(0, 1).toUpperCase()}
+                  </span>
+                )}
+                <span className="max-w-[90px] truncate text-xs font-medium text-[var(--text-primary)]">
+                  {userFirstName}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => void signOut()}
+                  aria-label={t.auth.signOutAria}
+                  title={t.auth.signOutBtn}
+                  className="inline-flex h-8 items-center gap-1 rounded px-2 text-xs font-medium text-[var(--text-muted)] hover:bg-[var(--bg-subtle)] hover:text-[var(--text-primary)] transition-colors"
+                >
+                  <LogOut className="h-3.5 w-3.5" aria-hidden="true" />
+                  <span className="sr-only lg:not-sr-only">
+                    {t.auth.signOutBtn}
+                  </span>
+                </button>
+              </div>
+            ) : (
+              <button
+                type="button"
+                onClick={() => void signIn()}
+                disabled={isSigningIn}
+                aria-label={t.auth.signInAria}
+                className="hidden md:inline-flex min-h-[40px] items-center gap-1.5 rounded-md border border-[var(--border-hairline)] bg-[var(--bg-surface)] px-3 py-1.5 text-xs font-medium text-[var(--text-primary)] hover:border-[var(--accent-brass)] transition-colors whitespace-nowrap disabled:opacity-60"
+              >
+                <LogIn
+                  className="h-3.5 w-3.5 shrink-0 text-[var(--accent-brass)]"
+                  aria-hidden="true"
+                />
+                <span>
+                  {isSigningIn ? t.auth.signingInBtn : t.auth.signInBtn}
+                </span>
+              </button>
+            ))}
+
           <a
             href="#biljetter"
             aria-label={t.header.bookCtaAria}
@@ -161,6 +228,26 @@ export function Header() {
         </div>
       </div>
 
+      {authError && (
+        <div
+          role="alert"
+          className="border-t border-[var(--border-hairline)] bg-[var(--bg-surface)] px-4 py-2 text-center text-xs text-[var(--error-ink)]"
+        >
+          <span>
+            {authError === 'popup-closed'
+              ? t.auth.popupClosedError
+              : t.auth.signInFailedError}
+          </span>
+          <button
+            type="button"
+            onClick={clearAuthError}
+            className="ml-3 underline hover:opacity-80"
+          >
+            OK
+          </button>
+        </div>
+      )}
+
       {mobileOpen && (
         <nav
           id="mobile-nav-menu"
@@ -181,6 +268,54 @@ export function Header() {
               </li>
             ))}
           </ul>
+
+          {authReady && (
+            <div className="mt-3 border-t border-[var(--border-hairline)] pt-3">
+              {user ? (
+                <div className="flex items-center justify-between gap-3">
+                  <div className="min-w-0">
+                    <p className="text-[11px] text-[var(--text-muted)]">
+                      {t.auth.signedInLabel}
+                    </p>
+                    <p className="truncate text-xs font-semibold text-[var(--text-primary)]">
+                      {user.displayName || user.email}
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      void signOut();
+                      setMobileOpen(false);
+                    }}
+                    aria-label={t.auth.signOutAria}
+                    className="inline-flex min-h-[40px] items-center gap-1.5 rounded-md border border-[var(--border-hairline)] px-3 py-1.5 text-xs font-medium text-[var(--text-primary)]"
+                  >
+                    <LogOut className="h-3.5 w-3.5" aria-hidden="true" />
+                    <span>{t.auth.signOutBtn}</span>
+                  </button>
+                </div>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => {
+                    void signIn();
+                    setMobileOpen(false);
+                  }}
+                  disabled={isSigningIn}
+                  aria-label={t.auth.signInAria}
+                  className="inline-flex min-h-[44px] w-full items-center justify-center gap-2 rounded-md border border-[var(--border-hairline)] bg-[var(--bg-canvas)] px-4 py-2 text-xs font-semibold text-[var(--text-primary)] hover:border-[var(--accent-brass)]"
+                >
+                  <LogIn
+                    className="h-4 w-4 text-[var(--accent-brass)]"
+                    aria-hidden="true"
+                  />
+                  <span>
+                    {isSigningIn ? t.auth.signingInBtn : t.auth.signInBtn}
+                  </span>
+                </button>
+              )}
+            </div>
+          )}
         </nav>
       )}
     </header>
